@@ -1,0 +1,73 @@
+{
+  "name": "streamlineTS",
+  "author": {
+    "name": "Tommy",
+    "email": "24691116@naver.com"
+  },
+  "version": "0.0.0",
+  "description": "Type-inference capable functional programming.",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "patch": "tsc && npm version patch && npm publish",
+    "minor": "tsc && npm version minor && npm publish",
+    "major": "tsc && npm version major && npm publish"
+  },
+  "keywords": [
+    "function",
+    "functional-programming",
+    "streamlinejs",
+    "streamlineTS",
+    "node"
+  ],
+  "homepage": "https://github.com/gangnamssal/streamlineTS",
+  "bugs": {
+    "url": "https://github.com/gangnamssal/streamlineTS/issues",
+    "email": "24691116@naver.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gangnamssal/streamlineTS"
+  },
+  "license": "(ISC OR MIT)",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prettier": "3.2.5",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  },
+  "exports": {
+    "./curry": {
+      "types": "./dist/curry/index.d.ts",
+      "import": "./dist/curry/index.js",
+      "require": "./dist/curry/index.cjs"
+    },
+    "./lazy": {
+      "types": "./dist/lazy/index.d.ts",
+      "import": "./dist/lazy/index.js",
+      "require": "./dist/lazy/index.cjs"
+    },
+    "./strict": {
+      "types": "./dist/strict/index.d.ts",
+      "import": "./dist/strict/index.js",
+      "require": "./dist/strict/index.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js",
+      "require": "./dist/utils/index.cjs"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  }
+}
