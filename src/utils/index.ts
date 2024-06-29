@@ -13,3 +13,7 @@ export const isIterableIterator = (value: any): value is IterableIterator<any> =
 export const isAsyncIterableIterator = (value: any): value is AsyncIterableIterator<any> => {
   return typeof value?.[Symbol.asyncIterator] === 'function';
 };
+
+export const noop = () => {};
+
+export const nop = Symbol('nop');
