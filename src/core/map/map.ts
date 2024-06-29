@@ -1,6 +1,9 @@
 import { isAsyncIterable, isIterable } from './../../utils';
 
-function* syncMap<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<B> {
+function* syncMap<A, B>(
+  fn: (args: A) => B,
+  iter: Iterable<A | Promise<A>>,
+): IterableIterator<B | Promise<B>> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
@@ -8,7 +11,7 @@ function* syncMap<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator
 
     if (done) break;
 
-    yield fn(value);
+    yield value instanceof Promise ? value.then(fn) : fn(value);
   }
 }
 
@@ -32,25 +35,30 @@ function asyncMap<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterab
 
 function map<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<B>;
 
+function map<A, B>(fn: (args: A) => B, iter: Iterable<Promise<A>>): IterableIterator<Promise<B>>;
+
 function map<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<B>;
 
 function map<A, B>(
   fn: (args: A) => B,
-): (iter: Iterable<A> | AsyncIterable<A>) => IterableIterator<B> | AsyncIterableIterator<B>;
+): (
+  iter: Iterable<A | Promise<A>> | AsyncIterable<A>,
+) => IterableIterator<B | Promise<B>> | AsyncIterableIterator<B>;
 
 function map<A, B>(
   fn: (args: A) => B,
-  iter?: Iterable<A> | AsyncIterable<A>,
+  iter?: Iterable<A | Promise<A>> | AsyncIterable<A>,
 ):
-  | IterableIterator<B>
+  | IterableIterator<B | Promise<B>>
   | AsyncIterableIterator<B>
-  | ((iter: Iterable<A> | AsyncIterable<A>) => IterableIterator<B> | AsyncIterableIterator<B>) {
-  if (!iter)
-    return (iter: Iterable<A> | AsyncIterable<A>) => (isAsyncIterable(iter) ? map(fn, iter) : map(fn, iter));
+  | ((
+      iter: Iterable<A | Promise<A>> | AsyncIterable<A>,
+    ) => IterableIterator<B | Promise<B>> | AsyncIterableIterator<B>) {
+  if (!iter) return iter => (isAsyncIterable(iter) ? asyncMap(fn, iter) : syncMap(fn, iter));
 
   if (isAsyncIterable(iter)) return asyncMap(fn, iter as AsyncIterable<A>);
 
-  if (isIterable(iter)) return syncMap(fn, iter as Iterable<A>);
+  if (isIterable(iter)) return syncMap(fn, iter as Iterable<A | Promise<A>>);
 
   throw new Error('iterable or asyncIterable is required as second argument');
 }

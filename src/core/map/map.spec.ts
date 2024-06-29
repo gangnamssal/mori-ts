@@ -18,6 +18,58 @@ describe('map', () => {
     expect(result2.next()).toEqual({ done: true, value: undefined });
   });
 
+  it('map with set', () => {
+    // Arrange
+    const set = new Set([1, 2, 3]);
+    const callback = (value: number) => value * 2;
+
+    // Act
+    const result = map(callback, set);
+
+    // Assert
+    expect([...result]).toEqual([2, 4, 6]);
+  });
+
+  it('map with map', () => {
+    // Arrange
+    const map1 = new Map([
+      ['a', 1],
+      ['b', 2],
+      ['c', 3],
+    ]);
+    const callback = ([key, value]: [string, number]) => value * 2;
+
+    // Act
+    const result = map(callback, map1);
+
+    // Assert
+    expect([...result]).toEqual([2, 4, 6]);
+  });
+
+  it('map with promise', async () => {
+    const promise = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
+    const callback = (value: number) => value * 2;
+
+    const result = map(callback, promise);
+
+    expect(result.next()).toEqual({ done: false, value: Promise.resolve(2) });
+    expect(result.next()).toEqual({ done: false, value: Promise.resolve(4) });
+    expect(result.next()).toEqual({ done: false, value: Promise.resolve(6) });
+    expect(result.next()).toEqual({ done: true, value: undefined });
+  });
+
+  it('map with promise', async () => {
+    const promise = Promise.resolve([1, 2, 3]);
+    const callback = (value: number) => value * 2;
+
+    const result = map(callback)(await promise);
+
+    expect(result.next()).toEqual({ done: false, value: 2 });
+    expect(result.next()).toEqual({ done: false, value: 4 });
+    expect(result.next()).toEqual({ done: false, value: 6 });
+    expect(result.next()).toEqual({ done: true, value: undefined });
+  });
+
   it('map with iterable', () => {
     // Arrange
     const iterable = (function* () {
