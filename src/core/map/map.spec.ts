@@ -12,10 +12,7 @@ describe('map', () => {
 
     // Assert
     expect([...result]).toEqual([2, 4, 6]);
-    expect(result2.next()).toEqual({ done: false, value: 2 });
-    expect(result2.next()).toEqual({ done: false, value: 4 });
-    expect(result2.next()).toEqual({ done: false, value: 6 });
-    expect(result2.next()).toEqual({ done: true, value: undefined });
+    expect([...result2]).toEqual([2, 4, 6]);
   });
 
   it('map with set', () => {
@@ -25,9 +22,11 @@ describe('map', () => {
 
     // Act
     const result = map(callback, set);
+    const result2 = map(callback)(set);
 
     // Assert
     expect([...result]).toEqual([2, 4, 6]);
+    expect([...result2]).toEqual([2, 4, 6]);
   });
 
   it('map with map', () => {
@@ -41,9 +40,11 @@ describe('map', () => {
 
     // Act
     const result = map(callback, map1);
+    const result2 = map(callback)(map1);
 
     // Assert
     expect([...result]).toEqual([2, 4, 6]);
+    expect([...result2]).toEqual([2, 4, 6]);
   });
 
   it('map with promise', async () => {

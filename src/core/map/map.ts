@@ -39,11 +39,11 @@ function map<A, B>(fn: (args: A) => B, iter: Iterable<Promise<A>>): IterableIter
 
 function map<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<B>;
 
-function map<A, B>(
-  fn: (args: A) => B,
-): (
-  iter: Iterable<A | Promise<A>> | AsyncIterable<A>,
-) => IterableIterator<B | Promise<B>> | AsyncIterableIterator<B>;
+function map<A, B>(fn: (args: A) => B): (iter: Iterable<A>) => IterableIterator<B>;
+
+function map<A, B>(fn: (args: A) => B): (iter: Iterable<Promise<A>>) => IterableIterator<Promise<B>>;
+
+function map<A, B>(fn: (args: A) => B): (iter: AsyncIterable<A>) => AsyncIterableIterator<B>;
 
 function map<A, B>(
   fn: (args: A) => B,
@@ -51,10 +51,9 @@ function map<A, B>(
 ):
   | IterableIterator<B | Promise<B>>
   | AsyncIterableIterator<B>
-  | ((
-      iter: Iterable<A | Promise<A>> | AsyncIterable<A>,
-    ) => IterableIterator<B | Promise<B>> | AsyncIterableIterator<B>) {
-  if (!iter) return iter => (isAsyncIterable(iter) ? asyncMap(fn, iter) : syncMap(fn, iter));
+  | ((iter: Iterable<A | Promise<A>>) => IterableIterator<B | Promise<B>>)
+  | ((iter: AsyncIterable<A>) => AsyncIterableIterator<B>) {
+  if (!iter) return (iter: Iterable<A | Promise<A>> | AsyncIterable<A>) => map(fn, iter as any);
 
   if (isAsyncIterable(iter)) return asyncMap(fn, iter as AsyncIterable<A>);
 
