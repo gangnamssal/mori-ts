@@ -17,3 +17,6 @@ export const isAsyncIterableIterator = (value: any): value is AsyncIterableItera
 export const noop = () => {};
 
 export const nop = Symbol('nop');
+
+export const isPromise = <A, R>(a: A, f: (args: Awaited<A>) => R): R | Promise<R> =>
+  a instanceof Promise ? a.then(f) : f(a as Awaited<A>);

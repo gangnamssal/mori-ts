@@ -1,4 +1,4 @@
-import { isAsyncIterable, isIterable, nop } from '../../utils';
+import { isAsyncIterable, isIterable } from '../../utils';
 
 function* syncFilter<T, B>(
   fn: (args: T | Promise<T>) => B,
