@@ -4,14 +4,33 @@ describe('reduce', () => {
   it('should reduce an array of numbers to a single value', () => {
     const numbers = [1, 2, 3, 4, 5];
 
-    const result = reduce((acc: number, value) => acc + value, 0, numbers);
+    const result = reduce((acc, value) => acc + value, 0, numbers);
+    const result2 = reduce((acc, value) => acc + value, numbers);
+    const result3 = reduce((acc: number, value: number) => acc + value)(numbers);
+
     expect(result).toBe(15);
+    expect(result2).toBe(15);
+    expect(result3).toBe(15);
   });
 
   it('reduce with objects', () => {
     const objects = [{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }];
+
     const result = reduce((acc, value) => acc + value.x, 0, objects);
+    const result2 = reduce((acc: { x: number } | number, value: { x: number }) => {
+      if (acc instanceof Object) return acc.x + value.x;
+
+      return acc + value.x;
+    }, objects);
+    const result3 = reduce((acc: { x: number } | number, value: { x: number }) => {
+      if (acc instanceof Object) return acc.x + value.x;
+
+      return acc + value.x;
+    })(objects);
+
     expect(result).toBe(15);
+    expect(result2).toBe(15);
+    expect(result3).toBe(15);
   });
 
   it('reduce with objects', () => {
@@ -70,14 +89,24 @@ describe('reduce', () => {
     ];
 
     const result = reduce((acc, value) => acc + value, 10, arr);
+    const result2 = reduce((acc, value) => acc + value, arr);
+    const result3 = reduce((acc: number, value: number) => acc + value)(arr);
+
     expect(result).resolves.toBe(25);
+    expect(result2).resolves.toBe(15);
+    expect(result3).resolves.toBe(15);
   });
 
   it('reduce with promises2', () => {
     const arr = [1, Promise.resolve(2), Promise.resolve(3), 4, Promise.resolve(5)];
 
     const result = reduce((acc, value) => acc + value, 10, arr);
+    const result2 = reduce((acc, value) => acc + value, arr);
+    const result3 = reduce((acc: number, value: number) => acc + value)(arr);
+
     expect(result).resolves.toBe(25);
+    expect(result2).resolves.toBe(15);
+    expect(result3).resolves.toBe(15);
   });
 
   it('reduce with promises and initial value', () => {
