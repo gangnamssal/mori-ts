@@ -1,28 +1,32 @@
-import { isPromise } from './../../utils';
+import { isIterable, isPromise } from './../../utils';
 
-function reduce<T, Acc>(
-  fn: (acc: Acc, value: Awaited<T>) => Acc,
+function reduce<T, Acc, R extends Acc>(
+  fn: (acc: R, value: Promise<any> extends T ? Awaited<T> : T) => R,
   acc: Acc,
   iter: Iterable<T>,
-): IterableIterator<Acc>;
-function reduce<T extends Promise<any>, Acc>(
-  fn: (acc: Acc, value: Awaited<T>) => Acc,
+): Promise<any> extends T ? Promise<R> : R;
+
+function reduce<T, Acc, R>(
+  fn: (acc: R, value: Promise<any> extends T ? Awaited<T> : T) => R,
   acc: Acc,
   iter: Iterable<T>,
-): IterableIterator<Promise<Acc>>;
-function reduce<T, Acc extends Awaited<T>>(
-  fn: (acc: Acc, value: Awaited<T>) => Acc,
+): Promise<any> extends T ? Promise<R> : R;
+
+function reduce<T, R extends Promise<any> extends T ? Awaited<T> : T>(
+  fn: (acc: R, value: Promise<any> extends T ? Awaited<T> : T) => R,
   acc: Iterable<T>,
-): IterableIterator<Acc>;
-function reduce<T extends Promise<any>, Acc>(
-  fn: (acc: Acc, value: Awaited<T>) => Acc,
+): Promise<any> extends T ? Promise<R> : R;
+
+function reduce<T, R>(
+  fn: (acc: R, value: Promise<any> extends T ? Awaited<T> : T) => R,
   acc: Iterable<T>,
-): IterableIterator<Promise<Acc>>;
-function reduce<T, Acc>(
-  fn: (acc: Acc, value: T) => Acc,
+): Promise<any> extends T ? Promise<R> : R;
+
+function reduce<T, Acc, R>(
+  fn: (acc: Acc, value: T) => R,
   acc: Acc | Iterable<T | Promise<T>>,
   iter?: Iterable<T | Promise<T>>,
-): Acc | Promise<Acc> | Promise<Acc | Promise<Acc>> {
+): R | Promise<R> | Promise<R | Promise<R>> {
   let iterator: Iterator<T | Promise<T>>;
   let result;
 
@@ -30,11 +34,11 @@ function reduce<T, Acc>(
     iterator = (acc as Iterable<T | Promise<T>>)[Symbol.iterator]();
     result = iterator.next().value;
   } else {
-    result = acc as Acc;
+    result = acc;
     iterator = iter[Symbol.iterator]();
   }
 
-  return isPromise(result, function recur(acc): Acc | Promise<Acc> {
+  return isPromise(result, function recur(acc): R | Promise<R> {
     let { done, value } = iterator.next();
     if (done) return acc;
 
