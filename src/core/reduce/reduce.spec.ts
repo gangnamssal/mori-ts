@@ -6,7 +6,7 @@ describe('reduce', () => {
 
     const result = reduce((acc, value) => acc + value, 0, numbers);
     const result2 = reduce((acc, value) => acc + value, numbers);
-    const result3 = reduce((acc: number, value: number) => acc + value)(numbers);
+    const result3 = reduce<number>((acc: number, value: number) => acc + value)(numbers);
 
     expect(result).toBe(15);
     expect(result2).toBe(15);
@@ -19,10 +19,9 @@ describe('reduce', () => {
     const result = reduce((acc, value) => acc + value.x, 0, objects);
     const result2 = reduce((acc: { x: number } | number, value: { x: number }) => {
       if (acc instanceof Object) return acc.x + value.x;
-
       return acc + value.x;
     }, objects);
-    const result3 = reduce((acc: { x: number } | number, value: { x: number }) => {
+    const result3 = reduce<number>((acc: { x: number } | number, value: { x: number }) => {
       if (acc instanceof Object) return acc.x + value.x;
 
       return acc + value.x;
@@ -41,24 +40,37 @@ describe('reduce', () => {
       { x: 4, y: 5 },
       { x: 5, y: 6 },
     ];
+
     const result = reduce((acc, value) => acc + value.x + value.y, 0, objects);
     expect(result).toBe(35);
   });
 
   it('reduce with strings', () => {
     const strings = ['a', 'b', 'c', 'd', 'e'];
+
     const result = reduce((acc, value) => acc + value, '', strings);
+    const result2 = reduce((acc, value) => acc + value, strings);
+    const result3 = reduce<string>((acc: string, value: string) => acc + value)(strings);
+
     expect(result).toBe('abcde');
+    expect(result2).toBe('abcde');
+    expect(result3).toBe('abcde');
   });
 
   it('reduce with array on object initial value', () => {
     const numbers = [1, 2, 3, 4, 5];
+
     const result = reduce(
       (acc: Record<string, number>, value) => ({ ...acc, [value]: value }),
       { x: 10 },
       numbers,
     );
+    const result2 = reduce((acc: Record<string, number>, value) => ({ ...acc, [value]: value }), numbers);
+    const result3 = reduce((acc: Record<string, number>, value) => ({ ...acc, [value]: value }))(numbers);
+
     expect(result).toEqual({ x: 10, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 });
+    expect(result2).toEqual({ 2: 2, 3: 3, 4: 4, 5: 5 });
+    expect(result3).toEqual({ 2: 2, 3: 3, 4: 4, 5: 5 });
   });
 
   it('reduce with array on object', () => {
@@ -90,7 +102,7 @@ describe('reduce', () => {
 
     const result = reduce((acc, value) => acc + value, 10, arr);
     const result2 = reduce((acc, value) => acc + value, arr);
-    const result3 = reduce((acc: number, value: number) => acc + value)(arr);
+    const result3 = reduce<Promise<number>>((acc: number, value: number) => acc + value)(arr);
 
     expect(result).resolves.toBe(25);
     expect(result2).resolves.toBe(15);
@@ -102,7 +114,7 @@ describe('reduce', () => {
 
     const result = reduce((acc, value) => acc + value, 10, arr);
     const result2 = reduce((acc, value) => acc + value, arr);
-    const result3 = reduce((acc: number, value: number) => acc + value)(arr);
+    const result3 = reduce<Promise<number>>((acc: number, value: number) => acc + value)(arr);
 
     expect(result).resolves.toBe(25);
     expect(result2).resolves.toBe(15);

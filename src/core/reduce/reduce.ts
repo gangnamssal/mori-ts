@@ -74,7 +74,9 @@ function reduce<T, R>(
   acc: Iterable<T>,
 ): Promise<any> extends T ? Promise<R> : R;
 
-function reduce<T, R>(fn: (acc: R, value: T) => R): (iter: Iterable<T>) => R;
+function reduce<R, Acc = any, V = any, T = any, Fn = any>(
+  fn: (acc: Acc, value: V) => Fn,
+): (iter: Iterable<T>) => R;
 
 function reduce<T, R>(fn: (acc: R, value: Awaited<T>) => R): (iter: Iterable<Promise<T>>) => Promise<R>;
 
