@@ -1,4 +1,4 @@
-import reduce from './reduce';
+import reduce, { asyncReduce } from './reduce';
 
 describe('reduce', () => {
   it('should reduce an array of numbers to a single value', () => {
@@ -134,10 +134,26 @@ describe('reduce', () => {
     expect(result).resolves.toBe(15);
   });
 
-  //   it('reduce with promise array', () => {
-  //     const arr = Promise.resolve([1, 2, 3, 4, 5]);
+  it('reduce with promise array', async () => {
+    const arr = Promise.resolve([1, 2, 3, 4, 5]);
 
-  //     const result = reduce((acc, value) => acc + value, 10, arr);
-  //     expect(result).resolves.toBe(25);
-  //   });
+    const result = reduce((acc, value) => acc + value, 10, await arr);
+
+    expect(result).toBe(25);
+  });
+
+  it('reduce with async iterable', async () => {
+    async function* asyncIterable() {
+      yield 1;
+      yield 2;
+      yield 3;
+      yield 4;
+      yield 5;
+    }
+
+    const result = asyncReduce((acc, value) => acc + value, 10, asyncIterable());
+    const result2 = asyncReduce((acc, value) => acc + value, asyncIterable());
+    expect(result).resolves.toBe(25);
+    expect(result2).resolves.toBe(15);
+  });
 });

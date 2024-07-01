@@ -52,6 +52,42 @@ function syncReduce<T, Acc, R>(
   });
 }
 
+export function asyncReduce<T, Acc, R>(
+  fn: (acc: Acc, value: T) => R,
+  acc: Acc,
+  iter: AsyncIterable<T>,
+): Promise<R>;
+
+export function asyncReduce<T, Acc extends T, R>(
+  fn: (acc: Acc, value: T) => R,
+  acc: AsyncIterable<T>,
+): Promise<R>;
+
+export function asyncReduce<T, Acc, R>(
+  fn: (acc: Acc, value: T) => R,
+  acc: Acc | AsyncIterable<T>,
+  iter?: AsyncIterable<T>,
+): Promise<R> | Promise<Promise<R>> {
+  let iterator: AsyncIterator<T>;
+  let result;
+
+  if (!iter) {
+    iterator = (acc as AsyncIterable<T>)[Symbol.asyncIterator]();
+    result = iterator.next().then(({ value }) => value);
+  } else {
+    result = acc;
+    iterator = iter[Symbol.asyncIterator]();
+  }
+
+  return isPromise(result, function recur(acc): Promise<R> {
+    return iterator.next().then(({ done, value }) => {
+      if (done) return acc;
+
+      return isPromise(value, value => recur(fn(acc, value)));
+    });
+  });
+}
+
 function reduce<T, Acc, R extends Acc>(
   fn: (acc: R, value: Promise<any> extends T ? Awaited<T> : T) => R,
   acc: Acc,

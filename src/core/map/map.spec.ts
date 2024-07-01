@@ -71,6 +71,21 @@ describe('map', () => {
     expect(result.next()).toEqual({ done: true, value: undefined });
   });
 
+  it('map with promise', async () => {
+    const promise = Promise.resolve([1, 2, 3]);
+    const callback = (value: number) => value * 2;
+
+    const result = map(callback)(await promise);
+    const result2 = map(callback, await promise);
+
+    expect(result.next()).toEqual({ done: false, value: 2 });
+    expect(result.next()).toEqual({ done: false, value: 4 });
+    expect(result.next()).toEqual({ done: false, value: 6 });
+    expect(result.next()).toEqual({ done: true, value: undefined });
+
+    expect([...result2]).toEqual([2, 4, 6]);
+  });
+
   it('map with iterable', () => {
     // Arrange
     const iterable = (function* () {
