@@ -1,4 +1,4 @@
-import { isIterable, isPromise } from './../../utils';
+import { isAsyncIterable, isIterable, isPromise } from './../../utils';
 
 function syncReduce<T, Acc, R extends Acc>(
   fn: (acc: R, value: Promise<any> extends T ? Awaited<T> : T) => R,
@@ -52,18 +52,11 @@ function syncReduce<T, Acc, R>(
   });
 }
 
-export function asyncReduce<T, Acc, R>(
-  fn: (acc: Acc, value: T) => R,
-  acc: Acc,
-  iter: AsyncIterable<T>,
-): Promise<R>;
+function asyncReduce<T, Acc, R>(fn: (acc: Acc, value: T) => R, acc: Acc, iter: AsyncIterable<T>): Promise<R>;
 
-export function asyncReduce<T, Acc extends T, R>(
-  fn: (acc: Acc, value: T) => R,
-  acc: AsyncIterable<T>,
-): Promise<R>;
+function asyncReduce<T, Acc extends T, R>(fn: (acc: Acc, value: T) => R, acc: AsyncIterable<T>): Promise<R>;
 
-export function asyncReduce<T, Acc, R>(
+function asyncReduce<T, Acc, R>(
   fn: (acc: Acc, value: T) => R,
   acc: Acc | AsyncIterable<T>,
   iter?: AsyncIterable<T>,
@@ -110,22 +103,27 @@ function reduce<T, R>(
   acc: Iterable<T>,
 ): Promise<any> extends T ? Promise<R> : R;
 
+function reduce<T, Acc, R>(fn: (acc: Acc, value: T) => R, acc: Acc, iter: AsyncIterable<T>): Promise<R>;
+
+function reduce<T, Acc extends T, R>(fn: (acc: Acc, value: T) => R, acc: AsyncIterable<T>): Promise<R>;
+
 function reduce<R, Acc = any, V = any, T = any, Fn = any>(
   fn: (acc: Acc, value: V) => Fn,
-): (iter: Iterable<T>) => R;
-
-function reduce<T, R>(fn: (acc: R, value: Awaited<T>) => R): (iter: Iterable<Promise<T>>) => Promise<R>;
-
-function reduce<T, Acc, R>(fn: (acc: R, value: T) => R, acc: Acc): (iter: Iterable<T>) => R;
+): (iter: Iterable<T> | AsyncIterable<T>) => R;
 
 function reduce<T, Acc, R extends Acc>(
-  fn: (acc: R, value: Promise<any> extends T ? Awaited<T> : T) => R,
-  acc?: Acc | Iterable<T>,
-  iter?: Iterable<T>,
+  fn: (
+    acc: Acc | Iterable<T> | AsyncIterable<T> | undefined,
+    value: Promise<any> extends T ? Awaited<T> : T,
+  ) => R,
+  acc?: Acc | Iterable<T> | AsyncIterable<T>,
+  iter?: Iterable<T> | AsyncIterable<T>,
 ): R | Promise<R> | ((iter: Iterable<T>) => R | Promise<R>) {
   if (!acc && !iter) return (iter: Iterable<T>) => reduce(fn, iter);
 
   if (isIterable(acc) || isIterable(iter)) return syncReduce(fn, acc, iter as any);
+
+  if (isAsyncIterable(acc) || isAsyncIterable(iter)) return asyncReduce(fn, acc, iter as any);
 
   throw new Error('Not implemented');
 }

@@ -1,4 +1,4 @@
-import reduce, { asyncReduce } from './reduce';
+import reduce from './reduce';
 
 describe('reduce', () => {
   it('should reduce an array of numbers to a single value', () => {
@@ -66,7 +66,10 @@ describe('reduce', () => {
       numbers,
     );
     const result2 = reduce((acc: Record<string, number>, value) => ({ ...acc, [value]: value }), numbers);
-    const result3 = reduce((acc: Record<string, number>, value) => ({ ...acc, [value]: value }))(numbers);
+    const result3 = reduce<Record<string, number>>((acc: Record<string, number>, value) => ({
+      ...acc,
+      [value]: value,
+    }))(numbers);
 
     expect(result).toEqual({ x: 10, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 });
     expect(result2).toEqual({ 2: 2, 3: 3, 4: 4, 5: 5 });
@@ -81,14 +84,22 @@ describe('reduce', () => {
 
   it('should reduce an array of numbers to a single value with an initial value', () => {
     const numbers = [1, 2, 3, 4, 5];
+
     const result = reduce((acc, value) => acc + value, 10, numbers);
+    const result2 = reduce<number>((acc: number, value: number) => acc + value)(numbers);
+
     expect(result).toBe(25);
+    expect(result2).toBe(15);
   });
 
   it('should reduce an array of numbers to a single value with an initial value of 0', () => {
     const numbers = [1, 2, 3, 4, 5];
+
     const result = reduce((acc, value) => acc + value, numbers);
+    const result2 = reduce<number>((acc: number, value: number) => acc + value)(numbers);
+
     expect(result).toBe(15);
+    expect(result2).toBe(15);
   });
 
   it('reduce with promises', () => {
@@ -138,8 +149,10 @@ describe('reduce', () => {
     const arr = Promise.resolve([1, 2, 3, 4, 5]);
 
     const result = reduce((acc, value) => acc + value, 10, await arr);
+    const result2 = reduce<number>((acc: number, value: number) => acc + value)(await arr);
 
     expect(result).toBe(25);
+    expect(result2).toBe(15);
   });
 
   it('reduce with async iterable', async () => {
@@ -151,9 +164,12 @@ describe('reduce', () => {
       yield 5;
     }
 
-    const result = asyncReduce((acc, value) => acc + value, 10, asyncIterable());
-    const result2 = asyncReduce((acc, value) => acc + value, asyncIterable());
+    const result = reduce((acc, value) => acc + value, 10, asyncIterable());
+    const result2 = reduce((acc, value) => acc + value, asyncIterable());
+    const result3 = reduce<Promise<number>>((acc: number, value: number) => acc + value)(asyncIterable());
+
     expect(result).resolves.toBe(25);
     expect(result2).resolves.toBe(15);
+    expect(result3).resolves.toBe(15);
   });
 });
