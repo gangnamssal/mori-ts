@@ -1,4 +1,10 @@
-import { isAsyncIterable, isIterable } from './../../utils';
+import {
+  IsPromise,
+  IterableInfer,
+  ReturnIterableIteratorType,
+  isAsyncIterable,
+  isIterable,
+} from './../../utils';
 
 function* syncMap<A, B>(
   fn: (args: A) => B,
@@ -33,31 +39,33 @@ function asyncMap<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterab
   };
 }
 
-function map<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<B>;
+function map<A, B>(
+  fn: (args: A extends Promise<any> ? Awaited<A> : A) => IsPromise<A, B>,
+  iter: Iterable<A>,
+): IterableIterator<IsPromise<A, B>>;
 
-function map<A, B>(fn: (args: A) => B, iter: Iterable<Promise<A>>): IterableIterator<Promise<B>>;
+function map<A, B>(fn: (args: Awaited<A>) => B, iter: Iterable<Promise<A>>): IterableIterator<Promise<B>>;
 
 function map<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<B>;
 
-function map<A, B>(fn: (args: A) => B): (iter: Iterable<A>) => IterableIterator<B>;
+function map<A extends Iterable<any> | AsyncIterable<any>, B>(
+  fn: (args: Awaited<IterableInfer<A>>) => B,
+): (iter: A) => ReturnIterableIteratorType<A, IsPromise<IterableInfer<A>, B>>;
 
-function map<A, B>(fn: (args: A) => B): (iter: Iterable<Promise<A>>) => IterableIterator<Promise<B>>;
-
-function map<A, B>(fn: (args: A) => B): (iter: AsyncIterable<A>) => AsyncIterableIterator<B>;
-
-function map<A, B>(
-  fn: (args: A) => B,
-  iter?: Iterable<A | Promise<A>> | AsyncIterable<A>,
+function map<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
+  fn: (args: IterableInfer<A>) => B,
+  iter?: A,
 ):
   | IterableIterator<B | Promise<B>>
   | AsyncIterableIterator<B>
-  | ((iter: Iterable<A | Promise<A>>) => IterableIterator<B | Promise<B>>)
-  | ((iter: AsyncIterable<A>) => AsyncIterableIterator<B>) {
-  if (!iter) return (iter: Iterable<A | Promise<A>> | AsyncIterable<A>) => map(fn, iter as any);
+  | ((iter: A) => IterableIterator<B | Promise<B>> | AsyncIterableIterator<B>) {
+  if (!iter)
+    return (iter: A): ReturnIterableIteratorType<A, B> =>
+      map(fn, iter as any) as ReturnIterableIteratorType<A, B>;
 
-  if (isAsyncIterable(iter)) return asyncMap(fn, iter as AsyncIterable<A>);
+  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncMap(fn, iter);
 
-  if (isIterable(iter)) return syncMap(fn, iter as Iterable<A | Promise<A>>);
+  if (isIterable<IterableInfer<A>>(iter)) return syncMap(fn, iter);
 
   throw new Error('iterable or asyncIterable is required as second argument');
 }
