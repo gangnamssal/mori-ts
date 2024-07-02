@@ -1,9 +1,9 @@
 import { isAsyncIterable, isIterable } from '../../utils';
 
-function* syncFilter<T, B>(
-  fn: (args: T | Promise<T>) => B,
-  iter: Iterable<T | Promise<T>>,
-): IterableIterator<T | Promise<T>> {
+function* syncFilter<A, B>(
+  fn: (args: A | Promise<A>) => B,
+  iter: Iterable<A | Promise<A>>,
+): IterableIterator<A | Promise<A>> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
@@ -15,7 +15,7 @@ function* syncFilter<T, B>(
   }
 }
 
-async function* asyncFilter<T, R>(fn: (args: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<T> {
+async function* asyncFilter<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<A> {
   const iterator = iter[Symbol.asyncIterator]();
 
   while (true) {
@@ -28,33 +28,32 @@ async function* asyncFilter<T, R>(fn: (args: T) => R, iter: AsyncIterable<T>): A
   }
 }
 
-function filter<T, B>(fn: (args: T) => B, iter: Iterable<T>): IterableIterator<T>;
+function filter<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<A>;
 
-function filter<T, B>(fn: (args: Promise<T>) => B, iter: Iterable<Promise<T>>): IterableIterator<Promise<T>>;
+function filter<A, B>(fn: (args: Promise<A>) => B, iter: Iterable<Promise<A>>): IterableIterator<Promise<A>>;
 
-function filter<T, B>(fn: (args: T) => B, iter: AsyncIterable<T>): AsyncIterableIterator<T>;
+function filter<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<A>;
 
-function filter<T, B>(fn: (args: T) => B): (iter: Iterable<T>) => IterableIterator<T>;
+function filter<A, B>(
+  fn: (args: A) => B,
+): (
+  iter: Iterable<A | Promise<A>> | AsyncIterable<A>,
+) => IterableIterator<A | Promise<A>> | AsyncIterableIterator<A>;
 
-function filter<T, B>(
-  fn: (args: Promise<T>) => B,
-): (iter: Iterable<Promise<T>>) => IterableIterator<Promise<T>>;
-
-function filter<T, B>(fn: (args: T) => B): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>;
-
-function filter<T, B>(
-  fn: (args: T | Promise<T>) => B,
-  iter?: Iterable<T | Promise<T>> | AsyncIterable<T>,
+function filter<A, B>(
+  fn: (args: A | Promise<A>) => B,
+  iter?: Iterable<A | Promise<A>> | AsyncIterable<A>,
 ):
-  | IterableIterator<T | Promise<T>>
-  | AsyncIterableIterator<T>
-  | ((iter: Iterable<T | Promise<T>>) => IterableIterator<T | Promise<T>>)
-  | ((iter: AsyncIterable<T>) => AsyncIterableIterator<T>) {
-  if (!iter) return (iter: Iterable<T | Promise<T>> | AsyncIterable<T>) => filter(fn, iter as any);
+  | IterableIterator<A | Promise<A>>
+  | AsyncIterableIterator<A>
+  | ((
+      iter: Iterable<A | Promise<A>> | AsyncIterable<A>,
+    ) => IterableIterator<A | Promise<A>> | AsyncIterableIterator<A>) {
+  if (!iter) return (iter: Iterable<A | Promise<A>> | AsyncIterable<A>) => filter(fn, iter as any);
 
-  if (isAsyncIterable(iter)) return asyncFilter(fn, iter as AsyncIterable<T>);
+  if (isAsyncIterable(iter)) return asyncFilter(fn, iter);
 
-  if (isIterable(iter)) return syncFilter(fn, iter as Iterable<T | Promise<T>>);
+  if (isIterable(iter)) return syncFilter(fn, iter);
 
   throw new Error('Must be an iterable or async iterable');
 }
