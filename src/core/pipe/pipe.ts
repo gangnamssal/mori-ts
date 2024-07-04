@@ -1,4 +1,4 @@
-import { IsPromise } from '../../utils';
+import { IsPromise } from '../../types';
 import reduce from '../reduce/reduce';
 
 function pipe<T1, R>(a: T1, f1: (a: Awaited<T1>) => R): IsPromise<T1, R>;

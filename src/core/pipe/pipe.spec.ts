@@ -140,6 +140,51 @@ describe('pipe', () => {
     expect(res).toBe(6);
   });
 
+  it('pipe with reduce on promise array', async () => {
+    const res = await pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    const res2 = pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    expect(res).toBe(6);
+    expect(res2).resolves.toBe(6);
+  });
+
+  it('pipe with reduce on array promise', async () => {
+    const res = pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    const res2 = await pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    expect(res).resolves.toBe(6);
+    expect(res2).toBe(6);
+  });
+
+  it('pipe with reduce on array promise and number', async () => {
+    const res = pipe(
+      [1, Promise.resolve(2), Promise.resolve(3)],
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    const res2 = await pipe(
+      [1, Promise.resolve(2), 3],
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    expect(res).resolves.toBe(6);
+    expect(res2).toBe(6);
+  });
+
   it('pipe with reduce and map', () => {
     const res = pipe(
       [1, 2, 3],
@@ -148,6 +193,47 @@ describe('pipe', () => {
     );
 
     expect(res).toBe(9);
+  });
+
+  it('pipe with reduce and map on promise array', async () => {
+    const res = await pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.map(a => a + 1),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    const res2 = pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.map(a => a + 1),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    expect(res).toBe(9);
+    expect(res2).resolves.toBe(9);
+  });
+
+  it('pipe with reduce and map on array promise', async () => {
+    const res = await pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      streamline.map(a => a + 1),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    const res2 = pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      streamline.map(a => a + 1),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    const res3 = pipe(
+      [1, Promise.resolve(2), 3],
+      streamline.map(a => a + 1),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    expect(res).toBe(9);
+    expect(res2).resolves.toBe(9);
+    expect(res3).resolves.toBe(9);
   });
 
   it('pipe with map and filter', () => {
@@ -180,9 +266,37 @@ describe('pipe', () => {
     expect(res).toBe(2);
   });
 
+  it('pipe with reduce and filter on promise array', async () => {
+    const res = await pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.filter(a => a % 2 === 0),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    const res2 = pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.filter(a => a % 2 !== 0),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    expect(res).toBe(2);
+    expect(res2).resolves.toBe(4);
+  });
+
   it('pipe with reduce, filter and map', () => {
     const res = pipe(
       [1, 2, 3],
+      streamline.filter(a => a % 2 === 0),
+      streamline.map(a => a + 1),
+      streamline.reduce((acc, a) => acc + a),
+    );
+
+    expect(res).toBe(3);
+  });
+
+  it('pipe with reduce, filter and map on promise array', async () => {
+    const res = await pipe(
+      Promise.resolve([1, 2, 3]),
       streamline.filter(a => a % 2 === 0),
       streamline.map(a => a + 1),
       streamline.reduce((acc, a) => acc + a),

@@ -1,4 +1,6 @@
-import { isAsyncIterable, isIterable, isPromise, IterableInfer } from './../../utils';
+// import { IsPromise } from './../../utils/index';
+import { isAsyncIterable, isIterable, isPromise } from './../../utils';
+import { IterableInfer, IsPromise } from '../../types';
 
 function syncReduce<T extends Iterable<any>, Acc, R extends Acc>(
   fn: (acc: R, value: Awaited<IterableInfer<T>>) => R,
@@ -103,7 +105,7 @@ function reduce<
   T extends Iterable<any> | AsyncIterable<any>,
   Acc extends Awaited<IterableInfer<T>>,
   R extends Acc,
->(fn: (acc: Acc | R, value: IterableInfer<T>) => R): (iter: T) => Promise<any> extends T ? Promise<R> : R;
+>(fn: (acc: Acc | R, value: Awaited<IterableInfer<T>>) => R): (iter: T) => IsPromise<IterableInfer<T>, R>;
 
 function reduce<T extends Iterable<any> | AsyncIterable<any>, Acc, R extends Acc | Awaited<IterableInfer<T>>>(
   fn: (acc: R, value: Awaited<IterableInfer<T>>) => R,

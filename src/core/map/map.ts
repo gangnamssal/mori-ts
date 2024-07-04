@@ -1,10 +1,6 @@
-import {
-  IsPromise,
-  IterableInfer,
-  ReturnIterableIteratorType,
-  isAsyncIterable,
-  isIterable,
-} from './../../utils';
+import { isAsyncIterable, isIterable } from './../../utils';
+
+import { IsPromise, IterableInfer, ReturnIterableIteratorType } from './../../types';
 
 function* syncMap<A, B>(
   fn: (args: A) => B,

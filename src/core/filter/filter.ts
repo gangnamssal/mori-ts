@@ -1,4 +1,5 @@
-import { IterableInfer, ReturnIterableIteratorType, isAsyncIterable, isIterable } from '../../utils';
+import { isAsyncIterable, isIterable } from '../../utils';
+import { IterableInfer, ReturnIterableIteratorType } from '../../types';
 
 function* syncFilter<A, B>(
   fn: (args: A) => B,
