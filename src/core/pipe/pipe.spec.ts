@@ -134,7 +134,7 @@ describe('pipe', () => {
   it('pipe with reduce', () => {
     const res = pipe(
       [1, 2, 3],
-      streamline.reduce<number>((acc: number, a: number) => acc + a),
+      streamline.reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(6);
@@ -144,7 +144,7 @@ describe('pipe', () => {
     const res = pipe(
       [1, 2, 3],
       streamline.map(a => a + 1),
-      streamline.reduce<number>((acc: number, a: number) => acc + a),
+      streamline.reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(9);
@@ -174,7 +174,7 @@ describe('pipe', () => {
     const res = pipe(
       [1, 2, 3],
       streamline.filter(a => a % 2 === 0),
-      streamline.reduce<number>((acc: number, a: number) => acc + a),
+      streamline.reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(2);
@@ -185,7 +185,7 @@ describe('pipe', () => {
       [1, 2, 3],
       streamline.filter(a => a % 2 === 0),
       streamline.map(a => a + 1),
-      streamline.reduce<number>((acc: number, a: number) => acc + a),
+      streamline.reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(3);
