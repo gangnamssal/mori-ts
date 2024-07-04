@@ -15,6 +15,24 @@ describe('filter', () => {
     // expect([...result2]).toEqual([{ name: 'item 1', value: 1 }]);
   });
 
+  it('filter with promise array', async () => {
+    const items = Promise.resolve([1, 2, 3]);
+
+    const result = filter(item => item === 1, await items);
+    const result2 = filter(async item => item === 1)(await items);
+
+    expect([...result]).toEqual([1]);
+  });
+
+  it('filter with promise array', () => {
+    const items = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
+
+    const result = filter(item => item === 1, items);
+    const result2 = filter(item => item === 1)(items);
+
+    expect([...result]).toEqual([Promise.resolve(1), Promise.resolve(undefined), Promise.resolve(undefined)]);
+  });
+
   it('filter with async iterable', async () => {
     const items = [
       { name: 'item 1', value: 1 },

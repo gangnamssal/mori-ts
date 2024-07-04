@@ -83,10 +83,52 @@ describe('pipe', () => {
     const res = pipe(
       [1, 2, 3],
       streamline.filter(a => a % 2 === 0),
-      streamline.map(a => a + 10),
     );
 
-    expect([...res]).toEqual([12]);
+    expect([...res]).toEqual([2]);
+    expect([...res]).not.toEqual([2, 3]);
+  });
+
+  it('pipe with filter on array promise ', () => {
+    const res = pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      streamline.filter(a => a % 2 === 0),
+    );
+
+    expect(res.next().value).resolves.toBeUndefined();
+    expect(res.next().value).resolves.toBe(2);
+    expect(res.next().value).resolves.toBeUndefined();
+  });
+
+  it('pipe with filter on array promise and number', () => {
+    const res = pipe(
+      [Promise.resolve(1), Promise.resolve(2), 4],
+      streamline.filter(a => a % 2 === 0),
+    );
+
+    expect(res.next().value).resolves.toBeUndefined();
+    expect(res.next().value).resolves.toBe(2);
+    expect(res.next().value).toBe(4);
+  });
+
+  it('pipe with filter promise array', async () => {
+    const res = await pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.filter(a => a % 2 === 0),
+    );
+
+    expect([...res]).toEqual([2]);
+    expect([...res]).not.toEqual([2, 3]);
+  });
+
+  it('pipe with filter object', () => {
+    const res = pipe(
+      [{ a: 1 }, { a: 2 }, { a: 3 }],
+      streamline.filter(a => a.a % 2 === 0),
+    );
+
+    expect([...res]).toEqual([{ a: 2 }]);
+    expect([...res]).not.toEqual([{ a: 2 }, { a: 3 }]);
   });
 
   it('pipe with reduce', () => {
@@ -106,6 +148,26 @@ describe('pipe', () => {
     );
 
     expect(res).toBe(9);
+  });
+
+  it('pipe with map and filter', () => {
+    const res = pipe(
+      [1, 2, 3],
+      streamline.filter(a => a % 2 === 0),
+      streamline.map(a => a + 1),
+    );
+
+    expect([...res]).toEqual([3]);
+  });
+
+  it('pipe with map and filter and promise array', async () => {
+    const res = await pipe(
+      Promise.resolve([1, 2, 3]),
+      streamline.filter(a => a % 2 === 0),
+      streamline.map(a => a + 1),
+    );
+
+    expect([...res]).toEqual([3]);
   });
 
   it('pipe with reduce and filter', () => {
