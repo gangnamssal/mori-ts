@@ -1,5 +1,5 @@
 {
-  "name": "streamlineTS",
+  "name": "mori-ts",
   "author": {
     "name": "Tommy",
     "email": "24691116@naver.com"
@@ -17,18 +17,18 @@
   "keywords": [
     "function",
     "functional-programming",
-    "streamlinejs",
-    "streamlineTS",
-    "node"
+    "fx-ts",
+    "mori-ts",
+    "effect"
   ],
-  "homepage": "https://github.com/gangnamssal/streamlineTS",
+  "homepage": "https://github.com/gangnamssal/mori-ts",
   "bugs": {
-    "url": "https://github.com/gangnamssal/streamlineTS/issues",
+    "url": "https://github.com/gangnamssal/mori-ts/issues",
     "email": "24691116@naver.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gangnamssal/streamlineTS"
+    "url": "https://github.com/gangnamssal/mori-ts"
   },
   "license": "(ISC OR MIT)",
   "files": [
@@ -44,25 +44,10 @@
     "typescript": "^5.4.3"
   },
   "exports": {
-    "./curry": {
-      "types": "./dist/curry/index.d.ts",
-      "import": "./dist/curry/index.js",
-      "require": "./dist/curry/index.cjs"
-    },
-    "./lazy": {
-      "types": "./dist/lazy/index.d.ts",
-      "import": "./dist/lazy/index.js",
-      "require": "./dist/lazy/index.cjs"
-    },
-    "./strict": {
-      "types": "./dist/strict/index.d.ts",
-      "import": "./dist/strict/index.js",
-      "require": "./dist/strict/index.cjs"
-    },
-    "./utils": {
-      "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.js",
-      "require": "./dist/utils/index.cjs"
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js",
+      "require": "./dist/core/index.cjs"
     },
     ".": {
       "types": "./dist/index.d.ts",
