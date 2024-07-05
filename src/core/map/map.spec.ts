@@ -1,4 +1,5 @@
 import map from './map';
+import toArray from '../toArray/toArray';
 
 describe('map', () => {
   it('map with array', () => {
@@ -7,11 +8,11 @@ describe('map', () => {
 
     // Act
     const result = map(value => value * 2, array);
-    const result2 = map(value => value * 2)(array);
+    const result2 = toArray(map(value => value * 2)(array));
 
     // Assert
     expect([...result]).toEqual([2, 4, 6]);
-    // expect(Array(result2)).toEqual([2, 4, 6]);
+    expect(result2).toEqual([2, 4, 6]);
   });
 
   it('map with set', () => {
@@ -24,7 +25,7 @@ describe('map', () => {
 
     // Assert
     expect([...result]).toEqual([2, 4, 6]);
-    // expect(Array(result2)).toEqual([2, 4, 6]);
+    expect(toArray(result2)).toEqual([2, 4, 6]);
   });
 
   it('map with map', () => {
@@ -41,7 +42,7 @@ describe('map', () => {
 
     // Assert
     expect([...result]).toEqual([2, 4, 6]);
-    // expect(Array(result2)).toEqual([2, 4, 6]);
+    expect(toArray(result2)).toEqual([2, 4, 6]);
   });
 
   it('map with promise', async () => {
@@ -51,7 +52,7 @@ describe('map', () => {
     const result2 = map(value => value * 2)(promise);
 
     expect([...result]).toEqual([Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
-    // expect(Array(result2)).toEqual([Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
+    expect(toArray(result2)).toEqual([Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
   });
 
   it('map with promise', async () => {
@@ -61,7 +62,7 @@ describe('map', () => {
     const result2 = map(value => value * 2)(promise);
 
     expect([...result]).toEqual([2, Promise.resolve(4), Promise.resolve(6)]);
-    // expect(Array(result2)).toEqual([Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
+    expect(toArray(result2)).toEqual([2, Promise.resolve(4), Promise.resolve(6)]);
   });
 
   it('map with promise, number', async () => {
@@ -71,7 +72,7 @@ describe('map', () => {
     const result2 = map((value: number) => value * 2)(await promise);
 
     expect([...result]).toEqual([2, 4, 6]);
-    // expect(Array(result2)).toEqual([2, 4, 6]);
+    expect(toArray(result2)).toEqual([2, 4, 6]);
   });
 
   it('map with promise, promise', async () => {
@@ -81,7 +82,7 @@ describe('map', () => {
     const result2 = map((value: number) => value * 2)(await promise);
 
     expect([...result]).toEqual([Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
-    // expect(Array(result2)).toEqual([2, 4, 6]);
+    expect(toArray(result2)).toEqual([Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
   });
 
   it('map with promise', async () => {
@@ -97,8 +98,7 @@ describe('map', () => {
     expect(result.next()).toEqual({ done: true, value: undefined });
 
     expect([...result2]).toEqual([2, 4, 6]);
-
-    // expect(Array(result3)).toEqual([2, 4, 6]);
+    expect(toArray(result3)).toEqual([2, 4, 6]);
   });
 
   it('map with iterable', () => {
@@ -124,7 +124,7 @@ describe('map', () => {
 
     // Assert
     expect([...result]).toEqual([2, 4, 6]);
-    // expect(Array(result2)).toEqual([2, 4, 6]);
+    expect(toArray(result2)).toEqual([2, 4, 6]);
   });
 
   it('map with promise', async () => {
@@ -152,13 +152,19 @@ describe('map', () => {
 
     // Act
     const result = map(value => value * 2, asyncIterable);
-    const result2 = map(value => value * 2)(asyncIterable);
+
+    const asyncIterable2 = (async function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
+    const result2 = map(value => value * 2)(asyncIterable2);
 
     expect(result.next()).resolves.toEqual({ done: false, value: 2 });
     expect(result.next()).resolves.toEqual({ done: false, value: 4 });
     expect(result.next()).resolves.toEqual({ done: false, value: 6 });
     expect(result.next()).resolves.toEqual({ done: true, value: undefined });
 
-    // expect(Array(result2)).resolves.toEqual([2, 4, 6]);
+    expect(toArray(result2)).resolves.toEqual([2, 4, 6]);
   });
 });
