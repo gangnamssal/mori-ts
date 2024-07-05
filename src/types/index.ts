@@ -24,9 +24,16 @@ export type ReturnArrayType<T extends Iterable<unknown> | AsyncIterable<unknown>
       ? Promise<IterableInfer<T>[]>
       : never;
 
-export type ReturnIterablePromiseType<T extends Iterable<unknown> | AsyncIterable<unknown>> =
+export type ReturnIterableAsyncIterableType<T extends Iterable<unknown> | AsyncIterable<unknown>> =
   T extends Iterable<unknown>
     ? IterableInfer<T>
     : T extends AsyncIterable<unknown>
       ? Promise<IterableInfer<T>>
+      : never;
+
+export type ReturnIterablePromiseType<T extends Iterable<unknown> | AsyncIterable<unknown>> =
+  T extends Iterable<unknown>
+    ? IterableIterator<IterableInfer<T>>
+    : T extends AsyncIterable<unknown>
+      ? AsyncIterableIterator<IterableInfer<T>>
       : never;

@@ -1,6 +1,5 @@
-import { ReturnIterablePromiseType } from './../../types/index';
-import { IterableInfer } from '../../types';
 import { isAsyncIterable, isIterable } from './../../utils';
+import { IterableInfer, ReturnIterableAsyncIterableType } from '../../types';
 
 function syncAt<A>(index: number, iter: Iterable<A>): A | undefined {
   if (index === 0) {
@@ -65,7 +64,7 @@ async function asyncAt<A>(index: number, iter: AsyncIterable<A>): Promise<A | un
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
   iter: A,
-): ReturnIterablePromiseType<A>;
+): ReturnIterableAsyncIterableType<A>;
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
 ): (iter: A) => IterableInfer<A>;
