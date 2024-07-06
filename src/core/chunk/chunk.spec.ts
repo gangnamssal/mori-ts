@@ -1,11 +1,13 @@
 import chunk from './chunk';
-import * as mori from '..';
+import { pipe, toArray } from '..';
 
 describe('chunk', () => {
   it('should chunk the given iterable', () => {
     const iter = chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const iter2 = toArray(chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
 
     expect([...iter]).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+    expect(iter2).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
 
   it('should chunk no iterable', () => {
@@ -15,7 +17,7 @@ describe('chunk', () => {
   });
 
   it('should chunk no iterable with toArray', () => {
-    const iter = mori.toArray(chunk(2)([1, 2, 3, 4, 5, 6, 7, 8, 9]));
+    const iter = toArray(chunk(2)([1, 2, 3, 4, 5, 6, 7, 8, 9]));
 
     expect([...iter]).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
@@ -43,7 +45,7 @@ describe('chunk', () => {
   });
 
   it('should chunk the given iterable with object, toArray', () => {
-    const iter = mori.toArray(
+    const iter = toArray(
       chunk(2, [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }, { a: 9 }]),
     );
 
@@ -57,7 +59,7 @@ describe('chunk', () => {
   });
 
   it('should chunk the given iterable with toArray', () => {
-    const iter2 = mori.toArray(chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
+    const iter2 = toArray(chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
 
     expect(iter2).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
@@ -79,7 +81,7 @@ describe('chunk', () => {
   });
 
   it('should return empty iterable if the given iterable is empty with toArray', () => {
-    const iter = mori.toArray(chunk(2, []));
+    const iter = toArray(chunk(2, []));
     expect(iter).toEqual([]);
   });
 
@@ -89,7 +91,7 @@ describe('chunk', () => {
   });
 
   it('should return empty iterable if the given size is 0 with toArray', () => {
-    const iter = mori.toArray(chunk(0, [1, 2, 3]));
+    const iter = toArray(chunk(0, [1, 2, 3]));
     expect(iter).toEqual([]);
   });
 
@@ -121,14 +123,14 @@ describe('chunk', () => {
   });
 
   it('chunk with pipe', async () => {
-    const iter = mori.pipe([1, 2, 3, 4, 5, 6, 7, 8, 9], chunk(2), mori.toArray);
-    const iter2 = mori.pipe(
+    const iter = pipe([1, 2, 3, 4, 5, 6, 7, 8, 9], chunk(2), toArray);
+    const iter2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4)],
       chunk(2),
-      mori.toArray,
+      toArray,
     );
-    const iter3 = await mori.pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), mori.toArray);
-    const iter4 = mori.pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), mori.toArray);
+    const iter3 = await pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
+    const iter4 = pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
 
     expect(iter).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
     expect(iter2).toEqual([

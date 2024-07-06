@@ -1,10 +1,10 @@
 import take from './take';
-import * as mori from '..';
+import { pipe, toArray } from '..';
 
 describe('take', () => {
   it('should take the first n elements from an iterable', () => {
     const iter = take(3, [1, 2, 3, 4, 5]);
-    const iter2 = mori.toArray(take(3, [1, 2, 3, 4, 5]));
+    const iter2 = toArray(take(3, [1, 2, 3, 4, 5]));
 
     expect([...iter]).toEqual([1, 2, 3]);
     expect(iter2).toEqual([1, 2, 3]);
@@ -22,7 +22,7 @@ describe('take', () => {
       })(),
     );
 
-    const iter2 = mori.toArray(
+    const iter2 = toArray(
       take(
         3,
         (async function* () {
@@ -35,7 +35,7 @@ describe('take', () => {
       ),
     );
 
-    const iter3 = await mori.toArray(
+    const iter3 = await toArray(
       take(
         2,
         (async function* () {
@@ -70,14 +70,14 @@ describe('take', () => {
   });
 
   it('take with pipe', async () => {
-    const res = mori.pipe([1, 2, 3, 4, 5], mori.take(3), mori.toArray);
-    const res2 = mori.pipe(
+    const res = pipe([1, 2, 3, 4, 5], take(3), toArray);
+    const res2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4)],
-      mori.take(1),
-      mori.toArray,
+      take(1),
+      toArray,
     );
-    const res3 = await mori.pipe(Promise.resolve([1, 2, 3, 4, 5]), mori.take(2), mori.toArray);
-    const res4 = mori.pipe(Promise.resolve([1, 2, 3, 4, 5]), mori.take(4), mori.toArray);
+    const res3 = await pipe(Promise.resolve([1, 2, 3, 4, 5]), take(2), toArray);
+    const res4 = pipe(Promise.resolve([1, 2, 3, 4, 5]), take(4), toArray);
 
     expect(res).toEqual([1, 2, 3]);
     expect(res2).toEqual([Promise.resolve(1)]);

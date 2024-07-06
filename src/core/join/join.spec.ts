@@ -1,5 +1,5 @@
 import join from './join';
-import * as mori from '..';
+import { map, pipe, range } from '..';
 
 describe('join', () => {
   it('joins an array of strings with a separator', () => {
@@ -33,7 +33,7 @@ describe('join', () => {
   });
 
   it('join with pipe', () => {
-    const res = mori.pipe(mori.range(1, 4), mori.map(String), join(','));
+    const res = pipe(range(1, 4), map(String), join(','));
 
     expect(res).toBe('1,2,3');
   });
@@ -41,9 +41,9 @@ describe('join', () => {
   it('object with a separator', () => {
     const obj = { a: 1, b: 2, c: 3 };
 
-    const res = mori.pipe(
+    const res = pipe(
       Object.entries(obj),
-      mori.map(([k, v]: [string, number]) => `${k}=${v}`),
+      map(([k, v]: [string, number]) => `${k}=${v}`),
       join('&'),
     );
 

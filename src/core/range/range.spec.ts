@@ -1,5 +1,5 @@
 import range from './range';
-import * as mori from '..';
+import { filter, map, pipe, reduce, take, toArray } from '..';
 
 describe('range', () => {
   it('should generate a range of numbers', () => {
@@ -33,20 +33,20 @@ describe('range', () => {
   });
 
   it('range with pipe', () => {
-    const res = mori.pipe(range(5), mori.toArray);
-    const res2 = mori.pipe(range(5, 10), mori.toArray);
-    const res3 = mori.pipe(range(5, 10, 2), mori.toArray);
-    const res4 = mori.pipe(
+    const res = pipe(range(5), toArray);
+    const res2 = pipe(range(5, 10), toArray);
+    const res3 = pipe(range(5, 10, 2), toArray);
+    const res4 = pipe(
       range(5),
-      mori.map(x => x * 2),
-      mori.take(3),
-      mori.toArray,
+      map(x => x * 2),
+      take(3),
+      toArray,
     );
-    const res5 = mori.pipe(
+    const res5 = pipe(
       range(0, 10),
-      mori.map(x => x * 2),
-      mori.filter(x => x % 2 === 0),
-      mori.reduce((acc, x) => acc + x),
+      map(x => x * 2),
+      filter(x => x % 2 === 0),
+      reduce((acc, x) => acc + x),
     );
 
     expect(res).toEqual([0, 1, 2, 3, 4]);

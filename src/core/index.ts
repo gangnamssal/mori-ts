@@ -1,5 +1,6 @@
 export { default as at } from './at/at';
 export { default as chunk } from './chunk/chunk';
+export { default as drop } from './drop/drop';
 export { default as filter } from './filter/filter';
 export { default as join } from './join/join';
 export { default as map } from './map/map';

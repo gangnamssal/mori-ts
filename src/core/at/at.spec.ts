@@ -1,5 +1,5 @@
 import at from './at';
-import * as mori from '..';
+import { filter, map, pipe } from '..';
 
 describe('at', () => {
   it('should return the element at the specified index', () => {
@@ -16,10 +16,12 @@ describe('at', () => {
     const res = at(-1, [1, 2, 3]);
     const res2 = at(-2, [1, 2, 3]);
     const res3 = at(-3, [1, 2, 3]);
+    const res4 = at(-5, [1, 2, 3]);
 
     expect(res).toBe(3);
     expect(res2).toBe(2);
     expect(res3).toBe(1);
+    expect(res4).toBeUndefined();
   });
 
   it('should return undefined if the index is out of bounds', () => {
@@ -99,35 +101,35 @@ describe('at', () => {
   });
 
   it('at with pipe', async () => {
-    const res = mori.pipe(
+    const res = pipe(
       [1, 2, 3],
-      mori.map(x => x * 2),
-      mori.filter(x => x > 2),
+      map(x => x * 2),
+      filter(x => x > 2),
       at(0),
     );
 
-    const res2 = mori.pipe(
+    const res2 = pipe(
       [1, 2, 3],
-      mori.map(x => x * 2),
-      mori.filter(x => x > 2),
+      map(x => x * 2),
+      filter(x => x > 2),
       at(-1),
     );
 
-    const res3 = mori.pipe(
+    const res3 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.map(x => x * 2),
+      map(x => x * 2),
       at(-1),
     );
 
-    const res4 = mori.pipe(
+    const res4 = pipe(
       [Promise.resolve(1), 2, Promise.resolve(3)],
-      mori.map(x => x * 2),
+      map(x => x * 2),
       at(-2),
     );
 
-    const res5 = await mori.pipe(
+    const res5 = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.map(x => x * 2),
+      map(x => x * 2),
       at(-2),
     );
 
