@@ -9,4 +9,4 @@ export { default as pipe } from './pipe/pipe';
 export { default as range } from './range/range';
 export { default as reduce } from './reduce/reduce';
 export { default as take } from './take/take';
-export { default as toArray } from './toArray/toArray';
+export { default as toArray } from './to-array/to-array';

@@ -1,5 +1,5 @@
 import pipe from './pipe';
-import * as mori from '..';
+import { filter, map, reduce, toArray } from '..';
 
 describe('pipe', () => {
   it('pipe with functions', () => {
@@ -16,17 +16,17 @@ describe('pipe', () => {
   it('pipe with map', () => {
     const res = pipe(
       [1, 2, 3],
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
     );
 
     const res2 = pipe(
       [1, 2, 3],
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
-      mori.toArray,
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
+      toArray,
     );
 
     expect([...res]).toEqual([112, 113, 114]);
@@ -36,17 +36,17 @@ describe('pipe', () => {
   it('pipe with map on object', () => {
     const res = pipe(
       [{ a: 1 }, { a: 2 }, { a: 3 }],
-      mori.map(a => ({ a: a.a + 1 })),
-      mori.map(a => ({ a: a.a + 10 })),
-      mori.map(a => ({ a: a.a + 100 })),
+      map(a => ({ a: a.a + 1 })),
+      map(a => ({ a: a.a + 10 })),
+      map(a => ({ a: a.a + 100 })),
     );
 
     const res2 = pipe(
       [{ a: 1 }, { a: 2 }, { a: 3 }],
-      mori.map(a => ({ a: a.a + 1 })),
-      mori.map(a => ({ a: a.a + 10 })),
-      mori.map(a => ({ a: a.a + 100 })),
-      mori.toArray,
+      map(a => ({ a: a.a + 1 })),
+      map(a => ({ a: a.a + 10 })),
+      map(a => ({ a: a.a + 100 })),
+      toArray,
     );
 
     expect([...res]).toEqual([{ a: 112 }, { a: 113 }, { a: 114 }]);
@@ -56,17 +56,17 @@ describe('pipe', () => {
   it('pipe with map, promise', () => {
     const res = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
     );
 
     const res2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
-      mori.toArray,
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
+      toArray,
     );
 
     expect([...res]).toEqual([Promise.resolve(112), Promise.resolve(113), Promise.resolve(114)]);
@@ -78,17 +78,17 @@ describe('pipe', () => {
   it('pipe with map on promise, number', () => {
     const res = pipe(
       [1, Promise.resolve(2), Promise.resolve(3)],
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
     );
 
     const res2 = pipe(
       [1, Promise.resolve(2), Promise.resolve(3)],
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
-      mori.toArray,
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
+      toArray,
     );
     expect([...res]).toEqual([112, Promise.resolve(113), Promise.resolve(114)]);
     expect(res2[0]).toBe(112);
@@ -99,17 +99,17 @@ describe('pipe', () => {
   it('pipe with map, promise', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
     );
 
     const res2 = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
-      mori.toArray,
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
+      toArray,
     );
 
     expect([...res]).toEqual([112, 113, 114]);
@@ -119,17 +119,17 @@ describe('pipe', () => {
   it('pipe with map, promise', async () => {
     const res = await pipe(
       Promise.resolve([Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]),
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
     );
 
     const res2 = await pipe(
       Promise.resolve([Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]),
-      mori.map(a => a + 1),
-      mori.map(a => a + 10),
-      mori.map(a => a + 100),
-      mori.toArray,
+      map(a => a + 1),
+      map(a => a + 10),
+      map(a => a + 100),
+      toArray,
     );
 
     expect([...res]).toEqual([Promise.resolve(112), Promise.resolve(113), Promise.resolve(114)]);
@@ -141,13 +141,13 @@ describe('pipe', () => {
   it('pipe with filter', () => {
     const res = pipe(
       [1, 2, 3],
-      mori.filter(a => a % 2 === 0),
+      filter(a => a % 2 === 0),
     );
 
     const res2 = pipe(
       [1, 2, 3],
-      mori.filter(a => a % 2 === 0),
-      mori.toArray,
+      filter(a => a % 2 === 0),
+      toArray,
     );
 
     expect([...res]).toEqual([2]);
@@ -159,13 +159,13 @@ describe('pipe', () => {
   it('pipe with filter on array promise ', () => {
     const res = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.filter(a => a % 2 === 0),
+      filter(a => a % 2 === 0),
     );
 
     const res2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.filter(a => a % 2 === 0),
-      mori.toArray,
+      filter(a => a % 2 === 0),
+      toArray,
     );
 
     expect(res.next().value).resolves.toBeUndefined();
@@ -180,13 +180,13 @@ describe('pipe', () => {
   it('pipe with filter on array promise and number', () => {
     const res = pipe(
       [Promise.resolve(1), Promise.resolve(2), 4],
-      mori.filter(a => a % 2 === 0),
+      filter(a => a % 2 === 0),
     );
 
     const res2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), 4],
-      mori.filter(a => a % 2 === 0),
-      mori.toArray,
+      filter(a => a % 2 === 0),
+      toArray,
     );
 
     expect(res.next().value).resolves.toBeUndefined();
@@ -201,13 +201,13 @@ describe('pipe', () => {
   it('pipe with filter promise array', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.filter(a => a % 2 === 0),
+      filter(a => a % 2 === 0),
     );
 
     const res2 = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.filter(a => a % 2 === 0),
-      mori.toArray,
+      filter(a => a % 2 === 0),
+      toArray,
     );
 
     expect([...res]).toEqual([2]);
@@ -218,13 +218,13 @@ describe('pipe', () => {
   it('pipe with filter object', () => {
     const res = pipe(
       [{ a: 1 }, { a: 2 }, { a: 3 }],
-      mori.filter(a => a.a % 2 === 0),
+      filter(a => a.a % 2 === 0),
     );
 
     const res2 = pipe(
       [{ a: 1 }, { a: 2 }, { a: 3 }],
-      mori.filter(a => a.a % 2 === 0),
-      mori.toArray,
+      filter(a => a.a % 2 === 0),
+      toArray,
     );
 
     expect([...res]).toEqual([{ a: 2 }]);
@@ -236,7 +236,7 @@ describe('pipe', () => {
   it('pipe with reduce', () => {
     const res = pipe(
       [1, 2, 3],
-      mori.reduce((acc, a) => acc + a),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(6);
@@ -245,12 +245,12 @@ describe('pipe', () => {
   it('pipe with reduce on promise array', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.reduce((acc, a) => acc + a),
+      reduce((acc, a) => acc + a),
     );
 
     const res2 = pipe(
       Promise.resolve([1, 2, 3]),
-      mori.reduce((acc, a) => acc + a),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(6);
@@ -260,12 +260,12 @@ describe('pipe', () => {
   it('pipe with reduce on array promise', async () => {
     const res = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.reduce((acc, a) => acc + a),
+      reduce((acc, a) => acc + a),
     );
 
     const res2 = await pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.reduce((acc, a) => acc + a),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).resolves.toBe(6);
@@ -275,12 +275,12 @@ describe('pipe', () => {
   it('pipe with reduce on array promise and number', async () => {
     const res = pipe(
       [1, Promise.resolve(2), Promise.resolve(3)],
-      mori.reduce((acc, a) => acc + a),
+      reduce((acc, a) => acc + a),
     );
 
     const res2 = await pipe(
       [1, Promise.resolve(2), 3],
-      mori.reduce((acc, a) => acc + a),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).resolves.toBe(6);
@@ -290,8 +290,8 @@ describe('pipe', () => {
   it('pipe with reduce and map', () => {
     const res = pipe(
       [1, 2, 3],
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(9);
@@ -300,14 +300,14 @@ describe('pipe', () => {
   it('pipe with reduce and map on promise array', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     const res2 = pipe(
       Promise.resolve([1, 2, 3]),
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(9);
@@ -317,20 +317,20 @@ describe('pipe', () => {
   it('pipe with reduce and map on array promise', async () => {
     const res = await pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     const res2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     const res3 = pipe(
       [1, Promise.resolve(2), 3],
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(9);
@@ -341,15 +341,15 @@ describe('pipe', () => {
   it('pipe with map and filter', () => {
     const res = pipe(
       [1, 2, 3],
-      mori.filter(a => a % 2 === 0),
-      mori.map(a => a + 1),
+      filter(a => a % 2 === 0),
+      map(a => a + 1),
     );
 
     const res2 = pipe(
       [1, 2, 3],
-      mori.filter(a => a % 2 === 0),
-      mori.map(a => a + 1),
-      mori.toArray,
+      filter(a => a % 2 === 0),
+      map(a => a + 1),
+      toArray,
     );
 
     expect([...res]).toEqual([3]);
@@ -359,15 +359,15 @@ describe('pipe', () => {
   it('pipe with map and filter and promise array', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.filter(a => a % 2 === 0),
-      mori.map(a => a + 1),
+      filter(a => a % 2 === 0),
+      map(a => a + 1),
     );
 
     const res2 = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.filter(a => a % 2 === 0),
-      mori.map(a => a + 1),
-      mori.toArray,
+      filter(a => a % 2 === 0),
+      map(a => a + 1),
+      toArray,
     );
 
     expect([...res]).toEqual([3]);
@@ -377,8 +377,8 @@ describe('pipe', () => {
   it('pipe with reduce and filter', () => {
     const res = pipe(
       [1, 2, 3],
-      mori.filter(a => a % 2 === 0),
-      mori.reduce((acc, a) => acc + a),
+      filter(a => a % 2 === 0),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(2);
@@ -387,14 +387,14 @@ describe('pipe', () => {
   it('pipe with reduce and filter on promise array', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.filter(a => a % 2 === 0),
-      mori.reduce((acc, a) => acc + a),
+      filter(a => a % 2 === 0),
+      reduce((acc, a) => acc + a),
     );
 
     const res2 = pipe(
       Promise.resolve([1, 2, 3]),
-      mori.filter(a => a % 2 !== 0),
-      mori.reduce((acc, a) => acc + a),
+      filter(a => a % 2 !== 0),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(2);
@@ -404,9 +404,9 @@ describe('pipe', () => {
   it('pipe with reduce, filter and map', () => {
     const res = pipe(
       [1, 2, 3],
-      mori.filter(a => a % 2 === 0),
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      filter(a => a % 2 === 0),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(3);
@@ -415,9 +415,9 @@ describe('pipe', () => {
   it('pipe with reduce, filter and map on promise array', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
-      mori.filter(a => a % 2 === 0),
-      mori.map(a => a + 1),
-      mori.reduce((acc, a) => acc + a),
+      filter(a => a % 2 === 0),
+      map(a => a + 1),
+      reduce((acc, a) => acc + a),
     );
 
     expect(res).toBe(3);

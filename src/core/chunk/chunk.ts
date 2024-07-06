@@ -1,7 +1,7 @@
 import { IterableInfer, ReturnIterableIteratorType } from '../../types';
 import { isAsyncIterable, isIterable } from '../../utils';
 import take from '../take/take';
-import toArray from '../toArray/toArray';
+import toArray from '../to-array/to-array';
 
 function* syncChunk<A>(size: number, iter: Iterable<A>): IterableIterator<A[]> {
   if (size <= 0) return;

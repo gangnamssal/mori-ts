@@ -1,4 +1,4 @@
-import toArray from '../toArray/toArray';
+import toArray from '../to-array/to-array';
 import filter from './filter';
 
 describe('filter', () => {

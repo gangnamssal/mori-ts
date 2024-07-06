@@ -1,5 +1,5 @@
 import map from './map';
-import toArray from '../toArray/toArray';
+import toArray from '../to-array/to-array';
 
 describe('map', () => {
   it('map with array', () => {
