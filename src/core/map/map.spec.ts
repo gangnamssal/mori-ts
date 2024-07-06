@@ -167,4 +167,18 @@ describe('map', () => {
 
     expect(toArray(result2)).resolves.toEqual([2, 4, 6]);
   });
+
+  it('map with empty iterable', () => {
+    // Arrange
+    const iterable = (function* () {})();
+    const arr: any[] = [];
+
+    // Act
+    const result = map(value => value * 2, iterable);
+    const result2 = map(value => value * 2)(arr);
+
+    // Assert
+    expect([...result]).toEqual([]);
+    expect(toArray(result2)).toEqual([]);
+  });
 });

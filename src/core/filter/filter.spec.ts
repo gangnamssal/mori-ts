@@ -119,4 +119,14 @@ describe('filter', () => {
     expect([...result]).toEqual([['1', 1]]);
     expect(toArray(result2)).toEqual([['1', 1]]);
   });
+
+  it('filter with empty iterable', () => {
+    const items: any[] = [];
+
+    const result = filter(item => item === 1, items);
+    const result2 = filter(item => item === 1)(items);
+
+    expect([...result]).toEqual([]);
+    expect(toArray(result2)).toEqual([]);
+  });
 });

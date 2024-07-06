@@ -49,4 +49,9 @@ describe('join', () => {
 
     expect(res).toBe('a=1&b=2&c=3');
   });
+
+  it('join with empty array', () => {
+    const res = join(',', []);
+    expect(res).toBe('');
+  });
 });

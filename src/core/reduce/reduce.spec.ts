@@ -169,4 +169,16 @@ describe('reduce', () => {
     expect(result2).resolves.toBe(15);
     expect(result3).resolves.toBe(15);
   });
+
+  it('reduce with empty iterable', () => {
+    function* iterable() {}
+
+    const result = reduce((acc, value) => acc + value, 10, iterable());
+    const result2 = reduce((acc, value) => acc + value, iterable());
+    const result3 = reduce((acc: number, value: number) => acc + value)(iterable());
+
+    expect(result).toBe(10);
+    expect(result2).toBe(undefined);
+    expect(result3).toBe(undefined);
+  });
 });
