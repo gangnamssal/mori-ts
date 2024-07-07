@@ -26,4 +26,16 @@ describe('flat', () => {
     const iter = flat([]);
     expect([...iter]).toEqual([]);
   });
+
+  it('flat with array promise', () => {
+    const iter = flat([[Promise.resolve(1), Promise.resolve(2)], [Promise.resolve(3)]]);
+    expect(iter.next().value).resolves.toBe(1);
+    expect(iter.next().value).resolves.toBe(2);
+    expect(iter.next().value).resolves.toBe(3);
+  });
+
+  it('flat with promise array', async () => {
+    const iter = flat(await Promise.resolve([[1], [2], [3]]));
+    expect([...iter]).toEqual([1, 2, 3]);
+  });
 });
