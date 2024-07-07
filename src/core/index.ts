@@ -11,3 +11,4 @@ export { default as range } from './range/range';
 export { default as reduce } from './reduce/reduce';
 export { default as take } from './take/take';
 export { default as toArray } from './to-array/to-array';
+export { default as toAsync } from './to-async/to-async';
