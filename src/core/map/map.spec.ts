@@ -1,5 +1,7 @@
 import map from './map';
 import toArray from '../to-array/to-array';
+import pipe from '../pipe/pipe';
+import toAsync from '../to-async/to-async';
 
 describe('map', () => {
   it('map with array', () => {
@@ -180,5 +182,33 @@ describe('map', () => {
     // Assert
     expect([...result]).toEqual([]);
     expect(toArray(result2)).toEqual([]);
+  });
+
+  it('map with toAsync', async () => {
+    const iter = [1, 2, 3];
+
+    const res = pipe(
+      iter,
+      toAsync,
+      map(value => value * 2),
+      toArray,
+    );
+    expect(res).resolves.toEqual([2, 4, 6]);
+
+    const res2 = await pipe(
+      iter,
+      toAsync,
+      map(value => value * 2),
+      toArray,
+    );
+    expect(res2).toEqual([2, 4, 6]);
+
+    const res3 = await pipe(
+      [],
+      toAsync,
+      map(value => value * 2),
+      toArray,
+    );
+    expect(res3).toEqual([]);
   });
 });

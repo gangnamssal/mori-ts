@@ -41,7 +41,7 @@ function filter<A, B>(fn: (args: Awaited<A>) => B, iter: Iterable<Promise<A>>): 
 
 function filter<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<A>;
 
-function filter<A extends Iterable<any> | AsyncIterable<A>, B>(
+function filter<A extends Iterable<any> | AsyncIterable<any>, B>(
   fn: (args: Awaited<IterableInfer<A>>) => B,
 ): (iter: A) => ReturnIterableIteratorType<A>;
 

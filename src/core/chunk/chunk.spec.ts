@@ -1,5 +1,5 @@
 import chunk from './chunk';
-import { pipe, toArray } from '..';
+import { pipe, toArray, toAsync } from '..';
 
 describe('chunk', () => {
   it('should chunk the given iterable', () => {
@@ -13,13 +13,18 @@ describe('chunk', () => {
   it('should chunk no iterable', () => {
     const iter = chunk(2)([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
-    expect([...iter]).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+    expect(iter.next()).toEqual({ value: [1, 2], done: false });
+    expect(iter.next()).toEqual({ value: [3, 4], done: false });
+    expect(iter.next()).toEqual({ value: [5, 6], done: false });
+    expect(iter.next()).toEqual({ value: [7, 8], done: false });
+    expect(iter.next()).toEqual({ value: [9], done: false });
+    expect(iter.next()).toEqual({ value: undefined, done: true });
   });
 
   it('should chunk no iterable with toArray', () => {
     const iter = toArray(chunk(2)([1, 2, 3, 4, 5, 6, 7, 8, 9]));
 
-    expect([...iter]).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+    expect(iter).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
 
   it('should chunk the given iterable with object', () => {
@@ -131,6 +136,7 @@ describe('chunk', () => {
     );
     const iter3 = await pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
     const iter4 = pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
+    const iter5 = pipe([], chunk(2), toArray);
 
     expect(iter).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
     expect(iter2).toEqual([
@@ -139,5 +145,21 @@ describe('chunk', () => {
     ]);
     expect(iter3).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
     expect(iter4).resolves.toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+    expect(iter5).toEqual([]);
+  });
+
+  it('chunk with toAsync', async () => {
+    const iter = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    // const res = pipe(iter, toAsync, chunk(2), toArray);
+    const res = pipe(iter, toAsync, chunk(2), toArray);
+    const res2 = await pipe(iter, toAsync, chunk(2), toArray);
+    const res3 = pipe([], toAsync, chunk(2), toArray);
+    const res4 = await pipe([], toAsync, chunk(2), toArray);
+
+    expect(res).resolves.toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+    expect(res2).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+    expect(res3).resolves.toEqual([]);
+    expect(res4).toEqual([]);
   });
 });

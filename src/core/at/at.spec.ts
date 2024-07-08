@@ -1,5 +1,5 @@
 import at from './at';
-import { filter, map, pipe } from '..';
+import { filter, map, pipe, toAsync } from '..';
 
 describe('at', () => {
   it('should return the element at the specified index', () => {
@@ -138,5 +138,15 @@ describe('at', () => {
     expect(res3).resolves.toBe(6);
     expect(res4).toBe(4);
     expect(res5).toBe(4);
+  });
+
+  it('at with toAsync', () => {
+    const iter = [1, 2, 3];
+
+    const res = pipe(iter, toAsync, at(0));
+    const res2 = pipe(iter, toAsync, at(-1));
+
+    expect(res).resolves.toBe(1);
+    expect(res2).resolves.toBe(3);
   });
 });

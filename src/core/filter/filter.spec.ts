@@ -1,4 +1,6 @@
+import pipe from '../pipe/pipe';
 import toArray from '../to-array/to-array';
+import toAsync from '../to-async/to-async';
 import filter from './filter';
 
 describe('filter', () => {
@@ -128,5 +130,33 @@ describe('filter', () => {
 
     expect([...result]).toEqual([]);
     expect(toArray(result2)).toEqual([]);
+  });
+
+  it('filter with toAsync', async () => {
+    const iter = [1, 2, 3];
+
+    const res = pipe(
+      iter,
+      toAsync,
+      filter(item => item === 1),
+      toArray,
+    );
+    expect(res).resolves.toEqual([1]);
+
+    const res2 = pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
+      filter(item => item === 3),
+      toArray,
+    );
+    expect(res2).resolves.toEqual([3]);
+
+    const res3 = pipe(
+      [],
+      toAsync,
+      filter(item => item === 3),
+      toArray,
+    );
+    expect(res3).resolves.toEqual([]);
   });
 });

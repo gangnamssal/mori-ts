@@ -1,3 +1,5 @@
+import pipe from '../pipe/pipe';
+import toAsync from '../to-async/to-async';
 import reduce from './reduce';
 
 describe('reduce', () => {
@@ -180,5 +182,17 @@ describe('reduce', () => {
     expect(result).toBe(10);
     expect(result2).toBe(undefined);
     expect(result3).toBe(undefined);
+  });
+
+  it('reduce with toAsync', () => {
+    const iter = [1, 2, 3];
+
+    const res = pipe(
+      iter,
+      toAsync,
+      reduce((acc, value) => acc + value),
+    );
+
+    expect(res).resolves.toBe(6);
   });
 });

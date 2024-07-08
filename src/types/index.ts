@@ -1,5 +1,7 @@
 export type IsPromise<T, R> =
-  T extends Promise<any> ? Promise<R> : Promise<any> extends T ? Promise<R> | R : R;
+  T extends Promise<unknown> ? Promise<R> : Promise<unknown> extends T ? Promise<R> | R : R;
+
+export type IsContainPromise<T, R> = Promise<unknown> extends T ? Promise<R> : R;
 
 export type IterableInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> = T extends
   | Iterable<infer U>
@@ -45,3 +47,5 @@ export type ReturnIterablePromiseType<T extends Iterable<unknown> | AsyncIterabl
     : T extends AsyncIterable<unknown>
       ? AsyncIterableIterator<IterableInfer<T>>
       : never;
+
+export type IsNever<T> = [T] extends [never] ? true : false;

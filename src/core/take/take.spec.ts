@@ -1,5 +1,5 @@
 import take from './take';
-import { pipe, toArray } from '..';
+import { pipe, toArray, toAsync } from '..';
 
 describe('take', () => {
   it('should take the first n elements from an iterable', () => {
@@ -83,5 +83,16 @@ describe('take', () => {
     expect(res2).toEqual([Promise.resolve(1)]);
     expect(res3).toEqual([1, 2]);
     expect(res4).resolves.toEqual([1, 2, 3, 4]);
+  });
+
+  it('take with toAsync', async () => {
+    const iter = [1, 2, 3, 4, 5];
+
+    const res = pipe(iter, toAsync, take(3), toArray);
+
+    expect(res).resolves.toEqual([1, 2, 3]);
+
+    const res2 = await pipe(iter, toAsync, take(3), toArray);
+    expect(res2).toEqual([1, 2, 3]);
   });
 });

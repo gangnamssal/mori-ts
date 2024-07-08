@@ -105,7 +105,11 @@ function reduce<
   T extends Iterable<any> | AsyncIterable<any>,
   Acc extends Awaited<IterableInfer<T>>,
   R extends Acc,
->(fn: (acc: Acc | R, value: Awaited<IterableInfer<T>>) => R): (iter: T) => IsPromise<IterableInfer<T>, R>;
+>(
+  fn: (acc: Acc | R, value: Awaited<IterableInfer<T>>) => R,
+): (
+  iter: T,
+) => T extends AsyncIterableIterator<unknown> ? Promise<IterableInfer<T>> : IsPromise<IterableInfer<T>, R>;
 
 function reduce<T extends Iterable<any> | AsyncIterable<any>, Acc, R extends Acc | Awaited<IterableInfer<T>>>(
   fn: (acc: R, value: Awaited<IterableInfer<T>>) => R,

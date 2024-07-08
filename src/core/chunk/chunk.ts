@@ -1,4 +1,4 @@
-import { IterableInfer, ReturnIterableIteratorType } from '../../types';
+import { IsNever, IterableInfer, ReturnIterableIteratorType } from '../../types';
 import { isAsyncIterable, isIterable } from '../../utils';
 import take from '../take/take';
 import toArray from '../to-array/to-array';
@@ -41,11 +41,16 @@ async function* asyncChunk<A>(size: number, iter: AsyncIterable<A>): AsyncIterab
   }
 }
 
-function chunk<A>(size: number, iter: Iterable<A>): IterableIterator<A[]>;
+function chunk<A>(
+  size: number,
+  iter: Iterable<A>,
+): IsNever<A> extends true ? IterableIterator<never> : IterableIterator<A[]>;
 function chunk<A>(size: number, iter: AsyncIterable<A>): AsyncIterableIterator<A[]>;
 function chunk<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   size: number,
-): (iter: A) => ReturnIterableIteratorType<A[]>;
+): (
+  iter: A,
+) => ReturnIterableIteratorType<A, IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]>;
 
 function chunk<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   size: number,
@@ -53,7 +58,9 @@ function chunk<A extends Iterable<unknown> | AsyncIterable<unknown>>(
 ):
   | IterableIterator<IterableInfer<A>[]>
   | AsyncIterableIterator<IterableInfer<A>[]>
-  | ((iter: A) => ReturnIterableIteratorType<A[]>) {
+  | ((
+      iter: A,
+    ) => ReturnIterableIteratorType<A, IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]>) {
   if (!iter) return (iter: A) => chunk(size, iter as any) as any;
 
   if (isIterable(iter)) return syncChunk(size, iter) as IterableIterator<IterableInfer<A>[]>;

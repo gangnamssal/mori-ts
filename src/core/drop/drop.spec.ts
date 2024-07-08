@@ -1,5 +1,5 @@
 import drop from './drop';
-import { toArray, pipe } from '..';
+import { toArray, pipe, toAsync } from '..';
 
 describe('drop', () => {
   it('should drop the first n elements from the iterable', () => {
@@ -94,5 +94,19 @@ describe('drop', () => {
 
     expect(iter).resolves.toEqual([3, 4, 5]);
     expect(iter2).toEqual([3, 4, 5]);
+  });
+
+  it('drop with toAsync', async () => {
+    const iter = [1, 2, 3, 4, 5];
+
+    const res = pipe(iter, toAsync, drop(2), toArray);
+    const res2 = await pipe(iter, toAsync, drop(2), toArray);
+    const res3 = pipe([], toAsync, drop(2), toArray);
+    const res4 = await pipe([], toAsync, drop(2), toArray);
+
+    expect(res).resolves.toEqual([3, 4, 5]);
+    expect(res2).toEqual([3, 4, 5]);
+    expect(res3).resolves.toEqual([]);
+    expect(res4).toEqual([]);
   });
 });
