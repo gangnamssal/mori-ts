@@ -1,5 +1,5 @@
 import flat from './flat';
-import { toArray } from '..';
+import { pipe, toArray, toAsync } from '..';
 
 describe('flat', () => {
   it('flat with array', () => {
@@ -27,6 +27,23 @@ describe('flat', () => {
     expect([...iter]).toEqual([]);
   });
 
+  it('flat with asyncIterator', () => {
+    const items = [[[1]], [2], [3]];
+
+    const res = flat(
+      (async function* () {
+        for (const item of items) {
+          yield item;
+        }
+      })(),
+    );
+
+    expect(res.next()).resolves.toEqual({ done: false, value: 1 });
+    expect(res.next()).resolves.toEqual({ done: false, value: 2 });
+    expect(res.next()).resolves.toEqual({ done: false, value: 3 });
+    expect(res.next()).resolves.toEqual({ done: true, value: undefined });
+  });
+
   it('flat with array promise', () => {
     const iter = flat([[Promise.resolve(1), Promise.resolve(2)], [Promise.resolve(3)]]);
     expect(iter.next().value).resolves.toBe(1);
@@ -37,5 +54,16 @@ describe('flat', () => {
   it('flat with promise array', async () => {
     const iter = flat(await Promise.resolve([[1], [2], [3]]));
     expect([...iter]).toEqual([1, 2, 3]);
+  });
+
+  it('flat with toAsync', () => {
+    const iter = [[1], [2], [3]];
+    const items2 = [Promise.resolve([1]), Promise.resolve([2]), Promise.resolve([3])];
+
+    const res = pipe(iter, toAsync, flat, toArray);
+    const res2 = pipe(items2, toAsync, flat, toArray);
+
+    expect(res).resolves.toEqual([1, 2, 3]);
+    expect(res2).resolves.toEqual([1, 2, 3]);
   });
 });
