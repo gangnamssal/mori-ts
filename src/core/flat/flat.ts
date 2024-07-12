@@ -1,4 +1,4 @@
-import { IterableInfer, IterableRecurInfer } from './../../types';
+import { IterableInfer, IterableRecurInfer, ReturnIterableIteratorType } from './../../types';
 import { isAsyncIterable, isIterable } from './../../utils';
 
 function* syncFlat<A extends Iterable<unknown>>(iter: A): IterableIterator<IterableRecurInfer<A>> {
@@ -19,14 +19,14 @@ async function* asyncFlat<A extends AsyncIterable<unknown>>(
   }
 }
 
-function flat<A extends Iterable<unknown>>(iter: A): IterableIterator<IterableRecurInfer<A>>;
-function flat<A extends AsyncIterable<unknown>>(iter: A): AsyncIterableIterator<IterableRecurInfer<A>>;
-
 function flat<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   iter: A,
-): IterableIterator<IterableRecurInfer<A>> | AsyncIterableIterator<IterableRecurInfer<A>> {
-  if (isIterable<IterableInfer<A>>(iter)) return syncFlat(iter);
-  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncFlat(iter);
+): ReturnIterableIteratorType<A, IterableRecurInfer<A>> {
+  if (isIterable<IterableInfer<A>>(iter))
+    return syncFlat(iter) as ReturnIterableIteratorType<A, IterableRecurInfer<A>>;
+
+  if (isAsyncIterable<IterableInfer<A>>(iter))
+    return asyncFlat(iter) as ReturnIterableIteratorType<A, IterableRecurInfer<A>>;
 
   throw new Error('argument is not iterable');
 }

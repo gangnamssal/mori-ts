@@ -12,11 +12,11 @@ export type IterableInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> 
   : never;
 
 export type IterableRecurInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> = T extends
-  | Iterable<unknown>
-  | AsyncIterable<unknown>
-  ? IterableInfer<T> extends Iterable<unknown> | AsyncIterable<unknown>
-    ? IterableRecurInfer<IterableInfer<T>>
-    : IterableInfer<T>
+  | Iterable<infer U>
+  | AsyncIterable<infer U>
+  ? U extends Iterable<unknown> | AsyncIterable<unknown>
+    ? IterableRecurInfer<U>
+    : U
   : never;
 
 export type ReturnIterableIteratorType<
