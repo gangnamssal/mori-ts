@@ -32,7 +32,7 @@ function flatMap<
     return (iter: A): ReturnIterableIteratorType<A, IterableInfer<B>> =>
       flatMap(fn, iter as any) as ReturnIterableIteratorType<A, IterableInfer<B>>;
 
-  return pipe(iter, map(fn) as any, flat) as
+  return pipe(iter, map(fn), flat) as
     | IterableIterator<IterableInfer<B>>
     | AsyncIterableIterator<IterableInfer<B>>;
 }

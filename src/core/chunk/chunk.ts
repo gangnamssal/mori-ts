@@ -61,7 +61,14 @@ function chunk<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   | ((
       iter: A,
     ) => ReturnIterableIteratorType<A, IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]>) {
-  if (!iter) return (iter: A) => chunk(size, iter as any) as any;
+  if (!iter)
+    return (
+      iter: A,
+    ): ReturnIterableIteratorType<A, IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]> =>
+      chunk(size, iter as any) as ReturnIterableIteratorType<
+        A,
+        IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]
+      >;
 
   if (isIterable(iter)) return syncChunk(size, iter) as IterableIterator<IterableInfer<A>[]>;
   if (isAsyncIterable(iter)) return asyncChunk(size, iter) as AsyncIterableIterator<IterableInfer<A>[]>;
