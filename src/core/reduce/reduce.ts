@@ -1,6 +1,5 @@
-// import { IsPromise } from './../../utils/index';
 import { isAsyncIterable, isIterable, isPromise } from './../../utils';
-import { IterableInfer, IsPromise } from '../../types';
+import { IsPromiseExist, IterableInfer } from '../../types';
 
 function syncReduce<T extends Iterable<any>, Acc, R extends Acc>(
   fn: (acc: R, value: Awaited<IterableInfer<T>>) => R,
@@ -107,9 +106,7 @@ function reduce<
   R extends Acc,
 >(
   fn: (acc: Acc | R, value: Awaited<IterableInfer<T>>) => R,
-): (
-  iter: T,
-) => T extends AsyncIterableIterator<unknown> ? Promise<IterableInfer<T>> : IsPromise<IterableInfer<T>, R>;
+): (iter: T) => T extends AsyncIterableIterator<unknown> ? Promise<R> : IsPromiseExist<IterableInfer<T>, R>;
 
 function reduce<T extends Iterable<any> | AsyncIterable<any>, Acc, R extends Acc | Awaited<IterableInfer<T>>>(
   fn: (acc: R, value: Awaited<IterableInfer<T>>) => R,
