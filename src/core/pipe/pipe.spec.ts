@@ -20,6 +20,7 @@ describe('pipe', () => {
       map(a => a + 10),
       map(a => a + 100),
     );
+    expect([...res]).toEqual([112, 113, 114]);
 
     const res2 = pipe(
       [1, 2, 3],
@@ -28,8 +29,6 @@ describe('pipe', () => {
       map(a => a + 100),
       toArray,
     );
-
-    expect([...res]).toEqual([112, 113, 114]);
     expect(res2).toEqual([112, 113, 114]);
   });
 
@@ -40,6 +39,7 @@ describe('pipe', () => {
       map(a => ({ a: a.a + 10 })),
       map(a => ({ a: a.a + 100 })),
     );
+    expect([...res]).toEqual([{ a: 112 }, { a: 113 }, { a: 114 }]);
 
     const res2 = pipe(
       [{ a: 1 }, { a: 2 }, { a: 3 }],
@@ -48,8 +48,6 @@ describe('pipe', () => {
       map(a => ({ a: a.a + 100 })),
       toArray,
     );
-
-    expect([...res]).toEqual([{ a: 112 }, { a: 113 }, { a: 114 }]);
     expect(res2).toEqual([{ a: 112 }, { a: 113 }, { a: 114 }]);
   });
 
@@ -60,7 +58,6 @@ describe('pipe', () => {
       map(a => a + 10),
       map(a => a + 100),
     );
-
     expect([...res]).toEqual([Promise.resolve(112), Promise.resolve(113), Promise.resolve(114)]);
 
     const res2 = pipe(
@@ -70,7 +67,6 @@ describe('pipe', () => {
       map(a => a + 100),
       toArray,
     );
-
     expect(res2[0]).resolves.toBe(112);
     expect(res2[1]).resolves.toBe(113);
     expect(res2[2]).resolves.toBe(114);
@@ -83,6 +79,7 @@ describe('pipe', () => {
       map(a => a + 10),
       map(a => a + 100),
     );
+    expect([...res]).toEqual([112, Promise.resolve(113), Promise.resolve(114)]);
 
     const res2 = pipe(
       [1, Promise.resolve(2), Promise.resolve(3)],
@@ -91,7 +88,6 @@ describe('pipe', () => {
       map(a => a + 100),
       toArray,
     );
-    expect([...res]).toEqual([112, Promise.resolve(113), Promise.resolve(114)]);
     expect(res2[0]).toBe(112);
     expect(res2[1]).resolves.toBe(113);
     expect(res2[2]).resolves.toBe(114);
@@ -104,6 +100,7 @@ describe('pipe', () => {
       map(a => a + 10),
       map(a => a + 100),
     );
+    expect([...res]).toEqual([112, 113, 114]);
 
     const res2 = await pipe(
       Promise.resolve([1, 2, 3]),
@@ -112,8 +109,6 @@ describe('pipe', () => {
       map(a => a + 100),
       toArray,
     );
-
-    expect([...res]).toEqual([112, 113, 114]);
     expect(res2).toEqual([112, 113, 114]);
   });
 
@@ -124,7 +119,6 @@ describe('pipe', () => {
       map(a => a + 10),
       map(a => a + 100),
     );
-
     expect([...res]).toEqual([Promise.resolve(112), Promise.resolve(113), Promise.resolve(114)]);
 
     const res2 = await pipe(
@@ -134,7 +128,6 @@ describe('pipe', () => {
       map(a => a + 100),
       toArray,
     );
-
     expect(res2[0]).resolves.toBe(112);
     expect(res2[1]).resolves.toBe(113);
     expect(res2[2]).resolves.toBe(114);
@@ -161,7 +154,6 @@ describe('pipe', () => {
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
       filter(a => a % 2 === 0),
     );
-
     expect(res.next().value).resolves.toBeUndefined();
     expect(res.next().value).resolves.toBe(2);
     expect(res.next().value).resolves.toBeUndefined();
@@ -171,7 +163,6 @@ describe('pipe', () => {
       filter(a => a % 2 === 0),
       toArray,
     );
-
     expect(res2[0]).resolves.toBeUndefined();
     expect(res2[1]).resolves.toBe(2);
     expect(res2[2]).resolves.toBeUndefined();
@@ -182,7 +173,6 @@ describe('pipe', () => {
       [Promise.resolve(1), Promise.resolve(2), 4],
       filter(a => a % 2 === 0),
     );
-
     expect(res.next().value).resolves.toBeUndefined();
     expect(res.next().value).resolves.toBe(2);
     expect(res.next().value).toBe(4);
@@ -192,7 +182,6 @@ describe('pipe', () => {
       filter(a => a % 2 === 0),
       toArray,
     );
-
     expect(res2[0]).resolves.toBeUndefined();
     expect(res2[1]).resolves.toBe(2);
     expect(res2[2]).toBe(4);
@@ -203,7 +192,6 @@ describe('pipe', () => {
       Promise.resolve([1, 2, 3]),
       filter(a => a % 2 === 0),
     );
-
     expect([...res]).toEqual([2]);
     expect([...res]).not.toEqual([2, 3]);
 
@@ -239,7 +227,6 @@ describe('pipe', () => {
       [1, 2, 3],
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(6);
   });
 
@@ -248,14 +235,12 @@ describe('pipe', () => {
       Promise.resolve([1, 2, 3]),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(6);
 
     const res2 = pipe(
       Promise.resolve([1, 2, 3]),
       reduce((acc, a) => acc + a),
     );
-
     expect(res2).resolves.toBe(6);
   });
 
@@ -264,14 +249,12 @@ describe('pipe', () => {
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
       reduce((acc, a) => acc + a),
     );
-
     expect(res).resolves.toBe(6);
 
     const res2 = await pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
       reduce((acc, a) => acc + a),
     );
-
     expect(res2).toBe(6);
   });
 
@@ -280,14 +263,12 @@ describe('pipe', () => {
       [1, Promise.resolve(2), Promise.resolve(3)],
       reduce((acc, a) => acc + a),
     );
-
     expect(res).resolves.toBe(6);
 
     const res2 = await pipe(
       [1, Promise.resolve(2), 3],
       reduce((acc, a) => acc + a),
     );
-
     expect(res2).toBe(6);
   });
 
@@ -297,7 +278,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(9);
   });
 
@@ -307,7 +287,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(9);
 
     const res2 = pipe(
@@ -315,7 +294,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res2).resolves.toBe(9);
   });
 
@@ -325,7 +303,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(9);
 
     const res2 = pipe(
@@ -333,7 +310,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res2).resolves.toBe(9);
 
     const res3 = pipe(
@@ -341,7 +317,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res3).resolves.toBe(9);
 
     const res4 = await pipe(
@@ -351,7 +326,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res4).toBe(3);
   });
 
@@ -361,7 +335,6 @@ describe('pipe', () => {
       filter(a => a % 2 === 0),
       map(a => a + 1),
     );
-
     expect([...res]).toEqual([3]);
 
     const res2 = pipe(
@@ -370,7 +343,6 @@ describe('pipe', () => {
       map(a => a + 1),
       toArray,
     );
-
     expect(res2).toEqual([3]);
   });
 
@@ -380,7 +352,6 @@ describe('pipe', () => {
       filter(a => a % 2 === 0),
       map(a => a + 1),
     );
-
     expect([...res]).toEqual([3]);
 
     const res2 = await pipe(
@@ -389,7 +360,6 @@ describe('pipe', () => {
       map(a => a + 1),
       toArray,
     );
-
     expect(res2).toEqual([3]);
   });
 
@@ -399,7 +369,6 @@ describe('pipe', () => {
       filter(a => a % 2 === 0),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(2);
   });
 
@@ -409,7 +378,6 @@ describe('pipe', () => {
       filter(a => a % 2 === 0),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(2);
 
     const res2 = pipe(
@@ -417,7 +385,6 @@ describe('pipe', () => {
       filter(a => a % 2 !== 0),
       reduce((acc, a) => acc + a),
     );
-
     expect(res2).resolves.toBe(4);
   });
 
@@ -428,7 +395,6 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(3);
   });
 
@@ -439,7 +405,27 @@ describe('pipe', () => {
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
-
     expect(res).toBe(3);
+  });
+
+  it('pipe with toAsync', () => {
+    const iter = [1, 2, 3];
+    const res = pipe(
+      iter,
+      map(a => a + 1),
+      filter(a => a % 2 === 0),
+      reduce((acc, a) => acc + a),
+    );
+    expect(res).toBe(6);
+
+    const iter2 = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
+    const res2 = pipe(
+      iter2,
+      toAsync,
+      map(a => a + 1),
+      filter(a => a % 2 === 0),
+      reduce((acc, a) => acc + a),
+    );
+    expect(res2).resolves.toBe(6);
   });
 });

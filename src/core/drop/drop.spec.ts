@@ -100,13 +100,15 @@ describe('drop', () => {
     const iter = [1, 2, 3, 4, 5];
 
     const res = pipe(iter, toAsync, drop(2), toArray);
-    const res2 = await pipe(iter, toAsync, drop(2), toArray);
-    const res3 = pipe([], toAsync, drop(2), toArray);
-    const res4 = await pipe([], toAsync, drop(2), toArray);
-
     expect(res).resolves.toEqual([3, 4, 5]);
+
+    const res2 = await pipe(iter, toAsync, drop(2), toArray);
     expect(res2).toEqual([3, 4, 5]);
+
+    const res3 = pipe([], toAsync, drop(2), toArray);
     expect(res3).resolves.toEqual([]);
+
+    const res4 = await pipe([], toAsync, drop(2), toArray);
     expect(res4).toEqual([]);
   });
 });

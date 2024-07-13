@@ -143,20 +143,36 @@ describe('filter', () => {
     );
     expect(res).resolves.toEqual([1]);
 
-    const res2 = pipe(
+    const res2 = await pipe(
+      iter,
+      toAsync,
+      filter(item => item === 1),
+      toArray,
+    );
+    expect(res2).toEqual([1]);
+
+    const res3 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
       toAsync,
       filter(item => item === 3),
       toArray,
     );
-    expect(res2).resolves.toEqual([3]);
+    expect(res3).resolves.toEqual([3]);
 
-    const res3 = pipe(
+    const res4 = await pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
+      filter(item => item === 3),
+      toArray,
+    );
+    expect(res4).toEqual([3]);
+
+    const res5 = pipe(
       [],
       toAsync,
       filter(item => item === 3),
       toArray,
     );
-    expect(res3).resolves.toEqual([]);
+    expect(res5).resolves.toEqual([]);
   });
 });
