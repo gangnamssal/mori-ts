@@ -41,33 +41,45 @@ async function* asyncChunk<A>(size: number, iter: AsyncIterable<A>): AsyncIterab
   }
 }
 
-function chunk<A>(
-  size: number,
-  iter: Iterable<A>,
-): IsNever<A> extends true ? IterableIterator<never> : IterableIterator<A[]>;
-function chunk<A>(size: number, iter: AsyncIterable<A>): AsyncIterableIterator<A[]>;
-function chunk<A extends Iterable<unknown> | AsyncIterable<unknown>>(
-  size: number,
+function chunk<S extends number, A extends Iterable<unknown> | AsyncIterable<unknown>>(
+  size: S,
+  iter: A,
+): ReturnIterableIteratorType<
+  A,
+  IsNever<IterableInfer<A>> extends true ? never : S extends 0 ? never : IterableInfer<A>[]
+>;
+
+function chunk<S extends number, A extends Iterable<unknown> | AsyncIterable<unknown>>(
+  size: S,
 ): (
   iter: A,
-) => ReturnIterableIteratorType<A, IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]>;
+) => ReturnIterableIteratorType<
+  A,
+  IsNever<IterableInfer<A>> extends true ? never : S extends 0 ? never : IterableInfer<A>[]
+>;
 
-function chunk<A extends Iterable<unknown> | AsyncIterable<unknown>>(
-  size: number,
+function chunk<S extends number, A extends Iterable<unknown> | AsyncIterable<unknown>>(
+  size: S,
   iter?: A,
 ):
   | IterableIterator<IterableInfer<A>[]>
   | AsyncIterableIterator<IterableInfer<A>[]>
   | ((
       iter: A,
-    ) => ReturnIterableIteratorType<A, IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]>) {
+    ) => ReturnIterableIteratorType<
+      A,
+      IsNever<IterableInfer<A>> extends true ? never : S extends 0 ? never : IterableInfer<A>[]
+    >) {
   if (!iter)
     return (
       iter: A,
-    ): ReturnIterableIteratorType<A, IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]> =>
+    ): ReturnIterableIteratorType<
+      A,
+      IsNever<IterableInfer<A>> extends true ? never : S extends 0 ? never : IterableInfer<A>[]
+    > =>
       chunk(size, iter as any) as ReturnIterableIteratorType<
         A,
-        IsNever<IterableInfer<A>> extends true ? never : IterableInfer<A>[]
+        IsNever<IterableInfer<A>> extends true ? never : S extends 0 ? never : IterableInfer<A>[]
       >;
 
   if (isIterable(iter)) return syncChunk(size, iter) as IterableIterator<IterableInfer<A>[]>;

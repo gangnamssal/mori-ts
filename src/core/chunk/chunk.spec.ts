@@ -129,37 +129,47 @@ describe('chunk', () => {
 
   it('chunk with pipe', async () => {
     const iter = pipe([1, 2, 3, 4, 5, 6, 7, 8, 9], chunk(2), toArray);
+    expect(iter).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+
     const iter2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4)],
       chunk(2),
       toArray,
     );
-    const iter3 = await pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
-    const iter4 = pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
-    const iter5 = pipe([], chunk(2), toArray);
-
-    expect(iter).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
     expect(iter2).toEqual([
       [Promise.resolve(1), Promise.resolve(2)],
       [Promise.resolve(3), Promise.resolve(4)],
     ]);
+
+    const iter3 = await pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
     expect(iter3).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+
+    const iter4 = pipe(Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]), chunk(2), toArray);
     expect(iter4).resolves.toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+
+    const iter5 = pipe([], chunk(2), toArray);
     expect(iter5).toEqual([]);
+
+    const iter6 = pipe(Promise.resolve([]), chunk(2), toArray);
+    expect(iter6).resolves.toEqual([]);
   });
 
   it('chunk with toAsync', async () => {
     const iter = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    // const res = pipe(iter, toAsync, chunk(2), toArray);
     const res = pipe(iter, toAsync, chunk(2), toArray);
-    const res2 = await pipe(iter, toAsync, chunk(2), toArray);
-    const res3 = pipe([], toAsync, chunk(2), toArray);
-    const res4 = await pipe([], toAsync, chunk(2), toArray);
-
     expect(res).resolves.toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+
+    const res2 = await pipe(iter, toAsync, chunk(2), toArray);
     expect(res2).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+
+    const res3 = pipe([], toAsync, chunk(2), toArray);
     expect(res3).resolves.toEqual([]);
+
+    const res4 = await pipe([], toAsync, chunk(2), toArray);
     expect(res4).toEqual([]);
+
+    const res5 = pipe(iter, toAsync, chunk(0), toArray);
+    expect(res5).resolves.toEqual([]);
   });
 });
