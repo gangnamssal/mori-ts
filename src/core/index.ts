@@ -12,3 +12,4 @@ export { default as reduce } from './reduce/reduce';
 export { default as take } from './take/take';
 export { default as toArray } from './to-array/to-array';
 export { default as toAsync } from './to-async/to-async';
+export { default as zip } from './zip/zip';

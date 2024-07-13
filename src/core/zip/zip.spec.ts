@@ -20,6 +20,24 @@ describe('zip', () => {
     ]);
   });
 
+  it('zip with promise array', async () => {
+    const iter1 = Promise.resolve([1, 2, 3]);
+    const iter2 = ['a', 'b', 'c'];
+    const res = zip(await iter1, iter2);
+    expect([...res]).toEqual([
+      [1, 'a'],
+      [2, 'b'],
+      [3, 'c'],
+    ]);
+
+    const res2 = toArray(zip(await iter1, iter2));
+    expect(res2).toEqual([
+      [1, 'a'],
+      [2, 'b'],
+      [3, 'c'],
+    ]);
+  });
+
   it('should zip two arrays with different lengths', () => {
     const result = zip([1, 2, 3], ['a', 'b']);
     expect([...result]).toEqual([
@@ -118,5 +136,18 @@ describe('zip', () => {
       [2, 'b'],
       [3, 'c'],
     ]);
+  });
+
+  it('zip uses', () => {
+    const iter1 = [1, 2, 3];
+    const iter2 = ['a', 'b', 'c'];
+
+    const res = pipe(iter2, zip(iter1), Object.fromEntries);
+
+    expect(res).toEqual({
+      1: 'a',
+      2: 'b',
+      3: 'c',
+    });
   });
 });
