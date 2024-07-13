@@ -47,22 +47,49 @@ describe('at', () => {
         yield* [1, 2, 3];
       })(),
     );
-    const res2 = await at(
+    expect(res).toBe(1);
+
+    const res2 = at(
+      0,
+      (async function* () {
+        yield* [1, 2, 3];
+      })(),
+    );
+    expect(res2).resolves.toBe(1);
+
+    const res3 = await at(
       1,
       (async function* () {
         yield* [1, 2, 3];
       })(),
     );
-    const res3 = await at(
+    expect(res3).toBe(2);
+
+    const res4 = at(
+      1,
+      (async function* () {
+        yield* [1, 2, 3];
+      })(),
+    );
+    expect(res4).resolves.toBe(2);
+
+    const res5 = await at(
       2,
       (async function* () {
         yield* [1, 2, 3];
       })(),
     );
 
-    expect(res).toBe(1);
-    expect(res2).toBe(2);
-    expect(res3).toBe(3);
+    expect(res5).toBe(3);
+
+    const res6 = at(
+      -5,
+      (async function* () {
+        yield* [1, 2, 3];
+      })(),
+    );
+
+    expect(res6).resolves.toBeUndefined();
   });
 
   it('should return the element at the specified index from the end in an async iterable', async () => {
@@ -92,12 +119,16 @@ describe('at', () => {
 
   it('at with promise', async () => {
     const res = at(0, await Promise.resolve([1, 2, 3]));
-    const res2 = at(1, [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]);
-    const res3 = at(-1, [Promise.resolve(1), Promise.resolve(2), 3]);
-
     expect(res).toBe(1);
+
+    const res2 = at(1, [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]);
     expect(res2).resolves.toBe(2);
+
+    const res3 = await at(-1, [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]);
     expect(res3).toBe(3);
+
+    const res4 = at(-1, [Promise.resolve(1), Promise.resolve(2), 3]);
+    expect(res4).toBe(3);
   });
 
   it('at with pipe', async () => {
@@ -107,6 +138,7 @@ describe('at', () => {
       filter(x => x > 2),
       at(0),
     );
+    expect(res).toBe(4);
 
     const res2 = pipe(
       [1, 2, 3],
@@ -114,39 +146,43 @@ describe('at', () => {
       filter(x => x > 2),
       at(-1),
     );
+    expect(res2).toBe(6);
 
     const res3 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
       map(x => x * 2),
       at(-1),
     );
+    expect(res3).resolves.toBe(6);
 
     const res4 = pipe(
       [Promise.resolve(1), 2, Promise.resolve(3)],
       map(x => x * 2),
       at(-2),
     );
+    expect(res4).toBe(4);
 
     const res5 = await pipe(
       Promise.resolve([1, 2, 3]),
       map(x => x * 2),
       at(-2),
     );
-
-    expect(res).toBe(4);
-    expect(res2).toBe(6);
-    expect(res3).resolves.toBe(6);
-    expect(res4).toBe(4);
     expect(res5).toBe(4);
   });
 
-  it('at with toAsync', () => {
+  it('at with toAsync', async () => {
     const iter = [1, 2, 3];
 
     const res = pipe(iter, toAsync, at(0));
-    const res2 = pipe(iter, toAsync, at(-1));
-
     expect(res).resolves.toBe(1);
-    expect(res2).resolves.toBe(3);
+
+    const res2 = await pipe(iter, toAsync, at(0));
+    expect(res2).toBe(1);
+
+    const res3 = pipe(iter, toAsync, at(-1));
+    expect(res3).resolves.toBe(3);
+
+    const res4 = await pipe(iter, toAsync, at(-1));
+    expect(res4).toBe(3);
   });
 });

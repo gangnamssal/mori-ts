@@ -64,10 +64,11 @@ async function asyncAt<A>(index: number, iter: AsyncIterable<A>): Promise<A | un
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
   iter: A,
-): ReturnIterableAsyncIterableType<A>;
+): ReturnIterableAsyncIterableType<A> | undefined;
+
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
-): (iter: A) => IterableInfer<A>;
+): (iter: A) => ReturnIterableAsyncIterableType<A> | undefined;
 
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(index: number, iter?: A) {
   if (!iter) return (iter: A): IterableInfer<A> => at(index, iter) as IterableInfer<A>;
