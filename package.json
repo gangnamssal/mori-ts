@@ -10,9 +10,9 @@
     "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watch",
-    "patch": "tsc && npm version patch && npm publish",
-    "minor": "tsc && npm version minor && npm publish",
-    "major": "tsc && npm version major && npm publish"
+    "patch": "tsc && pnpm version patch && pnpm publish",
+    "minor": "tsc && pnpm version minor && pnpm publish",
+    "major": "tsc && pnpm version major && pnpm publish"
   },
   "keywords": [
     "function",
@@ -21,6 +21,9 @@
     "mori-ts",
     "effect"
   ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "homepage": "https://github.com/gangnamssal/mori-ts",
   "bugs": {
     "url": "https://github.com/gangnamssal/mori-ts/issues",
@@ -54,5 +57,7 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
-  }
+  },
+  "unpkg": "dist/",
+  "jsdelivr": "dist/"
 }

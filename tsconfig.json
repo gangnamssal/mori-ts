@@ -7,17 +7,15 @@
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-
     "declaration": true,
     "strict": true,
     "types": ["jest"],
-
     "downlevelIteration": true,
     "esModuleInterop": true,
     "allowJs": true,
     "checkJs": true,
     "noEmitOnError": true
   },
-  "include": ["src/core/index.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
