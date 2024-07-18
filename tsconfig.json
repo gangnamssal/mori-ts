@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": "/",
-    "module": "CommonJS",
+    "module": "ESNext",
     "target": "ESNext",
     "noImplicitAny": true,
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "./dist/esm",
     "rootDir": "./src",
     "declaration": true,
     "strict": true,
@@ -14,7 +14,8 @@
     "esModuleInterop": true,
     "allowJs": true,
     "checkJs": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "moduleResolution": "node"
   },
   "include": ["src/**/index.ts", "src/core/index.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
