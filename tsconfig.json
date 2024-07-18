@@ -16,6 +16,6 @@
     "checkJs": true,
     "noEmitOnError": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/index.ts", "src/core/index.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
