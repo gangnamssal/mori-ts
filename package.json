@@ -7,9 +7,9 @@
   "version": "0.0.7",
   "description": "Type-inference capable functional programming.",
   "scripts": {
-    "build:esm": "tsc",
-    "build:cjs": "tsc --project tsconfig.cjs.json",
-    "build": "npm run build:esm && npm run build:cjs",
+    "build:ts": "tsc && tsc --project tsconfig.cjs.json",
+    "build:esbuild": "node esbuild.config.js",
+    "build": "pnpm run build:ts && npm run build:esbuild",
     "test": "jest",
     "test:watch": "jest --watch",
     "patch": "pnpm run build && pnpm version patch && pnpm publish",
@@ -41,6 +41,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^29.5.12",
+    "esbuild": "^0.23.0",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "prettier": "3.2.5",
