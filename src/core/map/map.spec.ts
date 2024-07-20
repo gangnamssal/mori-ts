@@ -77,12 +77,14 @@ describe('map', () => {
 
   it('map with toAsync', async () => {
     const iter = [1, 2, 3];
+
     const res = pipe(
       iter,
       toAsync,
       map(value => value * 2),
       toArray,
     );
+
     expect(res).resolves.toEqual([2, 4, 6]);
   });
 
@@ -95,6 +97,7 @@ describe('map', () => {
       map(value => value * 2),
       toArray,
     );
+
     expect(res).toEqual([2, 4, 6]);
   });
 
@@ -105,6 +108,7 @@ describe('map', () => {
       map(value => value * 2),
       toArray,
     );
+
     expect(res).toEqual([]);
   });
 });

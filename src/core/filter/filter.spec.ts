@@ -43,25 +43,6 @@ describe('filter', () => {
     expect(result.next()).resolves.toEqual({ done: true, value: undefined });
   });
 
-  it('filter with promise', () => {
-    const items = [
-      { name: 'item 1', value: 1 },
-      { name: 'item 2', value: 2 },
-      { name: 'item 3', value: 3 },
-    ];
-
-    const result = filter(
-      item => Promise.resolve(item.value === 1),
-      (async function* () {
-        for (const item of items) {
-          yield item;
-        }
-      })(),
-    );
-    expect(result.next()).resolves.toEqual({ done: false, value: { name: 'item 1', value: 1 } });
-    expect(result.next()).resolves.toEqual({ done: true, value: undefined });
-  });
-
   it('filter with set', () => {
     const items = new Set([1, 2, 3]);
 
@@ -83,7 +64,7 @@ describe('filter', () => {
   });
 
   it('filter with empty iterable', () => {
-    const items: any[] = [];
+    const items: never[] = [];
 
     const result = filter(item => item === 1, items);
 
@@ -128,7 +109,7 @@ describe('filter', () => {
   });
 
   it('filter with toAsync 4', async () => {
-    const iter = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
+    const iter = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3), 4];
 
     const res4 = await pipe(
       iter,

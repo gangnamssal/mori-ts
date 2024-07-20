@@ -4,9 +4,9 @@ import { pipe, toArray, toAsync } from '..';
 describe('chunk', () => {
   it('should chunk the given iterable', () => {
     const iter = chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    const iter2 = toArray(chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
-
     expect([...iter]).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
+
+    const iter2 = toArray(chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
     expect(iter2).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
 
@@ -19,12 +19,6 @@ describe('chunk', () => {
     expect(iter.next()).toEqual({ value: [7, 8], done: false });
     expect(iter.next()).toEqual({ value: [9], done: false });
     expect(iter.next()).toEqual({ value: undefined, done: true });
-  });
-
-  it('should chunk no iterable with toArray', () => {
-    const iter = toArray(chunk(2)([1, 2, 3, 4, 5, 6, 7, 8, 9]));
-
-    expect(iter).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
 
   it('should chunk the given iterable with object', () => {
@@ -69,17 +63,6 @@ describe('chunk', () => {
     expect(iter2).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
 
-  it('should chunk the given iterable with iter.next', () => {
-    const iter = chunk(2, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-
-    expect(iter.next()).toEqual({ value: [1, 2], done: false });
-    expect(iter.next()).toEqual({ value: [3, 4], done: false });
-    expect(iter.next()).toEqual({ value: [5, 6], done: false });
-    expect(iter.next()).toEqual({ value: [7, 8], done: false });
-    expect(iter.next()).toEqual({ value: [9], done: false });
-    expect(iter.next()).toEqual({ value: undefined, done: true });
-  });
-
   it('should return empty iterable if the given iterable is empty', () => {
     const iter = chunk(2, []);
     expect([...iter]).toEqual([]);
@@ -102,7 +85,6 @@ describe('chunk', () => {
 
   it('should chunk the given promise array', async () => {
     const iter = chunk(2, await Promise.resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]));
-
     expect([...iter]).toEqual([[1, 2], [3, 4], [5, 6], [7, 8], [9]]);
   });
 

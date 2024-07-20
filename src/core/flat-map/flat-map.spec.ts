@@ -36,13 +36,30 @@ describe('flat-map', () => {
       toArray,
     );
     expect(res).toEqual([1, 2, 2, 4, 3, 6]);
+  });
 
-    const res2 = await pipe(
+  it('flatMap with pipe 2', async () => {
+    const iter = [1, 2, 3];
+
+    const res = await pipe(
       iter,
       toAsync,
       flatMap(a => [[[[[[a, a * 2]]]]]]),
       toArray,
     );
-    expect(res2).toEqual([1, 2, 2, 4, 3, 6]);
+    expect(res).toEqual([1, 2, 2, 4, 3, 6]);
+  });
+
+  it('flatMap with pipe 3', async () => {
+    const iter = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
+
+    const res = await pipe(
+      iter,
+      toAsync,
+      flatMap(a => [[[[[[a, a * 2]]]]]]),
+      toArray,
+    );
+
+    expect(res).toEqual([1, 2, 2, 4, 3, 6]);
   });
 });
