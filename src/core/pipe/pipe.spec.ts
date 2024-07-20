@@ -51,48 +51,6 @@ describe('pipe', () => {
     expect(res2).toEqual([{ a: 112 }, { a: 113 }, { a: 114 }]);
   });
 
-  it('pipe with map, promise', () => {
-    const res = pipe(
-      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      map(a => a + 1),
-      map(a => a + 10),
-      map(a => a + 100),
-    );
-    expect([...res]).toEqual([Promise.resolve(112), Promise.resolve(113), Promise.resolve(114)]);
-
-    const res2 = pipe(
-      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      map(a => a + 1),
-      map(a => a + 10),
-      map(a => a + 100),
-      toArray,
-    );
-    expect(res2[0]).resolves.toBe(112);
-    expect(res2[1]).resolves.toBe(113);
-    expect(res2[2]).resolves.toBe(114);
-  });
-
-  it('pipe with map on promise, number', () => {
-    const res = pipe(
-      [1, Promise.resolve(2), Promise.resolve(3)],
-      map(a => a + 1),
-      map(a => a + 10),
-      map(a => a + 100),
-    );
-    expect([...res]).toEqual([112, Promise.resolve(113), Promise.resolve(114)]);
-
-    const res2 = pipe(
-      [1, Promise.resolve(2), Promise.resolve(3)],
-      map(a => a + 1),
-      map(a => a + 10),
-      map(a => a + 100),
-      toArray,
-    );
-    expect(res2[0]).toBe(112);
-    expect(res2[1]).resolves.toBe(113);
-    expect(res2[2]).resolves.toBe(114);
-  });
-
   it('pipe with map, promise', async () => {
     const res = await pipe(
       Promise.resolve([1, 2, 3]),
@@ -113,24 +71,17 @@ describe('pipe', () => {
   });
 
   it('pipe with map, promise', async () => {
-    const res = await pipe(
-      Promise.resolve([Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]),
-      map(a => a + 1),
-      map(a => a + 10),
-      map(a => a + 100),
-    );
-    expect([...res]).toEqual([Promise.resolve(112), Promise.resolve(113), Promise.resolve(114)]);
-
     const res2 = await pipe(
       Promise.resolve([Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]),
+      toAsync,
       map(a => a + 1),
       map(a => a + 10),
       map(a => a + 100),
       toArray,
     );
-    expect(res2[0]).resolves.toBe(112);
-    expect(res2[1]).resolves.toBe(113);
-    expect(res2[2]).resolves.toBe(114);
+    expect(res2[0]).toBe(112);
+    expect(res2[1]).toBe(113);
+    expect(res2[2]).toBe(114);
   });
 
   it('pipe with filter', () => {
@@ -300,6 +251,7 @@ describe('pipe', () => {
   it('pipe with reduce and map on array promise', async () => {
     const res = await pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
@@ -307,6 +259,7 @@ describe('pipe', () => {
 
     const res2 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );
@@ -314,6 +267,7 @@ describe('pipe', () => {
 
     const res3 = pipe(
       [1, Promise.resolve(2), 3],
+      toAsync,
       map(a => a + 1),
       reduce((acc, a) => acc + a),
     );

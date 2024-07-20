@@ -150,6 +150,7 @@ describe('at', () => {
 
     const res3 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       map(x => x * 2),
       at(-1),
     );
@@ -157,10 +158,11 @@ describe('at', () => {
 
     const res4 = pipe(
       [Promise.resolve(1), 2, Promise.resolve(3)],
+      toAsync,
       map(x => x * 2),
       at(-2),
     );
-    expect(res4).toBe(4);
+    expect(res4).resolves.toBe(4);
 
     const res5 = await pipe(
       Promise.resolve([1, 2, 3]),

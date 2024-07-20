@@ -1,11 +1,8 @@
 import { isAsyncIterable, isIterable } from './../../utils';
 
-import { IsPromise, IterableInfer, ReturnIterableIteratorType } from './../../types';
+import { IterableInfer, ReturnIterableIteratorType } from './../../types';
 
-function* syncMap<A, B>(
-  fn: (args: A) => B,
-  iter: Iterable<A | Promise<A>>,
-): IterableIterator<B | Promise<B>> {
+function* syncMap<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<B> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
@@ -13,7 +10,7 @@ function* syncMap<A, B>(
 
     if (done) break;
 
-    yield value instanceof Promise ? value.then(fn) : fn(value);
+    yield fn(value);
   }
 }
 
@@ -35,26 +32,22 @@ function asyncMap<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterab
   };
 }
 
-function map<A, B>(
-  fn: (args: A extends Promise<any> ? Awaited<A> : A) => IsPromise<A, B>,
-  iter: Iterable<A>,
-): IterableIterator<IsPromise<A, B>>;
+function map<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
+  fn: (args: IterableInfer<A>) => B,
+  iter: A,
+): ReturnIterableIteratorType<A, B>;
 
-function map<A, B>(fn: (args: Awaited<A>) => B, iter: Iterable<Promise<A>>): IterableIterator<Promise<B>>;
-
-function map<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<B>;
-
-function map<A extends Iterable<any> | AsyncIterable<any>, B>(
-  fn: (args: Awaited<IterableInfer<A>>) => B,
-): (iter: A) => ReturnIterableIteratorType<A, IsPromise<IterableInfer<A>, B>>;
+function map<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
+  fn: (args: IterableInfer<A>) => B,
+): (iter: A) => ReturnIterableIteratorType<A, B>;
 
 function map<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter?: A,
 ):
-  | IterableIterator<B | Promise<B>>
+  | IterableIterator<B>
   | AsyncIterableIterator<B>
-  | ((iter: A) => IterableIterator<B | Promise<B>> | AsyncIterableIterator<B>) {
+  | ((iter: A) => IterableIterator<B> | AsyncIterableIterator<B>) {
   if (!iter)
     return (iter: A): ReturnIterableIteratorType<A, B> =>
       map(fn, iter as any) as ReturnIterableIteratorType<A, B>;
