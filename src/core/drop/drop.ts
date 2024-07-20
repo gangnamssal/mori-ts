@@ -23,8 +23,11 @@ async function* asyncDrop<A>(skip: number, iter: AsyncIterable<A>): AsyncIterabl
   }
 }
 
-function drop<A>(skip: number, iter: Iterable<A>): IterableIterator<A>;
-function drop<A>(skip: number, iter: AsyncIterable<A>): AsyncIterableIterator<A>;
+function drop<A extends Iterable<unknown> | AsyncIterable<unknown>>(
+  skip: number,
+  iter: A,
+): ReturnIterableIteratorType<A>;
+
 function drop<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   skip: number,
 ): (iter: A) => ReturnIterableIteratorType<A>;
