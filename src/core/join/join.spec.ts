@@ -1,5 +1,5 @@
 import join from './join';
-import { map, pipe, range } from '..';
+import { map, pipe, range, toAsync } from '..';
 
 describe('join', () => {
   it('joins an array of strings with a separator', () => {
@@ -53,5 +53,17 @@ describe('join', () => {
   it('join with empty array', () => {
     const res = join(',', []);
     expect(res).toBe('');
+  });
+
+  it('join with async iterable', () => {
+    const res = pipe(range(1, 4), toAsync, join(''));
+
+    expect(res).resolves.toBe('123');
+  });
+
+  it('join with promise', () => {
+    const res = pipe([Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)], toAsync, join(''));
+
+    expect(res).resolves.toBe('123');
   });
 });
