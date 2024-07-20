@@ -1,12 +1,6 @@
 export type IsPromise<T, R> =
   T extends Promise<unknown> ? Promise<R> : Promise<unknown> extends T ? Promise<R> | R : R;
 
-export type IsPromiseExist<T, R> = Promise<any> extends T ? Promise<R> : R;
-
-export type IsContainPromise<T, R> = Promise<unknown> extends T ? Promise<R> : R;
-
-export type PromiseInfer<T> = T extends Promise<infer U> ? U : never;
-
 export type IterableInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> = T extends
   | Iterable<infer U>
   | AsyncIterable<infer U>
