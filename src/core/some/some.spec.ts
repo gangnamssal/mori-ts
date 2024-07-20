@@ -6,14 +6,14 @@ describe('some', () => {
     const arr = [1, 2, 3, 4, 5];
     const result = some(item => item > 3, arr);
 
-    expect(result.next().value).toBe(true);
+    expect(result).toBeTruthy();
   });
 
   it('some with array, result false', () => {
     const arr = [1, 2, 3, 4, 5];
     const result = some(item => item > 6, arr);
 
-    expect(result.next().value).toBe(false);
+    expect(result).toBeFalsy();
   });
 
   it('some with async iterable, result true', async () => {
@@ -27,7 +27,7 @@ describe('some', () => {
 
     const result = some(item => item > 3, asyncIterable);
 
-    expect((await result.next()).value).toBe(true);
+    expect(result).resolves.toBeTruthy();
   });
 
   it('some with async iterable, result false', async () => {
@@ -41,7 +41,7 @@ describe('some', () => {
 
     const result = some(item => item > 6, asyncIterable);
 
-    expect((await result.next()).value).toBe(false);
+    expect(result).resolves.toBeFalsy();
   });
 
   it('some with pipe', async () => {
@@ -52,7 +52,7 @@ describe('some', () => {
       some(item => item > 10),
     );
 
-    expect(res.next().value).toBe(false);
+    expect(res).toBeFalsy();
 
     const res2 = pipe(
       [1, 2, 3, 4, 5],
@@ -62,6 +62,6 @@ describe('some', () => {
       some(item => item > 10),
     );
 
-    expect((await res2.next()).value).toBe(false);
+    expect(res2).resolves.toBeFalsy();
   });
 });
