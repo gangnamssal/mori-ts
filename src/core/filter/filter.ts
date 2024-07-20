@@ -1,10 +1,7 @@
 import { isAsyncIterable, isIterable } from '../../utils';
 import { IterableInfer, ReturnIterableIteratorType } from '../../types';
 
-function* syncFilter<A, B>(
-  fn: (args: A) => B,
-  iter: Iterable<A | Promise<A>>,
-): IterableIterator<A | Promise<A | undefined>> {
+function* syncFilter<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<A> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
@@ -12,13 +9,7 @@ function* syncFilter<A, B>(
 
     if (done) break;
 
-    if (value instanceof Promise) {
-      yield value.then(v => {
-        if (fn(v)) return v;
-      });
-    } else if (fn(value)) {
-      yield value;
-    }
+    if (fn(value)) yield value;
   }
 }
 
@@ -35,31 +26,26 @@ async function* asyncFilter<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): A
   }
 }
 
-function filter<A, B>(fn: (args: Awaited<A>) => B, iter: Iterable<A>): IterableIterator<A>;
+function filter<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
+  fn: (args: IterableInfer<A>) => B,
+  iter: A,
+): ReturnIterableIteratorType<A>;
 
-function filter<A, B>(fn: (args: Awaited<A>) => B, iter: Iterable<Promise<A>>): IterableIterator<Promise<A>>;
-
-function filter<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<A>;
-
-function filter<A extends Iterable<any> | AsyncIterable<any>, B>(
-  fn: (args: Awaited<IterableInfer<A>>) => B,
+function filter<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
+  fn: (args: IterableInfer<A>) => B,
 ): (iter: A) => ReturnIterableIteratorType<A>;
 
-function filter<A extends Iterable<any> | AsyncIterable<any>, B>(
+function filter<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter?: A,
-):
-  | IterableIterator<A | Promise<A | undefined>>
-  | AsyncIterableIterator<A>
-  | ((iter: A) => ReturnIterableIteratorType<A>) {
+): ReturnIterableIteratorType<A> | ((iter: A) => ReturnIterableIteratorType<A>) {
   if (!iter)
     return (iter: A): ReturnIterableIteratorType<A> =>
       filter(fn, iter as any) as ReturnIterableIteratorType<A>;
 
-  if (isAsyncIterable<IterableInfer<A>>(iter))
-    return asyncFilter(fn, iter as AsyncIterable<IterableInfer<A>>);
+  if (isIterable<IterableInfer<A>>(iter)) return syncFilter(fn, iter) as ReturnIterableIteratorType<A>;
 
-  if (isIterable<IterableInfer<A>>(iter)) return syncFilter(fn, iter);
+  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncFilter(fn, iter) as ReturnIterableIteratorType<A>;
 
   throw new Error('Must be an iterable or async iterable');
 }

@@ -91,7 +91,9 @@ describe('pipe', () => {
     );
     expect([...res]).toEqual([2]);
     expect([...res]).not.toEqual([2, 3]);
+  });
 
+  it('pipe with filter 2', () => {
     const res2 = pipe(
       [1, 2, 3],
       filter(a => a % 2 === 0),
@@ -100,42 +102,46 @@ describe('pipe', () => {
     expect(res2).toEqual([2]);
   });
 
-  it('pipe with filter on array promise ', () => {
+  it('pipe with filter on array promise ', async () => {
     const res = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       filter(a => a % 2 === 0),
     );
-    expect(res.next().value).resolves.toBeUndefined();
-    expect(res.next().value).resolves.toBe(2);
-    expect(res.next().value).resolves.toBeUndefined();
 
-    const res2 = pipe(
-      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
-      filter(a => a % 2 === 0),
-      toArray,
-    );
-    expect(res2[0]).resolves.toBeUndefined();
-    expect(res2[1]).resolves.toBe(2);
-    expect(res2[2]).resolves.toBeUndefined();
+    expect((await res.next()).value).toBe(2);
   });
 
-  it('pipe with filter on array promise and number', () => {
+  it('pipe with filter on array promise 2', () => {
     const res = pipe(
-      [Promise.resolve(1), Promise.resolve(2), 4],
-      filter(a => a % 2 === 0),
-    );
-    expect(res.next().value).resolves.toBeUndefined();
-    expect(res.next().value).resolves.toBe(2);
-    expect(res.next().value).toBe(4);
-
-    const res2 = pipe(
-      [Promise.resolve(1), Promise.resolve(2), 4],
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       filter(a => a % 2 === 0),
       toArray,
     );
-    expect(res2[0]).resolves.toBeUndefined();
-    expect(res2[1]).resolves.toBe(2);
-    expect(res2[2]).toBe(4);
+
+    expect(res).resolves.toEqual([2]);
+  });
+
+  it('pipe with filter on array promise and number', async () => {
+    const res = pipe(
+      [Promise.resolve(1), Promise.resolve(2), 4],
+      toAsync,
+      filter(a => a % 2 === 0),
+    );
+
+    expect((await res.next()).value).toBe(2);
+  });
+
+  it('pipe with filter on array promise and number 2', () => {
+    const res = pipe(
+      [Promise.resolve(1), Promise.resolve(2), 4],
+      toAsync,
+      filter(a => a % 2 === 0),
+      toArray,
+    );
+
+    expect(res).resolves.toEqual([2, 4]);
   });
 
   it('pipe with filter promise array', async () => {
