@@ -71,7 +71,7 @@ describe('pipe', () => {
   });
 
   it('pipe with map, promise', async () => {
-    const res2 = await pipe(
+    const res = await pipe(
       Promise.resolve([Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]),
       toAsync,
       map(a => a + 1),
@@ -79,9 +79,8 @@ describe('pipe', () => {
       map(a => a + 100),
       toArray,
     );
-    expect(res2[0]).toBe(112);
-    expect(res2[1]).toBe(113);
-    expect(res2[2]).toBe(114);
+
+    expect(res).toEqual([112, 113, 114]);
   });
 
   it('pipe with filter', () => {
@@ -204,12 +203,14 @@ describe('pipe', () => {
   it('pipe with reduce on array promise', async () => {
     const res = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       reduce((acc, a) => acc + a),
     );
     expect(res).resolves.toBe(6);
 
     const res2 = await pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       reduce((acc, a) => acc + a),
     );
     expect(res2).toBe(6);
@@ -218,12 +219,14 @@ describe('pipe', () => {
   it('pipe with reduce on array promise and number', async () => {
     const res = pipe(
       [1, Promise.resolve(2), Promise.resolve(3)],
+      toAsync,
       reduce((acc, a) => acc + a),
     );
     expect(res).resolves.toBe(6);
 
     const res2 = await pipe(
       [1, Promise.resolve(2), 3],
+      toAsync,
       reduce((acc, a) => acc + a),
     );
     expect(res2).toBe(6);
