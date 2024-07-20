@@ -1,17 +1,17 @@
 import map from '../map/map';
 import flat from '../flat/flat';
 import pipe from '../pipe/pipe';
-import { IterableInfer, ReturnIterableIteratorType } from '../../types';
+import { IterableInfer, ReturnIterableIteratorType, IterableRecurInfer } from '../../types';
 
 function flatMap<
   A extends Iterable<unknown> | AsyncIterable<unknown>,
   B extends Iterable<unknown> | AsyncIterable<unknown>,
->(fn: (args: IterableInfer<A>) => B, iter: A): ReturnIterableIteratorType<A, IterableInfer<B>>;
+>(fn: (args: IterableInfer<A>) => B, iter: A): ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
 
 function flatMap<
   A extends Iterable<unknown> | AsyncIterable<unknown>,
   B extends Iterable<unknown> | AsyncIterable<unknown>,
->(fn: (args: IterableInfer<A>) => B): (iter: A) => ReturnIterableIteratorType<A, IterableInfer<B>>;
+>(fn: (args: IterableInfer<A>) => B): (iter: A) => ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
 
 function flatMap<
   A extends Iterable<unknown> | AsyncIterable<unknown>,
@@ -20,13 +20,13 @@ function flatMap<
   fn: (args: IterableInfer<A>) => B,
   iter?: A,
 ):
-  | ReturnIterableIteratorType<A, IterableInfer<B>>
-  | ((iter: A) => ReturnIterableIteratorType<A, IterableInfer<B>>) {
+  | ReturnIterableIteratorType<A, IterableRecurInfer<B>>
+  | ((iter: A) => ReturnIterableIteratorType<A, IterableRecurInfer<B>>) {
   if (!iter)
-    return (iter: A): ReturnIterableIteratorType<A, IterableInfer<B>> =>
-      flatMap(fn, iter as any) as ReturnIterableIteratorType<A, IterableInfer<B>>;
+    return (iter: A): ReturnIterableIteratorType<A, IterableRecurInfer<B>> =>
+      flatMap(fn, iter as any) as ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
 
-  return pipe(iter, map(fn), flat) as ReturnIterableIteratorType<A, IterableInfer<B>>;
+  return pipe(iter, map(fn), flat) as ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
 }
 
 export default flatMap;

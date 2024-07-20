@@ -35,14 +35,14 @@ describe('flat-map', () => {
       flatMap(a => [[[a]], [[[[[[a * 2]]]]]]]),
       toArray,
     );
+    expect(res).toEqual([1, 2, 2, 4, 3, 6]);
+
     const res2 = await pipe(
       iter,
       toAsync,
       flatMap(a => [[[[[[a, a * 2]]]]]]),
       toArray,
     );
-
-    expect(res).toEqual([1, 2, 2, 4, 3, 6]);
     expect(res2).toEqual([1, 2, 2, 4, 3, 6]);
   });
 });

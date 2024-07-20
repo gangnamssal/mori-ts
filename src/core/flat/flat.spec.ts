@@ -61,13 +61,15 @@ describe('flat', () => {
     const iter2 = [Promise.resolve([1]), Promise.resolve([2]), Promise.resolve([3])];
 
     const res = pipe(iter, toAsync, flat, toArray);
-    const res2 = await pipe(iter, toAsync, flat, toArray);
-    const res3 = pipe(iter2, toAsync, flat, toArray);
-    const res4 = await pipe(iter2, toAsync, flat, toArray);
-
     expect(res).resolves.toEqual([1, 2, 3]);
+
+    const res2 = await pipe(iter, toAsync, flat, toArray);
     expect(res2).toEqual([1, 2, 3]);
+
+    const res3 = pipe(iter2, toAsync, flat, toArray);
     expect(res3).resolves.toEqual([1, 2, 3]);
+
+    const res4 = await pipe(iter2, toAsync, flat, toArray);
     expect(res4).toEqual([1, 2, 3]);
   });
 });
