@@ -1,5 +1,5 @@
 import { isAsyncIterable, isIterable } from './../../utils';
-import { IterableInfer, ReturnIterableIteratorType } from './../../types';
+import { IterableInfer, ReturnIterableType } from './../../types';
 
 function syncSome<A, B>(fn: (args: A) => B, iter: Iterable<A>): boolean {
   const iterator = iter[Symbol.iterator]();
@@ -28,11 +28,11 @@ async function asyncSome<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): Prom
 function some<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter: A,
-): A extends Iterable<unknown> ? boolean : Promise<boolean>;
+): ReturnIterableType<A, boolean>;
 
 function some<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
-): (iter: A) => A extends Iterable<unknown> ? boolean : Promise<boolean>;
+): (iter: A) => ReturnIterableType<A, boolean>;
 
 function some<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,

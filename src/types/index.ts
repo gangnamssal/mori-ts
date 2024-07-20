@@ -21,6 +21,9 @@ export type IterableRecurInfer<T extends Iterable<unknown> | AsyncIterable<unkno
     : U
   : never;
 
+export type ReturnIterableType<T extends Iterable<unknown> | AsyncIterable<unknown>, R = IterableInfer<T>> =
+  T extends Iterable<unknown> ? R : T extends AsyncIterable<unknown> ? Promise<R> : never;
+
 export type ReturnIterableIteratorType<
   T extends Iterable<unknown> | AsyncIterable<unknown>,
   R = IterableInfer<T>,

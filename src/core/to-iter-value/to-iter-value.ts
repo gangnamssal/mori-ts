@@ -1,5 +1,5 @@
 import { isAsyncIterable, isIterable } from '../../utils';
-import { IterableInfer } from '../../types';
+import { IterableInfer, ReturnIterableType } from '../../types';
 
 function syncToIterValue<A>(iter: Iterable<A>): A {
   return iter[Symbol.iterator]().next().value;
@@ -11,7 +11,7 @@ async function asyncToIterValue<A>(iter: AsyncIterable<A>): Promise<A> {
 
 function toIterValue<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   iter: A,
-): A extends Iterable<unknown> ? IterableInfer<A> : Promise<IterableInfer<A>>;
+): ReturnIterableType<A, IterableInfer<A>>;
 
 function toIterValue<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   iter: A,

@@ -1,4 +1,4 @@
-import { at, map, pipe, range, some, toAsync } from '..';
+import { map, toAsync } from '..';
 import toIterValue from './to-iter-value';
 
 describe('toResult', () => {
