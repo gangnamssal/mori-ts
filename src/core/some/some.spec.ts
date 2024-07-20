@@ -53,8 +53,10 @@ describe('some', () => {
     );
 
     expect(res).toBeFalsy();
+  });
 
-    const res2 = pipe(
+  it('some with pipe 2', async () => {
+    const res = pipe(
       [1, 2, 3, 4, 5],
       toAsync,
       map(item => item * 2),
@@ -62,6 +64,29 @@ describe('some', () => {
       some(item => item > 10),
     );
 
-    expect(res2).resolves.toBeFalsy();
+    expect(res).resolves.toBeFalsy();
+  });
+
+  it('some with pipe 3', async () => {
+    const res = pipe(
+      [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3), Promise.resolve(4), Promise.resolve(5)],
+      toAsync,
+      map(item => item * 2),
+      filter(item => item > 5),
+      some(item => item > 10),
+    );
+
+    expect(res).resolves.toBeFalsy();
+  });
+
+  it('some with pipe 4', async () => {
+    const res = await pipe(
+      Promise.resolve([1, 2, 3, 4, 5]),
+      map(item => item * 2),
+      filter(item => item > 5),
+      some(item => item < 10),
+    );
+
+    expect(res).toBeTruthy();
   });
 });

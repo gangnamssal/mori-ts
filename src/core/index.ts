@@ -1,6 +1,8 @@
 export { default as at } from './at/at';
 export { default as chunk } from './chunk/chunk';
+export { default as curry } from './curry/curry';
 export { default as drop } from './drop/drop';
+export { default as every } from './every/every';
 export { default as filter } from './filter/filter';
 export { default as flat } from './flat/flat';
 export { default as flatMap } from './flat-map/flat-map';
