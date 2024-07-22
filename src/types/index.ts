@@ -7,13 +7,13 @@ export type IterableInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> 
   ? U
   : never;
 
-export type IterableRecurInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> = T extends
-  | Iterable<infer U>
-  | AsyncIterable<infer U>
-  ? U extends Iterable<unknown> | AsyncIterable<unknown>
-    ? IterableRecurInfer<U>
-    : U
-  : never;
+export type IterableRecurInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> = T extends string
+  ? T
+  : T extends Iterable<infer U> | AsyncIterable<infer U>
+    ? U extends Iterable<unknown> | AsyncIterable<unknown>
+      ? IterableRecurInfer<U>
+      : U
+    : never;
 
 export type ReturnIterableType<T extends Iterable<unknown> | AsyncIterable<unknown>, R = IterableInfer<T>> =
   T extends Iterable<unknown> ? R : T extends AsyncIterable<unknown> ? Promise<R> : never;

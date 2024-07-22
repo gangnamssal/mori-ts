@@ -7,6 +7,11 @@ describe('flat', () => {
     expect([...iter]).toEqual([1, 2, 3]);
   });
 
+  it('flat with string array', () => {
+    const iter = flat([['1'], ['b'], ['c']]);
+    expect([...iter]).toEqual(['1', 'b', 'c']);
+  });
+
   it('flat with array, toArray', () => {
     const iter = toArray(flat([[1], [2], [3]]));
     expect(iter).toEqual([1, 2, 3]);
@@ -71,5 +76,15 @@ describe('flat', () => {
 
     const res4 = await pipe(iter2, toAsync, flat, toArray);
     expect(res4).toEqual([1, 2, 3]);
+  });
+
+  it('flat with string toAsync', async () => {
+    const iter = [['a'], ['b'], ['c']];
+
+    const res = pipe(iter, toAsync, flat, toArray);
+    expect(res).resolves.toEqual(['a', 'b', 'c']);
+
+    const res2 = await pipe(iter, toAsync, flat, toArray);
+    expect(res2).toEqual(['a', 'b', 'c']);
   });
 });
