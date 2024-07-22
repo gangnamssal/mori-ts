@@ -1,6 +1,8 @@
 export { default as at } from './at/at';
 export { default as chunk } from './chunk/chunk';
+export { default as concat } from './concat/concat';
 export { default as curry } from './curry/curry';
+export { default as delay } from './delay/delay';
 export { default as drop } from './drop/drop';
 export { default as each } from './each/each';
 export { default as every } from './every/every';
