@@ -2,15 +2,31 @@ import { IterableInfer } from '../../types';
 import { isAsyncIterable, isIterable } from '../../utils';
 
 async function* syncDelay<A>(time: number, iter: Iterable<A>): AsyncIterableIterator<A> {
-  await new Promise(resolve => setTimeout(resolve, time));
+  const iterator = iter[Symbol.iterator]();
 
-  yield* iter;
+  while (true) {
+    const { value, done } = iterator.next();
+
+    if (done) break;
+
+    await new Promise(resolve => setTimeout(resolve, time));
+
+    yield value;
+  }
 }
 
 async function* asyncDelay<A>(time: number, iter: AsyncIterable<A>): AsyncIterableIterator<A> {
-  await new Promise(resolve => setTimeout(resolve, time));
+  const iterator = iter[Symbol.asyncIterator]();
 
-  yield* iter;
+  while (true) {
+    const { value, done } = await iterator.next();
+
+    if (done) break;
+
+    await new Promise(resolve => setTimeout(resolve, time));
+
+    yield value;
+  }
 }
 
 function delay<A extends Iterable<unknown> | AsyncIterable<unknown>>(
