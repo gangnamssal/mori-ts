@@ -121,4 +121,15 @@ describe('map', () => {
 
     expect(res.next().value).resolves.toEqual(1);
   });
+
+  it('map with delay 2', () => {
+    const res = pipe(
+      [1, 2, 3],
+      toAsync,
+      map(value => delay(100, value)),
+      toArray,
+    );
+
+    expect(res).resolves.toEqual([1, 2, 3]);
+  });
 });

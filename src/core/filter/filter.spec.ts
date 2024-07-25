@@ -1,3 +1,4 @@
+import delay from '../delay/delay';
 import pipe from '../pipe/pipe';
 import toArray from '../to-array/to-array';
 import toAsync from '../to-async/to-async';
@@ -129,5 +130,21 @@ describe('filter', () => {
       toArray,
     );
     expect(res5).resolves.toEqual([]);
+  });
+
+  it('filter with delay', async () => {
+    const start = Date.now();
+
+    const res = await pipe(
+      [1, 2, 3, 4, 5, 6],
+      toAsync,
+      filter(x => delay(100, x % 2 === 0)),
+      toArray,
+    );
+
+    const end = Date.now();
+
+    expect(res).toEqual([2, 4, 6]);
+    expect(end - start).toBeGreaterThanOrEqual(600);
   });
 });
