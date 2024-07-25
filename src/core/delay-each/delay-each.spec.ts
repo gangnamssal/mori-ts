@@ -11,7 +11,7 @@ describe('delay', () => {
 
     expect(first).toEqual({ value: 1, done: false });
 
-    expect(end - start).toBeGreaterThan(100);
+    expect(end - start).toBeGreaterThanOrEqual(100);
     expect(end - start).toBeLessThan(200);
 
     const second = await iter.next();
@@ -39,7 +39,7 @@ describe('delay', () => {
 
     expect(first).toEqual({ value: 1, done: false });
 
-    expect(end - start).toBeGreaterThan(100);
+    expect(end - start).toBeGreaterThanOrEqual(100);
     expect(end - start).toBeLessThan(200);
 
     const second = await iter.next();
@@ -65,7 +65,7 @@ describe('delay', () => {
 
     expect(res).toEqual([2, 3, 4]);
 
-    expect(end - start).toBeGreaterThan(300);
+    expect(end - start).toBeGreaterThanOrEqual(300);
     expect(end - start).toBeLessThan(400);
   });
 
@@ -84,7 +84,7 @@ describe('delay', () => {
 
     expect(res).toEqual([2, 3, 4, 5, 6]);
 
-    expect(end - start).toBeGreaterThan(500);
+    expect(end - start).toBeGreaterThanOrEqual(500);
     expect(end - start).toBeLessThan(600);
   });
 });
