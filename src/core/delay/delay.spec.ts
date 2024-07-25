@@ -2,53 +2,16 @@ import { map, pipe, toArray, toAsync } from '..';
 import delay from './delay';
 
 describe('delay', () => {
-  it('should delay sync iterable', async () => {
-    const iter = delay(100, [1, 2, 3]);
+  it('delay with number', async () => {
+    const result = await delay(1000, 1);
 
-    const start = Date.now();
-    const first = await iter.next();
-    const end = Date.now();
-
-    expect(first).toEqual({ value: 1, done: false });
-
-    expect(end - start).toBeGreaterThan(100);
-    expect(end - start).toBeLessThan(200);
-
-    const second = await iter.next();
-
-    expect(second).toEqual({ value: 2, done: false });
-
-    const third = await iter.next();
-
-    expect(third).toEqual({ value: 3, done: false });
+    expect(result).toBe(1);
   });
 
-  it('should delay async iterable', async () => {
-    const iter = delay(
-      100,
-      (async function* () {
-        yield 1;
-        yield 2;
-        yield 3;
-      })(),
-    );
+  it('delay with undefined', async () => {
+    const result = await delay(1000);
 
-    const start = Date.now();
-    const first = await iter.next();
-    const end = Date.now();
-
-    expect(first).toEqual({ value: 1, done: false });
-
-    expect(end - start).toBeGreaterThan(100);
-    expect(end - start).toBeLessThan(200);
-
-    const second = await iter.next();
-
-    expect(second).toEqual({ value: 2, done: false });
-
-    const third = await iter.next();
-
-    expect(third).toEqual({ value: 3, done: false });
+    expect(result).toBeUndefined();
   });
 
   it('delay with pipe', async () => {
@@ -56,35 +19,15 @@ describe('delay', () => {
 
     const res = await pipe(
       [1, 2, 3],
-      delay(300),
-      map(x => x + 1),
-      toArray,
-    );
-
-    const end = Date.now();
-
-    expect(res).toEqual([2, 3, 4]);
-
-    expect(end - start).toBeGreaterThan(300);
-    expect(end - start).toBeLessThan(400);
-  });
-
-  it('delay with pipe 2', async () => {
-    const start = Date.now();
-
-    const res = await pipe(
-      [1, 2, 3, 4, 5],
       toAsync,
-      map(x => x + 1),
-      delay(500),
+      map(value => delay(1000, value)),
       toArray,
     );
 
     const end = Date.now();
 
-    expect(res).toEqual([2, 3, 4, 5, 6]);
-
-    expect(end - start).toBeGreaterThan(500);
-    expect(end - start).toBeLessThan(600);
+    expect(res).toEqual([1, 2, 3]);
+    expect(end - start).toBeGreaterThanOrEqual(3000);
+    expect(end - start).toBeLessThan(4000);
   });
 });
