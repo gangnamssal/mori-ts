@@ -2,6 +2,7 @@ import map from './map';
 import toArray from '../to-array/to-array';
 import pipe from '../pipe/pipe';
 import toAsync from '../to-async/to-async';
+import delay from '../delay/delay';
 
 describe('map', () => {
   it('map with array', () => {
@@ -110,5 +111,14 @@ describe('map', () => {
     );
 
     expect(res).toEqual([]);
+  });
+
+  it('map with delay', () => {
+    const res = pipe(
+      [1, 2, 3],
+      map(value => delay(100, value)),
+    );
+
+    expect(res.next().value).resolves.toEqual(1);
   });
 });

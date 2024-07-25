@@ -27,7 +27,7 @@ function asyncMap<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterab
 
       if (done) return { done: true, value: undefined };
 
-      return { done: false, value: fn(value) };
+      return { done: false, value: await fn(value) };
     },
   };
 }
