@@ -35,4 +35,21 @@ describe('concurrent', () => {
     expect(res).toEqual([0, 2, 4, 6, 8, 10]);
     expect(end - start).toBeLessThan(4000);
   });
+
+  it('limit is valid num with filter', async () => {
+    const start = Date.now();
+
+    const res = await pipe(
+      range(0, 6),
+      toAsync,
+      filter(x => delay(1000, x % 2 === 0)),
+      concurrent(4),
+      toArray,
+    );
+
+    const end = Date.now();
+
+    expect(res).toEqual([0, 2, 4]);
+    expect(end - start).toBeLessThan(3000);
+  }, 10000);
 });
