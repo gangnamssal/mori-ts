@@ -19,7 +19,7 @@ function concurrentFilter<A>(iterable: AsyncIterable<[boolean, A]>): AsyncIterab
   const iterator = iterable[Symbol.asyncIterator]();
 
   //작업이 완료된 큐
-  const settledQueue: [ResolveType<A>, RejectType][] = [] as unknown as [ResolveType<A>, RejectType][];
+  const settledQueue: [ResolveType<A>, RejectType][] = [] as [ResolveType<A>, RejectType][];
 
   // 버퍼큐
   const bufferQueue: A[] = [];
@@ -38,6 +38,7 @@ function concurrentFilter<A>(iterable: AsyncIterable<[boolean, A]>): AsyncIterab
 
   function addBuffer(concurrent: Concurrent) {
     const nextItem = iterator.next(concurrent as any);
+
     prevItem = prevItem
       .then(() => nextItem)
       .then(({ done, value }) => {
@@ -59,6 +60,7 @@ function concurrentFilter<A>(iterable: AsyncIterable<[boolean, A]>): AsyncIterab
 
       .catch(reason => {
         finished = true;
+
         while (settledQueue.length > 0) {
           const [, reject] = settledQueue.shift()!;
           reject(reason);
@@ -75,29 +77,26 @@ function concurrentFilter<A>(iterable: AsyncIterable<[boolean, A]>): AsyncIterab
     }
   }
 
-  function recur(concurrent: Concurrent) {
-    if (finished || callCount === resolvedCount) {
-      return;
-    } else if (bufferQueue.length > 0) {
-      taskQueue();
-    } else {
-      addBuffer(concurrent);
-    }
-  }
+  const recur = (concurrent: Concurrent) => {
+    if (finished || callCount === resolvedCount) return;
+    else if (bufferQueue.length > 0) taskQueue();
+    else addBuffer(concurrent);
+  };
 
   return {
-    async next(concurrent: any) {
-      callCount++;
-      if (finished) {
-        return { done: true, value: undefined };
-      }
-      return new Promise((resolve, reject) => {
-        settledQueue.push([resolve, reject]);
-        recur(concurrent as Concurrent);
-      });
-    },
     [Symbol.asyncIterator]() {
       return this;
+    },
+
+    async next(concurrent: any) {
+      callCount++;
+
+      if (finished) return { done: true, value: undefined };
+
+      return new Promise((resolve, reject) => {
+        settledQueue.push([resolve, reject]);
+        recur(concurrent);
+      });
     },
   };
 }
