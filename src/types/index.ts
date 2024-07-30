@@ -50,3 +50,7 @@ export type ReturnIterablePromiseType<T extends Iterable<unknown> | AsyncIterabl
       : never;
 
 export type IsNever<T> = [T] extends [never] ? true : false;
+
+export type ResolveType<A> = (value: IteratorResult<A> | PromiseLike<IteratorResult<A>>) => void;
+
+export type RejectType = (reason?: any) => void;
