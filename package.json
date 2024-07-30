@@ -9,7 +9,7 @@
   "scripts": {
     "build:ts": "tsc && tsc --project tsconfig.cjs.json",
     "build:esbuild": "node esbuild.config.js",
-    "build": "pnpm run build:ts && npm run build:esbuild",
+    "build": "pnpm run build:ts && pnpm run build:esbuild",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "patch": "pnpm run build && pnpm version patch && pnpm publish",
