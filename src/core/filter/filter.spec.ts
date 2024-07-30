@@ -1,8 +1,10 @@
+import concurrent from '../concurrent/concurrent';
 import delay from '../delay/delay';
 import pipe from '../pipe/pipe';
 import toArray from '../to-array/to-array';
 import toAsync from '../to-async/to-async';
 import filter from './filter';
+import range from '../range/range';
 
 describe('filter', () => {
   it('should return an array of items that match the filter', () => {
@@ -147,4 +149,21 @@ describe('filter', () => {
     expect(res).toEqual([2, 4, 6]);
     expect(end - start).toBeGreaterThanOrEqual(600);
   });
+
+  it('filter with concurrent', async () => {
+    const start = Date.now();
+
+    const res = await pipe(
+      range(0, 6),
+      toAsync,
+      filter(x => delay(1000, x % 2 === 0)),
+      concurrent(4),
+      toArray,
+    );
+
+    const end = Date.now();
+
+    expect(res).toEqual([0, 2, 4]);
+    expect(end - start).toBeLessThan(3000);
+  }, 10000);
 });

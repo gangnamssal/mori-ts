@@ -1,5 +1,21 @@
 import { IterableInfer, RejectType, ResolveType } from './../../types';
 
+export class Concurrent {
+  limit: number;
+
+  constructor(limit: number) {
+    this.limit = limit;
+  }
+
+  static of(limit: number) {
+    return new Concurrent(limit);
+  }
+}
+
+export const isConcurrent = (concurrent: unknown): concurrent is Concurrent => {
+  return concurrent instanceof Concurrent;
+};
+
 function concurrent<A extends AsyncIterable<unknown>>(
   limit: number,
 ): (iter: A) => AsyncIterableIterator<IterableInfer<A>>;
@@ -32,7 +48,7 @@ function concurrent<A extends AsyncIterable<unknown>>(
   // 이전 작업
   let prevTask = Promise.resolve();
 
-  // 작업이 완료된 큐의 인덱스
+  // 버퍼큐에 작업이 추가된 횟수
   let callCount = 0;
 
   // 작업이 완료된 큐의 길이
@@ -65,9 +81,9 @@ function concurrent<A extends AsyncIterable<unknown>>(
     if (pending) {
       prevTask = prevTask.then(() => void (!finished && callCount > resolvedCount && addBuffer()));
     } else {
-      const nextItems = Promise.allSettled(Array.from({ length: limit }, () => iterator.next())) as Promise<
-        PromiseSettledResult<IteratorResult<IterableInfer<A>, any>>[]
-      >;
+      const nextItems = Promise.allSettled(
+        Array.from({ length: limit }, () => iterator.next(Concurrent.of(limit) as any)),
+      ) as Promise<PromiseSettledResult<IteratorResult<IterableInfer<A>, any>>[]>;
 
       pending = true;
       prevTask = prevTask
