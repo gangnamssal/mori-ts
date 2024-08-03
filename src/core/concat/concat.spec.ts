@@ -1,4 +1,3 @@
-import pipe from '../pipe/pipe';
 import concat from './concat';
 
 describe('concat', () => {
