@@ -32,9 +32,9 @@ mori-ts는 JavaScript 및 TypeScript 개발자를 위한 함수형 프로그래�
 - [reduce](#reduce)
 - [some](#some)
 - [take](#take)
-- [toArray](#toArray)
-- [toAsync](#toAsync)
-- [toIterValue](#toIterValue)
+- [toArray](#toarray)
+- [toAsync](#toasync)
+- [toIterValue](#toitervalue)
 - [zip](#zip)
 
 [4.License](#license)
@@ -220,6 +220,11 @@ pnpm install mori-ts
 
 - toIterValue 함수는 주어진 iterable 객체에서 값을 추출합니다.
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/toIterValue
+
+### zip
+
+- 두 개의 iterable(반복 가능한 객체)을 병합하여 각각의 요소를 쌍으로 묶은 새로운 iterable을 생성합니다.
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/zip
 
 ## License
 

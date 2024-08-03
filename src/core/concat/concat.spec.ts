@@ -1,3 +1,6 @@
+import map from '../map/map';
+import pipe from '../pipe/pipe';
+import toArray from '../to-array/to-array';
 import concat from './concat';
 
 describe('concat', () => {
@@ -67,5 +70,18 @@ describe('concat', () => {
     const res = concat(iter1, iter2, iter3);
 
     expect([...res]).toEqual([1, 2, 3, 'a', 'b', 'c']);
+  });
+
+  it('concat with pipe', () => {
+    const iter1 = [1, 2, 3];
+    const iter2 = [4, 5, 6];
+
+    const res = pipe(
+      concat(iter1, iter2),
+      map(x => x * 2),
+      toArray,
+    );
+
+    expect(res).toEqual([2, 4, 6, 8, 10, 12]);
   });
 });

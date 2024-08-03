@@ -56,8 +56,8 @@ describe('delayIter', () => {
 
     const res = await pipe(
       [1, 2, 3],
-      delayIter(300),
       map(x => x + 1),
+      delayIter(300),
       toArray,
     );
 
