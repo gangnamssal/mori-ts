@@ -30,6 +30,7 @@ mori-ts는 JavaScript 및 TypeScript 개발자를 위한 함수형 프로그래�
 - [pipe](#pipe)
 - [range](#range)
 - [reduce](#reduce)
+- [reverse](#reverse)
 - [some](#some)
 - [take](#take)
 - [toArray](#toarray)
@@ -192,6 +193,14 @@ pnpm install mori-ts
 - 누산기(accumulator)와 현재 값(current value)을 기반으로 최종 결과를 계산합니다.
 - 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/reduce
+
+### reverse
+
+- iterable 객체의 요소를 역순으로 반환합니다.
+- 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
+- 문자열, Map, Set 등 다양한 iterable 객체를 지원합니다.
+- pipe 함수와 함께 사용하여 다양한 조합의 함수 체인을 만들 수 있습니다.
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/reverse
 
 ### some
 

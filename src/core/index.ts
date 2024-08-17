@@ -18,6 +18,7 @@ export { default as map } from './map/map';
 export { default as pipe } from './pipe/pipe';
 export { default as range } from './range/range';
 export { default as reduce } from './reduce/reduce';
+export { default as reverse } from './reverse/reverse';
 export { default as some } from './some/some';
 export { default as take } from './take/take';
 export { default as toArray } from './to-array/to-array';
