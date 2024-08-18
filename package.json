@@ -4,7 +4,7 @@
     "name": "Tommy",
     "email": "24691116@naver.com"
   },
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Type-inference capable functional programming.",
   "scripts": {
     "build:ts": "tsc && tsc --project tsconfig.cjs.json",
