@@ -1,5 +1,6 @@
 export { default as at } from './at/at';
 export { default as chunk } from './chunk/chunk';
+export { default as compact } from './compact/compact';
 export { default as concat } from './concat/concat';
 export { default as concurrent } from './concurrent/concurrent';
 export { default as curry } from './curry/curry';
