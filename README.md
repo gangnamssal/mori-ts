@@ -30,6 +30,7 @@
 - [flat](#flat)
 - [flatMap](#flatMap)
 - [join](#join)
+- [length](#length)
 - [map](#map)
 - [pipe](#pipe)
 - [range](#range)
@@ -205,6 +206,12 @@ const res = pipe(
 - iterable의 요소들을 지정된 구분자(separator)로 연결하여 하나의 문자열로 반환합니다.
 - 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/join
+
+### length
+
+- length 함수는 iterable의 요소 개수를 반환합니다.
+- 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/length
 
 ### map
 
