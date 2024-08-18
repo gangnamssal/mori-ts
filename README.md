@@ -1,12 +1,16 @@
 # mori-ts
 
-mori-ts는 JavaScript 및 TypeScript 개발자를 위한 함수형 프로그래밍 라이브러리입니다. 이 라이브러리는 동기 및 비동기 iterable 객체를 처리하는 데 필요한 다양한 유틸리티 함수를 제공합니다.
+#### mori-ts는 JavaScript 및 TypeScript 개발자를 위한 함수형 프로그래밍 라이브러리입니다. 이 라이브러리는 동기 및 비동기 iterable 객체를 처리하는 데 필요한 다양한 유틸리티 함수를 제공합니다.
+
+#### mori-ts is a functional programming library for JavaScript and TypeScript developers. This library provides various utility functions necessary for handling synchronous and asynchronous iterable objects.
 
 ## Index
 
 [1.Install](#install)
 
 [2.Main Function](#main-function)
+
+[3.Concept](#concept)
 
 [3.Core](#core)
 
@@ -62,9 +66,42 @@ pnpm install mori-ts
 
 ## Main Function
 
-- **고차 함수 지원 :** 함수들을 조합하여 복잡한 로직을 간단하게 구현할 수 있습니다.
-- **지연 평가(Lazy Evaluation) :** 계산을 필요할 때까지 미루어 성능을 최적화합니다.
-- **다양한 iterable 처리 :** 배열, 객체, 비동기 iterable 등 다양한 데이터 구조를 지원합니다.
+- **고차 함수 지원 (Support for Higher-Order Functions) :** 함수들을 조합하여 복잡한 로직을 간단하게 구현할 수 있습니다.
+
+- **지연 평가 (Lazy Evaluation) :** 계산을 필요할 때까지 미루어 성능을 최적화합니다.
+
+- **다양한 iterable 처리 (Handling Various Iterables) :** 배열, 객체, 비동기 iterable 등 다양한 데이터 구조를 지원합니다.
+
+## Concept
+
+### 1. 단일 함수로 사용 (Used as a Single Function)
+
+#### 모든 함수는 단독으로 사용할 수 있습니다.
+
+```ts
+import { map, filter, toArray } from 'mori-ts';
+
+const arr = [1, 2, 3, 4, 5];
+
+const mappedResult = toArray(map(a => a * 2, arr));
+
+const filteredResult = toArray(filter(a => a % 2 === 0, arr));
+```
+
+### 2. pipe 라인으로 사용 (Used in a Pipeline)
+
+#### 모든 함수는 pipe 라인과 사용할 수 있습니다.
+
+```ts
+import { pipe, map, range, filter, toArray } from 'mori-ts';
+
+const res = pipe(
+  range(1, 10),
+  map(a => a * 2),
+  filter(a => a % 2),
+  toArray,
+);
+```
 
 ## Core
 
