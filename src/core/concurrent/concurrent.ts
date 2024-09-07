@@ -67,11 +67,15 @@ function concurrent<A extends AsyncIterable<unknown>>(
       const { status, value, reason } = bufferQueue.shift() as any;
 
       if (status === 'fulfilled') {
-        resolve(value);
         resolvedCount++;
+        resolve(value);
+
+        if(value.done) finished = true;
+        
       } else {
         reject(reason);
         finished = true;
+        break;
       }
     }
   };
