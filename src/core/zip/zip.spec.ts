@@ -99,7 +99,7 @@ describe('zip', () => {
     expect(res2.next()).resolves.toEqual({ value: undefined, done: true });
   });
 
-  it('zip with pipe', () => {
+  it('zip with pipe', async () => {
     const iter1 = toAsync([1, 2, 3]);
     const iter2 = toAsync(['a', 'b', 'c']);
 
@@ -132,6 +132,15 @@ describe('zip', () => {
     const iter8 = ['a', 'b', 'c'];
     const res4 = pipe(iter8, zip(iter7), toArray);
     expect(res4).toEqual([
+      [1, 'a'],
+      [2, 'b'],
+      [3, 'c'],
+    ]);
+
+    const iter9 = [1, 2, 3];
+    const iter10 = ['a', 'b', 'c'];
+    const res5 = await pipe(iter10, toAsync, zip(iter9), toArray);
+    expect(res5).toEqual([
       [1, 'a'],
       [2, 'b'],
       [3, 'c'],

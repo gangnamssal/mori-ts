@@ -1,6 +1,25 @@
 import { IsPromise } from '../../types';
 import reduce from '../reduce/reduce';
 
+/**
+ * @description
+ * - 여러 개의 함수를 연결하여 데이터를 처리합니다.
+ * - 이 함수는 입력값을 첫 번째 함수에 전달하고, 각 함수의 출력값을 다음 함수의 입력값으로 사용하는 방식으로 작동합니다.
+ *
+ * @example
+ * - 기본 사용법
+ * ```
+ * const result = pipe(
+ *  0, // 초기값
+ *  a => a + 1, // 첫 번째 함수
+ *  a => a + 10, // 두 번째 함수
+ *  a => a + 100 // 세 번째 함수
+ * ); // 출력: 111
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/pipe
+ */
+
 function pipe<T1, R>(a: T1, f1: (a: Awaited<T1>) => R): IsPromise<T1, R>;
 
 function pipe<T1, T2, R>(a: T1, f1: (a: Awaited<T1>) => T2, f2: (a: Awaited<T2>) => R): IsPromise<T1, R>;

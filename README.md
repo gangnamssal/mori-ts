@@ -26,7 +26,7 @@
 - [drop](#drop)
 - [each](#each)
 - [every](#every)
-- [filter](#mapc)
+- [filter](#filter)
 - [find](#find)
 - [flat](#flat)
 - [flatMap](#flatMap)

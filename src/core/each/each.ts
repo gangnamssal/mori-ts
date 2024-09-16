@@ -29,6 +29,39 @@ async function* asyncEach<A, R>(fn: (args: A) => R, iter: AsyncIterable<A>): Asy
   }
 }
 
+/**
+ * @description
+ * - 각 요소에 대해 지정된 함수를 실행하는 고차 함수입니다.
+ * - 원본 iterable을 변경하지 않고 그대로 반환합니다.
+ *
+ * @example
+ * - iterable에서 사용
+ * ```
+ * const arr = [1, 2, 3];
+ * let sum = 0;
+ *
+ * each(x => sum += x, arr);
+ *
+ * console.log(sum); // 출력: 6
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```
+ * const arr = [1, 2, 3];
+ *
+ * const logMessage = (message) => {
+ *  console.log(message);
+ * };
+ *
+ * const res = pipe(arr, each(logMessage), toArray); // 콘솔 출력: 1, 2, 3
+ *
+ * console.log(res); // 출력: [1, 2, 3]
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/each
+ */
+
 function each<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
   fn: (args: IterableInfer<A>) => R,
   iter: A,

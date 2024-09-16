@@ -162,6 +162,43 @@ function async<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableI
   };
 }
 
+/**
+ * @description
+ * - 주어진 조건을 만족하는 요소만 포함된 iterable을 반환합니다.
+ * - 조건을 만족하지 않는 요소는 제외됩니다.
+ * - 동기 및 비동기 iterable 모두 지원합니다.
+ *
+ * @example
+ * - 배열에서 사용
+ * ```
+ * const items = [
+ *  { name: 'item 1', value: 1 },
+ *  { name: 'item 2', value: 2 },
+ *  { name: 'item 3', value: 3 },
+ * ];
+ *
+ * const result = filter(item => item.value === 1, items);
+ *
+ * console.log([...result]); // 출력: [{ name: 'item 1', value: 1 }]
+ * console.log(toArray(result)); // 출력: [{ name: 'item 1', value: 1 }]
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```
+ * const iter = [1, 2, 3];
+ *
+ * const res = await pipe(
+ *  iter,
+ *  toAsync,
+ *  filter(item => item === 1),
+ *  toArray,
+ * ); // 출력: [1]
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/filter
+ */
+
 function filter<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter: A,

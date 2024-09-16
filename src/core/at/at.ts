@@ -61,6 +61,45 @@ async function asyncAt<A>(index: number, iter: AsyncIterable<A>): Promise<A | un
   return undefined;
 }
 
+/**
+ * @description
+ * - 주어진 인덱스에 해당하는 요소를 반환합니다.
+ * - 인덱스가 음수일 경우, 배열의 끝에서부터 요소를 반환합니다.
+ * - 동기 및 비동기 iterable 모두를 지원합니다.
+ * 
+ * @example 
+ * - 배열에서 요소 가져오기
+ * ```
+ * const array = [1, 2, 3];
+ *
+ * const firstElement = at(0, array); // 출력: 1
+ *
+ * const lastElement = at(-1, array); // 출력: 3
+ * ```
+ * 
+ * @example 
+ * - 파이프라인과 함께 사용하기
+ * ```
+ * const array = [1, 2, 3];
+ * 
+ * const result = pipe(
+ *  array,
+ *  map(x => x * 2),
+ *  filter(x => x > 2),
+ *  at(0)
+ * ); // 출력: 4
+
+ * const asyncResult = await pipe(
+ *  [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+ *  toAsync,
+ *  map(x => x * 2),
+ *  at(-1)
+ * ); // 출력: 6
+ * ```
+ * 
+ * @url https://github.com/gangnamssal/mori-ts/wiki/at
+*/
+
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
   iter: A,

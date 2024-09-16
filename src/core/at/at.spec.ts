@@ -43,6 +43,14 @@ describe('at', () => {
     expect(res2).toBeUndefined();
   });
 
+  it('should return undefined if the iterable is empty', () => {
+    const res = at(0, []);
+    expect(res).toBeUndefined();
+
+    const res2 = at(-1, []);
+    expect(res2).toBeUndefined();
+  });
+
   it('should return the element at the specified index in an async iterable', async () => {
     const res = await at(
       0,

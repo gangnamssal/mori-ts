@@ -1,6 +1,53 @@
 import { flat, pipe } from '..';
 import { ReturnIterableIteratorType } from '../../types';
 
+/**
+ * @description
+ * - 주어진 동기 iterable들을 연결하여 하나의 iterable로 반환합니다.
+ * - 배열, 객체 배열, 빈 배열 등 다양한 타입의 iterable을 처리할 수 있습니다.
+ *
+ * @example
+ * - 여러 배열을 연결하기
+ * ```
+ * const array1 = [1, 2, 3];
+ * const array2 = [4, 5, 6];
+ * const array3 = [7, 8, 9];
+ *
+ * const result = concat(array1, array2, array3);
+ *
+ * console.log([...result]); // 출력: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+ * ```
+ *
+ * @example
+ * - 다양한 타입의 iterable을 연결하기
+ * ```
+ * const array1 = [1, 2, 3];
+ * const array2 = [{ a: 1 }, { a: 2 }, { a: 3 }];
+ * const array3 = [];
+ *
+ * const result = concat(array1, array2, array3);
+ *
+ * console.log([...result]); // 출력: [1, 2, 3, { a: 1 }, { a: 2 }, { a: 3 }]
+ * ```
+ *
+ * @example
+ * - 파이프라인과 함께 사용하기
+ * ```
+ * const iter1 = [1, 2, 3];
+ * const iter2 = [4, 5, 6];
+ *
+ * const res = pipe(
+ *  concat(iter1, iter2),
+ *  map(x => x * 2),
+ *  toArray,
+ * );
+ *
+ * console.log(res); // 출력: [2, 4, 6, 8, 10, 12]
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/concat
+ */
+
 function concat<A1 extends Iterable<unknown> | AsyncIterable<unknown>>(
   iter1: A1,
 ): ReturnIterableIteratorType<A1>;

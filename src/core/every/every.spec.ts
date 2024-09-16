@@ -27,4 +27,17 @@ describe('every', () => {
 
     expect(res).toBe(true);
   });
+
+  it('every with pipe 2', async () => {
+    const iter = [1, 2, 3];
+
+    const res = await pipe(
+      iter,
+      toAsync,
+      map(x => x * 2),
+      every(x => x > 0),
+    );
+
+    expect(res).toBe(true);
+  });
 });

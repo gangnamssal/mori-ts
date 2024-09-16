@@ -25,6 +25,33 @@ async function* asyncTake<T>(limit: number, iter: AsyncIterable<T>): AsyncIterab
   }
 }
 
+/**
+ * @description
+ * - iterable에서 처음 n개의 요소를 추출합니다.
+ * - 동기 및 비동기 iterable 모두 지원합니다.
+ *
+ * @example
+ * - 기본 사용법
+ * ```
+ * const arr = [1, 2, 3, 4, 5];
+ *
+ * const result = take(3, arr);
+ *
+ * console.log([...result]); // 출력: [1, 2, 3]
+ * console.log(toArray(result)); // 출력: [1, 2, 3]
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```
+ * const array = [1, 2, 3, 4, 5];
+ *
+ * const result = pipe(array, take(3), toArray); // 출력: [1, 2, 3]
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/take
+ */
+
 function take<T>(limit: number, iter: Iterable<T>): IterableIterator<T>;
 function take<T>(limit: number, iter: Iterable<Promise<T>>): IterableIterator<Promise<T>>;
 function take<T>(limit: number, iter: AsyncIterable<T>): AsyncIterableIterator<T>;

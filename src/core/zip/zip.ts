@@ -69,6 +69,47 @@ type ZipAsyncIterableIterator<A, B> = AsyncIterableIterator<
   true extends IsNever<A> | IsNever<B> ? never : [A, B]
 >;
 
+/**
+ * @description
+ * - 두 개의 iterable(반복 가능한 객체)을 병합하여 각각의 요소를 쌍으로 묶은 새로운 iterable을 생성합니다.
+ * - 동기 및 비동기 iterable 모두 지원합니다.
+ *
+ * @example
+ * - 기본 사용법
+ * ```
+ * const array = [1, 2, 3];
+ * const array2 = ['a', 'b', 'c'];
+ * 
+ * const result = zip(array, array2); // 출력: [[1, 'a'], [2, 'b'], [3, 'c']]
+ * ```
+ *
+ * @example
+ * - 길이가 다른 배열
+ * ```
+ * const array = [1, 2, 3];
+ * const array2 = ['a', 'b'];
+ * 
+ * const result1 = zip(array, array2); // 출력: [[1, 'a'], [2, 'b']]
+ *
+ * const array3 = ['a', 'b', 'c'];
+ * const array4 = [1, 2];
+ * const result2 = zip(array4, array3); // 출력: [[1, 'a'], [2, 'b']]
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```
+ * const iter1 = [1, 2, 3];
+ * const iter2 = ['a', 'b', 'c'];
+
+ * const res = pipe(iter2, zip(iter1), toArray); // 결과: [[1, 'a'], [2, 'b'], [3, 'c']]
+
+ * const res2 = await pipe(iter2, toAsync, zip(iter1), toArray); // 결과: [[1, 'a'], [2, 'b'], [3, 'c']]
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/zip
+ */
+
 function zip<A, B>(iter1: Iterable<A>, iter2: Iterable<B>): ZipIterableIterator<A, B>;
 
 function zip<A, B>(iter1: AsyncIterable<A>, iter2: AsyncIterable<B>): ZipAsyncIterableIterator<A, B>;

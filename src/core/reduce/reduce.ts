@@ -78,6 +78,37 @@ function asyncReduce<T extends AsyncIterable<any>, Acc extends Awaited<IterableI
   });
 }
 
+/**
+ * @description
+ * - iterable 객체의 요소를 하나의 값으로 축소합니다.
+ * - 누산기(accumulator)와 현재 값(current value)을 기반으로 최종 결과를 계산합니다.
+ * - 동기 및 비동기 iterable 모두 지원합니다.
+ *
+ * @example
+ * - 기본 사용법
+ * ```
+ * const numbers = [1, 2, 3, 4, 5];
+ *
+ * const result = reduce((acc, value) => acc + value, 0, numbers); // 출력: 15
+ *
+ * const result2 = reduce((acc, value) => acc + value, numbers); // 출력: 15
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```
+ * const iter = [1, 2, 3];
+ *
+ * const res = pipe(
+ *  iter,
+ *  toAsync,
+ *  reduce((acc, value) => acc + value),
+ * ); // 출력: 6
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/reduce
+ */
+
 function reduce<A extends Iterable<unknown> | AsyncIterable<unknown>, Acc, R extends Acc>(
   fn: (acc: R, value: IterableInfer<A>) => R,
   acc: Acc,

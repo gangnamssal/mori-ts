@@ -25,6 +25,42 @@ async function asyncEvery<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): Pro
   }
 }
 
+/**
+ * @description
+ * - 모든 요소가 특정 조건을 만족하는지 확인하는 함수입니다.
+ * - 조건을 만족하면 true를, 하나라도 만족하지 않으면 false를 반환합니다.
+ * - 동기 및 비동기 iterable 모두 지원합니다.
+ *
+ * @example
+ * - 배열에서 사용
+ * ```
+ * const arr = [1, 2, 3];
+ *
+ * const result = every(x => x > 0, arr); // 출력: true
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```
+ * const arr = [1, 2, 3];
+ *
+ * const result = pipe(
+ *  arr,
+ *  map(x => x * 2),
+ *  every(x => x > 0),
+ * ); // 출력: true
+ *
+ * const result2 = await pipe(
+ *  arr,
+ *  toAsync,
+ *  map(x => x * 2),
+ *  every(x => x > 0),
+ * ); // 출력: true
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/every
+ */
+
 function every<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter: A,
