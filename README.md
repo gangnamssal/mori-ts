@@ -21,7 +21,6 @@
 - [concurrent](#concurrent)
 - [curry](#curry)
 - [delay](#delay)
-- [delayEach](#delayeach)
 - [delayIter](#delayiter)
 - [drop](#drop)
 - [each](#each)
@@ -29,7 +28,8 @@
 - [filter](#filter)
 - [find](#find)
 - [flat](#flat)
-- [flatMap](#flatMap)
+- [flatMap](#flatmap)
+- [interval](#interval)
 - [join](#join)
 - [length](#length)
 - [map](#map)
@@ -163,14 +163,6 @@ const res = pipe(
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/delay
 
-### delayEach
-
-- 주어진 지연 시간 동안 각 요소를 대기하면서 제공된 iterable을 반환하는 함수입니다.
-
-- 이 함수는 동기 및 비동기 iterable 모두를 지원하며, 비동기 작업에서 각 요소의 처리를 일정 시간 간격으로 지연시킬 수 있습니다.
-
-- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/delayEach
-
 ### delayIter
 
 - 주어진 지연 시간(ms) 동안 각 요소의 반환을 대기하며 iterable을 생성하는 함수입니다.
@@ -244,6 +236,14 @@ const res = pipe(
 - 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/flatMap
+
+### interval
+
+- 주어진 지연 시간 동안 각 요소를 대기하면서 제공된 iterable을 반환하는 함수입니다.
+
+- 이 함수는 동기 및 비동기 iterable 모두를 지원하며, 비동기 작업에서 각 요소의 처리를 일정 시간 간격으로 지연시킬 수 있습니다.
+
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/interval
 
 ### join
 

@@ -1,9 +1,9 @@
 import { map, pipe, toArray, toAsync } from '..';
-import delayEach from './delay-each';
+import interval from './interval';
 
 describe('delay', () => {
   it('should delay sync iterable', async () => {
-    const iter = delayEach(100, [1, 2, 3]);
+    const iter = interval(100, [1, 2, 3]);
 
     const start = Date.now();
     const first = await iter.next();
@@ -24,7 +24,7 @@ describe('delay', () => {
   });
 
   it('should delay async iterable', async () => {
-    const iter = delayEach(
+    const iter = interval(
       100,
       (async function* () {
         yield 1;
@@ -56,7 +56,7 @@ describe('delay', () => {
 
     const res = await pipe(
       [1, 2, 3],
-      delayEach(100),
+      interval(100),
       map(x => x + 1),
       toArray,
     );
@@ -76,7 +76,7 @@ describe('delay', () => {
       [1, 2, 3, 4, 5],
       toAsync,
       map(x => x + 1),
-      delayEach(100),
+      interval(100),
       toArray,
     );
 

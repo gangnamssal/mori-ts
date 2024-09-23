@@ -1,7 +1,7 @@
 import { IterableInfer } from '../../types';
 import { isAsyncIterable, isIterable } from '../../utils';
 
-async function* syncDelay<A>(time: number, iter: Iterable<A>): AsyncIterableIterator<A> {
+async function* syncInterval<A>(time: number, iter: Iterable<A>): AsyncIterableIterator<A> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
@@ -15,7 +15,7 @@ async function* syncDelay<A>(time: number, iter: Iterable<A>): AsyncIterableIter
   }
 }
 
-async function* asyncDelay<A>(time: number, iter: AsyncIterable<A>): AsyncIterableIterator<A> {
+async function* asyncInterval<A>(time: number, iter: AsyncIterable<A>): AsyncIterableIterator<A> {
   const iterator = iter[Symbol.asyncIterator]();
 
   while (true) {
@@ -37,7 +37,7 @@ async function* asyncDelay<A>(time: number, iter: AsyncIterable<A>): AsyncIterab
  * @example
  * - 동기 iterable에서 사용
  * ```
- * const iter = delayEach(100, [1, 2, 3]);
+ * const iter = interval(100, [1, 2, 3]);
  *
  * console.log(await iter.next()); // 출력: { value: 1, done: false }, 출력시간: 약 100ms
  * console.log(await iter.next()); // 출력: { value: 2, done: false }, 출력시간: 약 100ms
@@ -51,7 +51,7 @@ async function* asyncDelay<A>(time: number, iter: AsyncIterable<A>): AsyncIterab
  *
  * const res = await pipe(
  *  [1, 2, 3],
- *  delayEach(100),
+ *  interval(100),
  *  map(x => x + 1),
  *  toArray,
  * );
@@ -62,26 +62,26 @@ async function* asyncDelay<A>(time: number, iter: AsyncIterable<A>): AsyncIterab
  * console.log(`Elapsed time: ${end - start}ms`); // 출력: 약 300ms
  * ```
  *
- * @url https://github.com/gangnamssal/mori-ts/wiki/delayEach
+ * @url https://github.com/gangnamssal/mori-ts/wiki/interval
  */
 
-function delay<A extends Iterable<unknown> | AsyncIterable<unknown>>(
+function interval<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   time: number,
   iter: A,
 ): AsyncIterableIterator<IterableInfer<A>>;
 
-function delay<A extends Iterable<unknown> | AsyncIterable<unknown>>(
+function interval<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   time: number,
 ): (iter: A) => AsyncIterableIterator<IterableInfer<A>>;
 
-function delay<A extends Iterable<unknown> | AsyncIterable<unknown>>(time: number, iter?: A) {
-  if (!iter) return (iter: A) => delay(time, iter);
+function interval<A extends Iterable<unknown> | AsyncIterable<unknown>>(time: number, iter?: A) {
+  if (!iter) return (iter: A) => interval(time, iter);
 
-  if (isIterable<IterableInfer<A>>(iter)) return syncDelay(time, iter);
+  if (isIterable<IterableInfer<A>>(iter)) return syncInterval(time, iter);
 
-  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncDelay(time, iter);
+  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncInterval(time, iter);
 
   throw new Error('argument must be an iterable or async iterable');
 }
 
-export default delay;
+export default interval;
