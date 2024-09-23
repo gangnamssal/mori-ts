@@ -21,7 +21,6 @@
 - [concurrent](#concurrent)
 - [curry](#curry)
 - [delay](#delay)
-- [delayIter](#delayiter)
 - [drop](#drop)
 - [each](#each)
 - [every](#every)
@@ -39,6 +38,7 @@
 - [reverse](#reverse)
 - [some](#some)
 - [take](#take)
+- [timeOut](#timeout)
 - [toArray](#toarray)
 - [toAsync](#toasync)
 - [toIterValue](#toitervalue)
@@ -162,14 +162,6 @@ const res = pipe(
 - 주로 비동기 작업 시 특정 시간 동안 대기해야 할 때 유용하게 사용됩니다.
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/delay
-
-### delayIter
-
-- 주어진 지연 시간(ms) 동안 각 요소의 반환을 대기하며 iterable을 생성하는 함수입니다.
-
-- 이 함수는 동기와 비동기 iterable 모두를 지원합니다. 이를 통해 각 요소가 일정한 시간 간격으로 처리되도록 제어할 수 있습니다.
-
-- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/delayIter
 
 ### drop
 
@@ -324,6 +316,14 @@ const res = pipe(
 - 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/take
+
+### timeOut
+
+- 주어진 지연 시간(ms) 동안 각 요소의 반환을 대기하며 iterable을 생성하는 함수입니다.
+
+- 이 함수는 동기와 비동기 iterable 모두를 지원합니다. 이를 통해 각 요소가 일정한 시간 간격으로 처리되도록 제어할 수 있습니다.
+
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/timeOut
 
 ### toArray
 
