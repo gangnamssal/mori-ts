@@ -1,0 +1,33 @@
+.vite
+vite.config.*
+
+# Test-related files
+*.spec.ts
+*.test.ts
+*.spec.js
+*.test.js
+coverage/
+
+# TypeScript-related files
+*.tsbuildinfo
+tsconfig.json
+tsconfig.*.json
+
+# Configuration and environment files
+.eslintignore
+.eslintrc*
+.prettierignore
+.prettierrc*
+*.config.js
+*.config.ts
+.env
+.env.*
+.editorconfig
+
+# IDE/editor specific files
+.vscode/
+.idea/
+*.log
+
+# Miscellaneous
+*.md 
