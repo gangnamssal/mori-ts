@@ -1,5 +1,4 @@
-import { delay, filter, map, pipe, range, toArray, toAsync } from '..';
-import concurrent from './concurrent';
+import { delay, filter, map, pipe, range, toArray, toAsync, concurrent } from '../core';
 
 describe('concurrent', () => {
   it('limit is valid num with map', async () => {

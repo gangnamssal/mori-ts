@@ -1,8 +1,4 @@
-import delay from '../delay/delay';
-import pipe from '../pipe/pipe';
-import toArray from '../to-array/to-array';
-import toAsync from '../to-async/to-async';
-import filter from './filter';
+import { delay, pipe, toArray, toAsync, filter } from '../core';
 
 describe('filter', () => {
   it('should return an array of items that match the filter', () => {

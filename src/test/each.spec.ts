@@ -1,5 +1,4 @@
-import { pipe, toArray, toIterValue, toAsync } from '..';
-import each from './each';
+import { pipe, toArray, toIterValue, each } from '../core';
 
 const logMessage = (message: any) => {
   console.log(message);

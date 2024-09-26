@@ -1,6 +1,4 @@
-import pipe from '../pipe/pipe';
-import toAsync from '../to-async/to-async';
-import reduce from './reduce';
+import { pipe, toAsync, reduce } from '../core';
 
 describe('reduce', () => {
   it('should reduce an array of numbers to a single value', () => {

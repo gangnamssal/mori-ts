@@ -1,5 +1,4 @@
-import join from './join';
-import { map, pipe, range, toAsync } from '..';
+import { map, pipe, range, toAsync, join } from '../core';
 
 describe('join', () => {
   it('joins an array of strings with a separator', () => {

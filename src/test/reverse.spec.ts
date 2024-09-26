@@ -1,12 +1,4 @@
-import reverse from './reverse';
-import toArray from '../to-array/to-array';
-import toAsync from '../to-async/to-async';
-import pipe from '../pipe/pipe';
-import map from '../map/map';
-import range from '../range/range';
-import delay from '../delay/delay';
-import concurrent from '../concurrent/concurrent';
-import filter from '../filter/filter';
+import { reverse, toArray, toAsync, pipe, map, range, delay, concurrent, filter } from '../core';
 
 describe('reverse', () => {
   it('should reverse an iterable', () => {

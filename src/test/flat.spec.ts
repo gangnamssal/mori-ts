@@ -1,5 +1,4 @@
-import flat from './flat';
-import { pipe, toArray, toAsync } from '..';
+import { pipe, toArray, toAsync, flat } from '../core';
 
 describe('flat', () => {
   it('flat with array', () => {

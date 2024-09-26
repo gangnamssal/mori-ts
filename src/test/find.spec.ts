@@ -1,5 +1,4 @@
-import { map, pipe, toAsync } from '..';
-import find from './find';
+import { map, pipe, toAsync, find } from '../core';
 
 describe('find', () => {
   it('should return the first element that satisfies the predicate', () => {

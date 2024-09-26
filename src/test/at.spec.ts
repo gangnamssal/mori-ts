@@ -1,5 +1,4 @@
-import at from './at';
-import { filter, map, pipe, toAsync } from '..';
+import { filter, map, pipe, toAsync, at } from '../core';
 
 describe('at', () => {
   it('should return the element at the specified index', () => {

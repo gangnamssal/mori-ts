@@ -1,4 +1,4 @@
-import toAsync from './to-async';
+import { toAsync } from '../core';
 
 describe('toAsync', () => {
   it('toAsync with array', async () => {

@@ -1,5 +1,4 @@
-import chunk from './chunk';
-import { pipe, toArray, toAsync } from '..';
+import { pipe, toArray, toAsync, chunk } from '../core';
 
 describe('chunk', () => {
   it('should chunk the given iterable', () => {

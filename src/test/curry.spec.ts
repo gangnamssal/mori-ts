@@ -1,4 +1,4 @@
-import curry from './curry';
+import { curry } from '../core';
 
 describe('curry', () => {
   it('should curry a function', () => {

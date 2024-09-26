@@ -1,5 +1,4 @@
-import take from './take';
-import { pipe, toArray, toAsync } from '..';
+import { pipe, toArray, toAsync, take } from '../core';
 
 describe('take', () => {
   it('should take the first n elements from an iterable', () => {

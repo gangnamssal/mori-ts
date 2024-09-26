@@ -1,5 +1,4 @@
-import pipe from './pipe';
-import { filter, map, reduce, toArray, toAsync } from '..';
+import { filter, map, reduce, toArray, toAsync, pipe } from '../core';
 
 describe('pipe', () => {
   it('pipe with functions', () => {

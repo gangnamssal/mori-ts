@@ -1,7 +1,4 @@
-import map from '../map/map';
-import pipe from '../pipe/pipe';
-import toArray from '../to-array/to-array';
-import concat from './concat';
+import { map, pipe, toArray, concat } from '../core';
 
 describe('concat', () => {
   it('concat with one array', () => {

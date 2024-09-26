@@ -1,5 +1,4 @@
-import { toAsync, pipe, map } from '..';
-import every from './every';
+import { toAsync, pipe, map, every } from '../core';
 
 describe('every', () => {
   it('every with array', () => {

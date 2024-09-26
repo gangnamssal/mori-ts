@@ -17,6 +17,6 @@
     "noEmitOnError": true,
     "moduleResolution": "node"
   },
-  "include": ["src/**/index.ts", "src/core/index.ts"],
+  "include": ["src/index.ts", "src/core/index.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

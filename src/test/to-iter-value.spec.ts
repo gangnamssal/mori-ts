@@ -1,5 +1,4 @@
-import { map, toAsync } from '..';
-import toIterValue from './to-iter-value';
+import { map, toAsync, toIterValue } from '../core';
 
 describe('toResult', () => {
   it('toIterValue with map', () => {

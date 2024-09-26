@@ -1,11 +1,4 @@
-import pipe from '../pipe/pipe';
-import range from '../range/range';
-import length from './length';
-import filter from '../filter/filter';
-import delay from '../delay/delay';
-import toAsync from '../to-async/to-async';
-import map from '../map/map';
-import concurrent from '../concurrent/concurrent';
+import { pipe, range, length, filter, delay, toAsync, map, concurrent } from '../core';
 
 describe('length', () => {
   it('should return the length of an iterable', () => {

@@ -1,7 +1,4 @@
-import zip from './zip';
-import toArray from '../to-array/to-array';
-import toAsync from '../to-async/to-async';
-import pipe from '../pipe/pipe';
+import { zip, toArray, toAsync, pipe } from '../core';
 
 describe('zip', () => {
   it('should zip two iterable', () => {

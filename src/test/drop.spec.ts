@@ -1,5 +1,4 @@
-import drop from './drop';
-import { toArray, pipe, toAsync } from '..';
+import { toArray, pipe, toAsync, drop } from '../core';
 
 describe('drop', () => {
   it('should drop the first n elements from the iterable', () => {

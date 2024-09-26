@@ -1,11 +1,4 @@
-import toArray from '../to-array/to-array';
-import pipe from '../pipe/pipe';
-import range from '../range/range';
-import map from '../map/map';
-import toAsync from '../to-async/to-async';
-import compact from './compact';
-import delay from '../delay/delay';
-import concurrent from '../concurrent/concurrent';
+import { toArray, pipe, range, map, toAsync, compact, delay, concurrent } from '../core';
 
 describe('compact', () => {
   it('should remove falsy values from an iterable', () => {

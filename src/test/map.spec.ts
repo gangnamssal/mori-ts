@@ -1,8 +1,4 @@
-import map from './map';
-import toArray from '../to-array/to-array';
-import pipe from '../pipe/pipe';
-import toAsync from '../to-async/to-async';
-import delay from '../delay/delay';
+import { map, toArray, pipe, toAsync, delay } from '../core';
 
 describe('map', () => {
   it('map with array', () => {

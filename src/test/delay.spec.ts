@@ -1,5 +1,4 @@
-import { map, pipe, toArray, toAsync } from '..';
-import delay from './delay';
+import { map, pipe, toArray, toAsync, delay } from '../core';
 
 describe('delay', () => {
   it('delay with number', async () => {

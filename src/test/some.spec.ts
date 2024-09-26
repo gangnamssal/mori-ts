@@ -1,5 +1,4 @@
-import { filter, map, pipe, toAsync } from '..';
-import some from './some';
+import { filter, map, pipe, toAsync, some } from '../core';
 
 describe('some', () => {
   it('some with array, result true', () => {

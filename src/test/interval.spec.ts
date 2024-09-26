@@ -1,9 +1,8 @@
-import { map, pipe, toArray, toAsync } from '..';
-import timeOut from './time-out';
+import { map, pipe, toArray, toAsync, interval } from '../core';
 
-describe('timeOut', () => {
-  it('should timeOut sync iterable', async () => {
-    const iter = timeOut(100, [1, 2, 3]);
+describe('delay', () => {
+  it('should delay sync iterable', async () => {
+    const iter = interval(100, [1, 2, 3]);
 
     const start = Date.now();
     const first = await iter.next();
@@ -23,8 +22,8 @@ describe('timeOut', () => {
     expect(third).toEqual({ value: 3, done: false });
   });
 
-  it('should timeOut async iterable', async () => {
-    const iter = timeOut(
+  it('should delay async iterable', async () => {
+    const iter = interval(
       100,
       (async function* () {
         yield 1;
@@ -51,13 +50,13 @@ describe('timeOut', () => {
     expect(third).toEqual({ value: 3, done: false });
   });
 
-  it('timeOut with pipe', async () => {
+  it('delay with pipe', async () => {
     const start = Date.now();
 
     const res = await pipe(
       [1, 2, 3],
+      interval(100),
       map(x => x + 1),
-      timeOut(300),
       toArray,
     );
 
@@ -69,14 +68,14 @@ describe('timeOut', () => {
     expect(end - start).toBeLessThan(400);
   });
 
-  it('timeOut with pipe 2', async () => {
+  it('delay with pipe 2', async () => {
     const start = Date.now();
 
     const res = await pipe(
       [1, 2, 3, 4, 5],
       toAsync,
       map(x => x + 1),
-      timeOut(500),
+      interval(100),
       toArray,
     );
 

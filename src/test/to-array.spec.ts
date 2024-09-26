@@ -1,4 +1,4 @@
-import toArray from './to-array';
+import { toArray } from '../core';
 
 describe('toArray', () => {
   it('should convert an iterable to an array', () => {

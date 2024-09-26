@@ -1,5 +1,4 @@
-import range from './range';
-import { filter, map, pipe, reduce, take, toArray } from '..';
+import { filter, map, pipe, reduce, take, toArray, range } from '../core';
 
 describe('range', () => {
   it('should generate a range of numbers', () => {

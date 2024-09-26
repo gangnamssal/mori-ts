@@ -1,7 +1,4 @@
-import flatMap from './flat-map';
-import toArray from '../to-array/to-array';
-import pipe from '../pipe/pipe';
-import toAsync from '../to-async/to-async';
+import { flatMap, toArray, pipe, toAsync } from '../core';
 
 describe('flat-map', () => {
   it('flatMap with array', () => {
