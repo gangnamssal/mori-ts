@@ -54,7 +54,7 @@ function flatMap<
 ):
   | ReturnIterableIteratorType<A, IterableRecurInfer<B>>
   | ((iter: A) => ReturnIterableIteratorType<A, IterableRecurInfer<B>>) {
-  if (!iter)
+  if (iter === undefined)
     return (iter: A): ReturnIterableIteratorType<A, IterableRecurInfer<B>> =>
       flatMap(fn, iter as any) as ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
 

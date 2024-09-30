@@ -72,4 +72,18 @@ describe('flat-map', () => {
 
     expect(res).toEqual(['1', '2', '2', '4', '3', '6']);
   });
+
+  it('flatMap with string', () => {
+    const iter = 'hello';
+    const res = flatMap(a => [a, a], iter);
+
+    expect([...res]).toEqual(['h', 'h', 'e', 'e', 'l', 'l', 'l', 'l', 'o', 'o']);
+  });
+
+  it('flatMap with empty string', () => {
+    const iter = '';
+    const res = flatMap(a => [a, a], iter);
+
+    expect([...res]).toEqual([]);
+  });
 });
