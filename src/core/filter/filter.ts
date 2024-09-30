@@ -212,7 +212,7 @@ function filter<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter?: A,
 ): ReturnIterableIteratorType<A> | ((iter: A) => ReturnIterableIteratorType<A>) {
-  if (!iter)
+  if (iter === undefined)
     return (iter: A): ReturnIterableIteratorType<A> =>
       filter(fn, iter as any) as ReturnIterableIteratorType<A>;
 

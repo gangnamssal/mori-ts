@@ -143,4 +143,14 @@ describe('filter', () => {
     expect(res).toEqual([2, 4, 6]);
     expect(end - start).toBeGreaterThanOrEqual(600);
   });
+
+  it('filter with string', () => {
+    const res = filter(x => x === 'l', 'hello');
+    expect([...res]).toEqual(['l', 'l']);
+  });
+
+  it('filter with empty string', () => {
+    const res = filter(x => x === 'l', '');
+    expect([...res]).toEqual([]);
+  });
 });
