@@ -153,4 +153,14 @@ describe('chunk', () => {
     const res5 = pipe(iter, toAsync, chunk(0), toArray);
     expect(res5).resolves.toEqual([]);
   });
+
+  it('chunk with string', () => {
+    const iter = chunk(2, '123456789');
+    expect([...iter]).toEqual([['1', '2'], ['3', '4'], ['5', '6'], ['7', '8'], ['9']]);
+  });
+
+  it('chunk with empty string', () => {
+    const iter = chunk(2, '');
+    expect([...iter]).toEqual([]);
+  });
 });

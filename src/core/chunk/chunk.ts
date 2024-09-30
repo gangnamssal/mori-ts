@@ -110,7 +110,7 @@ function chunk<S extends number, A extends Iterable<unknown> | AsyncIterable<unk
       A,
       IsNever<IterableInfer<A>> extends true ? never : S extends 0 ? never : IterableInfer<A>[]
     >) {
-  if (!iter)
+  if (iter === undefined)
     return (
       iter: A,
     ): ReturnIterableIteratorType<
