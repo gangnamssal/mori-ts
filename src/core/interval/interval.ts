@@ -75,7 +75,7 @@ function interval<A extends Iterable<unknown> | AsyncIterable<unknown>>(
 ): (iter: A) => AsyncIterableIterator<IterableInfer<A>>;
 
 function interval<A extends Iterable<unknown> | AsyncIterable<unknown>>(time: number, iter?: A) {
-  if (!iter) return (iter: A) => interval(time, iter);
+  if (iter === undefined) return (iter: A) => interval(time, iter);
 
   if (isIterable<IterableInfer<A>>(iter)) return syncInterval(time, iter);
 

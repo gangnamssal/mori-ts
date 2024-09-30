@@ -1,7 +1,7 @@
 import { map, pipe, toArray, toAsync, interval } from '../core';
 
-describe('delay', () => {
-  it('should delay sync iterable', async () => {
+describe('interval', () => {
+  it('should interval sync iterable', async () => {
     const iter = interval(100, [1, 2, 3]);
 
     const start = Date.now();
@@ -22,7 +22,7 @@ describe('delay', () => {
     expect(third).toEqual({ value: 3, done: false });
   });
 
-  it('should delay async iterable', async () => {
+  it('should interval async iterable', async () => {
     const iter = interval(
       100,
       (async function* () {
@@ -50,7 +50,7 @@ describe('delay', () => {
     expect(third).toEqual({ value: 3, done: false });
   });
 
-  it('delay with pipe', async () => {
+  it('interval with pipe', async () => {
     const start = Date.now();
 
     const res = await pipe(
@@ -68,7 +68,7 @@ describe('delay', () => {
     expect(end - start).toBeLessThan(400);
   });
 
-  it('delay with pipe 2', async () => {
+  it('interval with pipe 2', async () => {
     const start = Date.now();
 
     const res = await pipe(
@@ -85,5 +85,28 @@ describe('delay', () => {
 
     expect(end - start).toBeGreaterThanOrEqual(500);
     expect(end - start).toBeLessThan(600);
+  });
+
+  it('interval with string', async () => {
+    const start = Date.now();
+
+    const res = await pipe('hello', interval(100), toArray);
+
+    const end = Date.now();
+
+    expect(res).toEqual(['h', 'e', 'l', 'l', 'o']);
+    expect(end - start).toBeGreaterThanOrEqual(500);
+    expect(end - start).toBeLessThan(600);
+  });
+
+  it('interval with empty string', async () => {
+    const start = Date.now();
+
+    const res = await pipe('', interval(100), toArray);
+
+    const end = Date.now();
+
+    expect(res).toEqual([]);
+    expect(end - start).toBeGreaterThanOrEqual(0);
   });
 });
