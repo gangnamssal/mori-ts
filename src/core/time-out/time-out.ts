@@ -59,7 +59,7 @@ function timeOut<A extends Iterable<unknown> | AsyncIterable<unknown>>(
 ): (iter: A) => AsyncIterableIterator<IterableInfer<A>>;
 
 function timeOut<A extends Iterable<unknown> | AsyncIterable<unknown>>(time: number, iter?: A) {
-  if (!iter) return (iter: A) => timeOut(time, iter);
+  if (iter === undefined) return (iter: A) => timeOut(time, iter);
 
   if (isIterable<IterableInfer<A>>(iter)) return syncTimeOut(time, iter);
 
