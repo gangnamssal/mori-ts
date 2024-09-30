@@ -195,4 +195,20 @@ describe('at', () => {
 
     expect(res3).resolves.toBe(3);
   });
+
+  it('at with string', () => {
+    const srt = 'hello';
+
+    const res = at(0, srt);
+
+    expect(res).toBe('h');
+  });
+
+  it('at with empty string', () => {
+    const srt = '';
+
+    const res = at(0, srt);
+
+    expect(res).toBeUndefined();
+  });
 });

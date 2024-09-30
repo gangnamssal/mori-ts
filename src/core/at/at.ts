@@ -110,7 +110,7 @@ function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
 ): (iter: A) => ReturnIterableAsyncIterableType<A> | undefined;
 
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(index: number, iter?: A) {
-  if (!iter) return (iter: A): IterableInfer<A> => at(index, iter) as IterableInfer<A>;
+  if (iter === undefined) return (iter: A): IterableInfer<A> => at(index, iter) as IterableInfer<A>;
 
   if (isIterable<IterableInfer<A>>(iter)) return syncAt(index, iter);
   if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncAt(index, iter);
