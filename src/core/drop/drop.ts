@@ -84,9 +84,7 @@ function drop<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   | IterableIterator<IterableInfer<A>>
   | AsyncIterableIterator<IterableInfer<A>>
   | ((iter: A) => ReturnIterableIteratorType<A>) {
-  if (!iter && typeof iter === 'string') return syncDrop(skip, iter);
-
-  if (!iter)
+  if (iter === undefined)
     return (iter: A): ReturnIterableIteratorType<A> =>
       drop(skip, iter as any) as ReturnIterableIteratorType<A>;
 
