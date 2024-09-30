@@ -82,7 +82,7 @@ function find<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
 ):
   | ReturnIterableType<A, IterableInfer<A> | undefined>
   | ((iter: A) => ReturnIterableType<A, IterableInfer<A> | undefined>) {
-  if (!iter)
+  if (iter === undefined)
     return (iter: A): ReturnIterableType<A, IterableInfer<A> | undefined> =>
       find(fn, iter) as ReturnIterableType<A, IterableInfer<A> | undefined>;
 

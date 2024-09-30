@@ -97,4 +97,18 @@ describe('find', () => {
 
     expect(res).resolves.toEqual(6);
   });
+
+  it('find with string', () => {
+    const iter = 'hello';
+    const res = find((x: string) => x === 'l', iter);
+
+    expect(res).toBe('l');
+  });
+
+  it('find with empty string', () => {
+    const iter = '';
+    const res = find((x: string) => x === 'l', iter);
+
+    expect(res).toBeUndefined();
+  });
 });
