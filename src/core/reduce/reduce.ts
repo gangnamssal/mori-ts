@@ -20,7 +20,7 @@ function syncReduce<T extends Iterable<any>, Acc extends Awaited<IterableInfer<T
   let iterator;
   let result;
 
-  if (!iter) {
+  if (iter === undefined) {
     iterator = (acc as T)[Symbol.iterator]();
     result = iterator.next().value;
   } else {
@@ -61,7 +61,7 @@ function asyncReduce<T extends AsyncIterable<any>, Acc extends Awaited<IterableI
   let iterator;
   let result;
 
-  if (!iter) {
+  if (iter === undefined) {
     iterator = (acc as T)[Symbol.asyncIterator]();
     result = iterator.next().then(({ value }) => value);
   } else {
@@ -131,9 +131,9 @@ function reduce<A extends Iterable<unknown> | AsyncIterable<unknown>, Acc, R ext
   acc?: Acc | A,
   iter?: A,
 ): ReturnIterableType<A, R> | ((iter: A) => ReturnIterableType<A, R>) {
-  if (!acc && !iter)
+  if (acc === undefined && iter === undefined)
     return (iter: A): ReturnIterableType<A, R> =>
-      reduce(fn as any, iter as Iterable<any>) as ReturnIterableType<A, R>;
+      reduce(fn as any, iter as Iterable<unknown>) as ReturnIterableType<A, R>;
 
   if (isIterable(acc) || isIterable(iter))
     return syncReduce(fn as any, acc, iter as Iterable<unknown>) as ReturnIterableType<A, R>;
