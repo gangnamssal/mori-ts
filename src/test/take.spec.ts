@@ -92,4 +92,14 @@ describe('take', () => {
     const res2 = await pipe(iter, toAsync, take(3), toArray);
     expect(res2).toEqual([1, 2, 3]);
   });
+
+  it('take with empty iterable', () => {
+    const res = pipe([], take(3), toArray);
+    expect(res).toEqual([]);
+  });
+
+  it('take with empty asyncIterable', () => {
+    const res = pipe([], toAsync, take(3), toArray);
+    expect(res).resolves.toEqual([]);
+  });
 });
