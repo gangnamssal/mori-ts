@@ -51,4 +51,9 @@ describe('concurrent', () => {
     expect(res).toEqual([0, 2, 4]);
     expect(end - start).toBeLessThan(3000);
   }, 10000);
+
+  it('concurrent with empty string', async () => {
+    const res = await pipe('', toAsync, concurrent(4), toArray);
+    expect(res).toEqual([]);
+  });
 });

@@ -75,7 +75,7 @@ function concurrent<A extends AsyncIterable<unknown>>(
   limit: number,
   iter?: A,
 ): AsyncIterableIterator<IterableInfer<A>> | ((iter: A) => AsyncIterableIterator<IterableInfer<A>>) {
-  if (!iter)
+  if (iter === undefined)
     return (iter: A): AsyncIterableIterator<IterableInfer<A>> =>
       concurrent(limit, iter) as AsyncIterableIterator<IterableInfer<A>>;
 
