@@ -145,7 +145,7 @@ function zip<
     ) =>
       | ZipIterableIterator<IterableInfer<A>, IterableInfer<B>>
       | ZipAsyncIterableIterator<IterableInfer<A>, IterableInfer<B>>) {
-  if (!iter2)
+  if (iter2 === undefined)
     return (
       iter2: B,
     ):

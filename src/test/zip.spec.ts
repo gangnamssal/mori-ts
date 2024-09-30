@@ -156,4 +156,9 @@ describe('zip', () => {
       3: 'c',
     });
   });
+
+  it('zip with empty string', () => {
+    const res = zip('', 'abc');
+    expect([...res]).toEqual([]);
+  });
 });
