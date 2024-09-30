@@ -52,12 +52,41 @@ async function* asyncSlice<A>(
  * - `start` 또는 `end`에 음수 값을 넣으면, 해당 값은 iterable의 끝에서부터 계산됩니다.
  *
  * @example
+ * - 기본 사용법 (동기 iterable)
+ * ```
  * const arr = [1, 2, 3, 4, 5];
+ *
  * const result = [...slice(1, 3, arr)]; // 출력: [2, 3]
+ * ```
  *
  * @example
+ * - 음수 값 사용
+ * ```
  * const arr = [1, 2, 3, 4, 5];
+ *
  * const result = [...slice(-3, -1, arr)]; // 출력: [3, 4]
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```
+ * const array = [1, 2, 3, 4, 5];
+ *
+ * const result = pipe(
+ *  array,
+ *  map(item => item * 2),
+ *  slice(1, 3)
+ * ); // 출력: [4, 6]
+ *
+ * const result = await pipe(
+ *  toAsync,
+ *  array,
+ *  map(item => item * 2),
+ *  slice(-2, -1)
+ * ); // 출력: [8]
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/slice
  */
 
 function slice<A extends Iterable<unknown> | AsyncIterable<unknown>>(
