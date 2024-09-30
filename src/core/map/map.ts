@@ -78,7 +78,7 @@ function map<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   | IterableIterator<B>
   | AsyncIterableIterator<B>
   | ((iter: A) => IterableIterator<B> | AsyncIterableIterator<B>) {
-  if (!iter)
+  if (iter === undefined)
     return (iter: A): ReturnIterableIteratorType<A, B> =>
       map(fn, iter as any) as ReturnIterableIteratorType<A, B>;
 
