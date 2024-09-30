@@ -74,7 +74,8 @@ function every<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter?: A,
 ): boolean | Promise<boolean> | ((iter: A) => boolean | Promise<boolean>) {
-  if (!iter) return (iter: A): boolean | Promise<boolean> => every(fn, iter) as boolean | Promise<boolean>;
+  if (iter === undefined)
+    return (iter: A): boolean | Promise<boolean> => every(fn, iter) as boolean | Promise<boolean>;
 
   if (isIterable<IterableInfer<A>>(iter)) return syncEvery(fn, iter);
 

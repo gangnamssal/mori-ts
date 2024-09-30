@@ -39,4 +39,18 @@ describe('every', () => {
 
     expect(res).toBe(true);
   });
+
+  it('every with string', () => {
+    const iter = 'hello';
+    const res = every(x => x === 'l', iter);
+
+    expect(res).toBe(false);
+  });
+
+  it('every with empty string', () => {
+    const iter = '';
+    const res = every(x => x === 'l', iter);
+
+    expect(res).toBe(true);
+  });
 });
