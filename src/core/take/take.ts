@@ -66,7 +66,7 @@ function take<T extends Iterable<unknown> | AsyncIterable<unknown>>(
   | IterableIterator<IterableInfer<T>>
   | AsyncIterableIterator<IterableInfer<T>>
   | ((iter: T) => ReturnIterablePromiseType<T>) {
-  if (!iter)
+  if (iter === undefined)
     return (iter: T): ReturnIterablePromiseType<T> =>
       take(limit, iter as any) as ReturnIterablePromiseType<T>;
 

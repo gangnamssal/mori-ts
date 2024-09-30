@@ -102,4 +102,9 @@ describe('take', () => {
     const res = pipe([], toAsync, take(3), toArray);
     expect(res).resolves.toEqual([]);
   });
+
+  it('take with empty string', () => {
+    const res = pipe('', take(3), toArray);
+    expect(res).toEqual([]);
+  });
 });
