@@ -43,6 +43,10 @@ describe('slice', () => {
     const res2 = slice(3, 3, [1, 2, 3]);
 
     expect([...res2]).toEqual([]);
+
+    const res3 = slice(-1, -3, [1, 2, 3]);
+
+    expect([...res3]).toEqual([]);
   });
 
   it('slice has one number', () => {
@@ -139,5 +143,75 @@ describe('slice', () => {
     const res7 = slice(2, 3, '');
 
     expect([...res7]).toEqual([]);
+  });
+
+  it('slice has minus number', () => {
+    const res = slice(-1, 3, [1, 2, 3]);
+
+    expect([...res]).toEqual([3]);
+
+    const res2 = slice(-2, 3, [1, 2, 3]);
+
+    expect([...res2]).toEqual([2, 3]);
+
+    const res3 = slice(-3, 3, [1, 2, 3]);
+
+    expect([...res3]).toEqual([1, 2, 3]);
+
+    const res4 = slice(-4, 3, [1, 2, 3]);
+
+    expect([...res4]).toEqual([1, 2, 3]);
+
+    const res5 = slice(-1, 3, '123');
+
+    expect([...res5]).toEqual(['3']);
+
+    const res6 = slice(-2, 3, '123');
+
+    expect([...res6]).toEqual(['2', '3']);
+
+    const res7 = slice(-3, 3, '123');
+
+    expect([...res7]).toEqual(['1', '2', '3']);
+
+    const res8 = slice(-4, 3, '123');
+
+    expect([...res8]).toEqual(['1', '2', '3']);
+  });
+
+  it('slice has async minus number', async () => {
+    const arr = [1, 2, 3];
+
+    const res = await pipe(arr, toAsync, slice(-1, 3), toArray);
+
+    expect(res).toEqual([3]);
+
+    const res2 = await pipe(arr, toAsync, slice(-2, 3), toArray);
+
+    expect(res2).toEqual([2, 3]);
+
+    const res3 = await pipe(arr, toAsync, slice(-3, 3), toArray);
+
+    expect(res3).toEqual([1, 2, 3]);
+
+    const res4 = await pipe(arr, toAsync, slice(-4, 3), toArray);
+
+    expect(res4).toEqual([1, 2, 3]);
+
+    const res5 = await pipe(arr, toAsync, slice(-1, 3), toArray);
+
+    expect(res5).toEqual([3]);
+
+    const res6 = await pipe(arr, toAsync, slice(-2, 3), toArray);
+
+    expect(res6).toEqual([2, 3]);
+
+    const res7 = await pipe(arr, toAsync, slice(-3, 3), toArray);
+
+    expect(res7).toEqual([1, 2, 3]);
+
+    const res8 = await pipe(arr, toAsync, slice(-4, 3), toArray);
+
+    expect(res8).toEqual([1, 2, 3]);
   });
 });
