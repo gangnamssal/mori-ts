@@ -96,12 +96,19 @@ const filteredResult = toArray(filter(a => a % 2 === 0, arr));
 #### 모든 함수는 pipe 라인과 사용할 수 있습니다.
 
 ```ts
-import { pipe, map, range, filter, toArray } from 'mori-ts';
+import { pipe, map, range, filter, toArray, toAsync } from 'mori-ts';
 
 const res = pipe(
   range(1, 10),
   map(a => a * 2),
   filter(a => a % 2),
+  toArray,
+);
+
+const res2 = await pipe(
+  [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
+  toAsync,
+  map(a => a * 10),
   toArray,
 );
 ```

@@ -2,21 +2,22 @@ import { isAsyncIterable, isIterable } from './../../utils';
 import { ReturnIterableIteratorType } from './../../types';
 
 function* syncSlice<A>(start: number, end: number | Iterable<A>, iter?: Iterable<A>): IterableIterator<A> {
-  const items = Array.from((iter || end) as Iterable<A>); // Iterable을 배열로 변환
-  const len = items.length;
+  const items: A[] = [];
+  let count = 0;
+  let iterator = iter !== undefined ? iter[Symbol.iterator]() : (end as Iterable<A>)[Symbol.iterator]();
+  let len = 0;
 
-  // 음수일 경우 길이를 기준으로 처리
+  for (const value of iterator as IterableIterator<A>) {
+    items.push(value);
+    len++;
+  }
+
+  // Calculate correct start and end based on length
   start = start < 0 ? Math.max(len + start, 0) : start;
   end = typeof end === 'number' ? (end < 0 ? Math.max(len + end, 0) : end) : len;
 
-  let count = 0;
-  const iterator = items[Symbol.iterator]();
-
   while (count < end && start < end) {
-    const { value, done } = iterator.next();
-    if (done) break;
-
-    if (count >= start) yield value;
+    if (count >= start) yield items[count];
     count++;
   }
 }
@@ -27,25 +28,19 @@ async function* asyncSlice<A>(
   iter?: AsyncIterable<A>,
 ): AsyncIterableIterator<A> {
   const items: A[] = [];
+  let count = 0;
+  let len = 0;
 
-  for await (const item of (iter || end) as AsyncIterable<A>) {
-    items.push(item); // AsyncIterable을 배열로 변환
+  for await (const value of (iter || end) as AsyncIterable<A>) {
+    items.push(value);
+    len++;
   }
 
-  const len = items.length;
-
-  // 음수일 경우 길이를 기준으로 처리
   start = start < 0 ? Math.max(len + start, 0) : start;
   end = typeof end === 'number' ? (end < 0 ? Math.max(len + end, 0) : end) : len;
 
-  let count = 0;
-  const iterator = items[Symbol.iterator]();
-
   while (count < end && start < end) {
-    const { value, done } = iterator.next();
-    if (done) break;
-
-    if (count >= start) yield value;
+    if (count >= start) yield items[count];
     count++;
   }
 }
@@ -57,41 +52,12 @@ async function* asyncSlice<A>(
  * - `start` 또는 `end`에 음수 값을 넣으면, 해당 값은 iterable의 끝에서부터 계산됩니다.
  *
  * @example
- * - 기본 사용법 (동기 iterable)
- * ```
  * const arr = [1, 2, 3, 4, 5];
- *
  * const result = [...slice(1, 3, arr)]; // 출력: [2, 3]
- * ```
  *
  * @example
- * - 음수 값 사용
- * ```
  * const arr = [1, 2, 3, 4, 5];
- *
  * const result = [...slice(-3, -1, arr)]; // 출력: [3, 4]
- * ```
- *
- * @example
- * - pipe와 함께 사용
- * ```
- * const array = [1, 2, 3, 4, 5];
- *
- * const result = pipe(
- *  array,
- *  map(item => item * 2),
- *  slice(1, 3)
- * ); // 출력: [4, 6]
- *
- * const result = await pipe(
- *  toAsync,
- *  array,
- *  map(item => item * 2),
- *  slice(-2, -1)
- * ); // 출력: [8]
- * ```
- *
- * @url https://github.com/gangnamssal/mori-ts/wiki/slice
  */
 
 function slice<A extends Iterable<unknown> | AsyncIterable<unknown>>(
