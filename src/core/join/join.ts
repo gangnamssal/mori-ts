@@ -59,7 +59,7 @@ function join<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   sep = ',',
   iter?: A,
 ): ReturnIterableType<A, string> | ((iter: A) => ReturnIterableType<A, string>) {
-  if (!iter) return (iter: A) => join(sep, iter);
+  if (iter === undefined) return (iter: A) => join(sep, iter);
 
   if (isIterable<IterableInfer<A>>(iter)) return syncJoin(sep, iter) as ReturnIterableType<A, string>;
   if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncJoin(sep, iter) as ReturnIterableType<A, string>;
