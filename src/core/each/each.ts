@@ -75,7 +75,7 @@ function each<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
   fn: (args: IterableInfer<A>) => R,
   iter?: A,
 ): ReturnIterableIteratorType<A> | ((iter: A) => ReturnIterableIteratorType<A>) {
-  if (!iter)
+  if (iter === undefined)
     return (iter: A): ReturnIterableIteratorType<A> => each(fn, iter) as ReturnIterableIteratorType<A>;
 
   if (isIterable<IterableInfer<A>>(iter)) return syncEach(fn, iter) as ReturnIterableIteratorType<A>;

@@ -53,4 +53,10 @@ describe('each', () => {
     expect(res).toEqual([1, 2, 3]);
     expect(consoleSpy).toHaveBeenCalledTimes(3);
   });
+
+  it('each with empty string', () => {
+    const res = toArray(each(logMessage, ''));
+    expect(res).toEqual([]);
+    expect(consoleSpy).toHaveBeenCalledTimes(0);
+  });
 });
