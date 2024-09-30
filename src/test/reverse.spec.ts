@@ -141,4 +141,11 @@ describe('reverse', () => {
     expect(result).toEqual([4, 2]);
     expect(end - start).toBeLessThan(2500);
   });
+
+  it('reverse with empty string', () => {
+    const iter = '';
+    const result = reverse(iter);
+
+    expect([...result]).toEqual([]);
+  });
 });

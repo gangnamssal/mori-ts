@@ -88,4 +88,10 @@ describe('some', () => {
 
     expect(res).toBeTruthy();
   });
+
+  it('some with empty string', () => {
+    const res = some(item => item === 'a', '');
+
+    expect(res).toBeFalsy();
+  });
 });
