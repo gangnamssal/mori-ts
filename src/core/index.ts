@@ -12,6 +12,7 @@ export { default as filter } from './filter/filter';
 export { default as find } from './find/find';
 export { default as flat } from './flat/flat';
 export { default as flatMap } from './flat-map/flat-map';
+export { default as insert } from './insert/insert';
 export { default as interval } from './interval/interval';
 export { default as join } from './join/join';
 export { default as length } from './length/length';

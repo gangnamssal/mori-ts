@@ -28,6 +28,7 @@
 - [find](#find)
 - [flat](#flat)
 - [flatMap](#flatmap)
+- [insert](#insert)
 - [interval](#interval)
 - [join](#join)
 - [length](#length)
@@ -236,6 +237,16 @@ const res2 = await pipe(
 - 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/flatMap
+
+### insert
+
+- 주어진 `인덱스`에 값을 `삽입`한 iterable을 반환합니다.
+
+- 동기 및 비동기 iterable 모두 지원하며, iterable의 끝에 도달해도 값을 삽입할 수 있습니다.
+
+- 삽입되는 값은 Promise로 감싸져 비동기적으로도 처리 가능합니다.
+
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/insert
 
 ### interval
 
