@@ -4,15 +4,13 @@ import { ReturnIterableIteratorType } from './../../types';
 function* syncSlice<A>(start: number, end: number | Iterable<A>, iter?: Iterable<A>): IterableIterator<A> {
   const items: A[] = [];
   let count = 0;
-  let iterator = iter !== undefined ? iter[Symbol.iterator]() : (end as Iterable<A>)[Symbol.iterator]();
   let len = 0;
 
-  for (const value of iterator as IterableIterator<A>) {
+  for (const value of (iter ?? end) as Iterable<A>) {
     items.push(value);
     len++;
   }
 
-  // Calculate correct start and end based on length
   start = start < 0 ? Math.max(len + start, 0) : start;
   end = typeof end === 'number' ? (end < 0 ? Math.max(len + end, 0) : end) : len;
 
@@ -31,7 +29,7 @@ async function* asyncSlice<A>(
   let count = 0;
   let len = 0;
 
-  for await (const value of (iter || end) as AsyncIterable<A>) {
+  for await (const value of (iter ?? end) as AsyncIterable<A>) {
     items.push(value);
     len++;
   }

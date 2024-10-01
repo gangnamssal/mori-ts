@@ -1,4 +1,4 @@
-import { pipe, toArray, toAsync, slice } from '../core';
+import { pipe, toArray, toAsync, slice, map, delay, concurrent } from '../core';
 
 describe('slice', () => {
   it('slice has two number', () => {
@@ -214,4 +214,76 @@ describe('slice', () => {
 
     expect(res8).toEqual([1, 2, 3]);
   });
+
+  it('slice with pipe', () => {
+    const arr = [
+      Promise.resolve(1),
+      Promise.resolve(2),
+      Promise.resolve(3),
+      Promise.resolve(4),
+      Promise.resolve(5),
+    ];
+
+    const res = pipe(
+      arr,
+      toAsync,
+      map(item => item * 2),
+      slice(1, 3),
+      toArray,
+    );
+
+    expect(res).resolves.toEqual([4, 6]);
+  });
+
+  it('slice with pipe 2', async () => {
+    const arr = [
+      Promise.resolve(1),
+      Promise.resolve(2),
+      Promise.resolve(3),
+      Promise.resolve(4),
+      Promise.resolve(5),
+    ];
+
+    const start = Date.now();
+
+    const res = await pipe(
+      arr,
+      toAsync,
+      map(item => delay(100, item * 2)),
+      concurrent(3),
+      slice(1, 3),
+      toArray,
+    );
+
+    const end = Date.now();
+
+    expect(res).toEqual([4, 6]);
+    expect(end - start).toBeLessThan(210);
+  }, 10000);
+
+  it('slice with pipe 3', async () => {
+    const arr = [
+      Promise.resolve(''),
+      Promise.resolve('1'),
+      Promise.resolve('12'),
+      Promise.resolve('123'),
+      Promise.resolve('1234'),
+    ];
+
+    const start = Date.now();
+
+    const res = await pipe(
+      arr,
+      toAsync,
+      map(item => delay(100, item)),
+      concurrent(3),
+      slice(-1),
+      toArray,
+    );
+
+    const end = Date.now();
+
+    expect(res).toEqual(['1234']);
+    expect(end - start).toBeLessThan(210);
+  }, 10000);
 });

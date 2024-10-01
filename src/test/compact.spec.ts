@@ -88,4 +88,24 @@ describe('compact', () => {
     expect(res).toEqual([1, 3, 5, 7, 9]);
     expect(end - start).toBeLessThan(2000);
   });
+
+  it('should remove falsy values from a pipe 4', () => {
+    const res = pipe(
+      [
+        Promise.resolve(1),
+        Promise.resolve(2),
+        Promise.resolve(3),
+        Promise.resolve(4),
+        Promise.resolve(5),
+        Promise.resolve(0),
+        Promise.resolve(null),
+        Promise.resolve(undefined),
+      ],
+      toAsync,
+      compact,
+      toArray,
+    );
+
+    expect(res).resolves.toEqual([1, 2, 3, 4, 5]);
+  });
 });
