@@ -2,14 +2,10 @@ import { isAsyncIterable, isIterable } from './../../utils';
 import { ReturnIterableIteratorType } from './../../types';
 
 function* syncSlice<A>(start: number, end: number | Iterable<A>, iter?: Iterable<A>): IterableIterator<A> {
-  const items: A[] = [];
-  let count = 0;
-  let len = 0;
+  const items: A[] = Array.from((iter ?? end) as Iterable<A>);
+  const len = items.length;
 
-  for (const value of (iter ?? end) as Iterable<A>) {
-    items.push(value);
-    len++;
-  }
+  let count = 0;
 
   start = start < 0 ? Math.max(len + start, 0) : start;
   end = typeof end === 'number' ? (end < 0 ? Math.max(len + end, 0) : end) : len;
