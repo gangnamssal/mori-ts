@@ -10,7 +10,10 @@ function* syncSome<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterato
 
     if (done) break;
 
-    if (fn(value)) yield true;
+    if (fn(value)) {
+      yield true;
+      break;
+    }
   }
 
   yield false;
@@ -24,7 +27,10 @@ async function* asyncSome<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): Asy
 
     if (done) break;
 
-    if (fn(value)) yield true;
+    if (fn(value)) {
+      yield true;
+      break;
+    }
   }
 
   yield false;

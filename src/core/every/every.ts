@@ -10,7 +10,10 @@ function* syncEvery<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterat
 
     if (done) break;
 
-    if (!fn(value)) yield false;
+    if (!fn(value)) {
+      yield false;
+      break;
+    }
   }
 
   yield true;
@@ -24,7 +27,10 @@ async function* asyncEvery<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): As
 
     if (done) break;
 
-    if (!fn(value)) yield false;
+    if (!fn(value)) {
+      yield false;
+      break;
+    }
   }
 
   yield true;

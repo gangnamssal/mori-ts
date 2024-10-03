@@ -10,7 +10,10 @@ function* syncFind<A, R>(fn: (args: A) => R, iter: Iterable<A>): IterableIterato
 
     if (done) break;
 
-    if (fn(value)) yield value;
+    if (fn(value)) {
+      yield value;
+      break;
+    }
   }
 }
 
@@ -25,7 +28,10 @@ async function* asyncFind<A, R>(
 
     if (done) break;
 
-    if (fn(value)) yield value;
+    if (fn(value)) {
+      yield value;
+      break;
+    }
   }
 }
 

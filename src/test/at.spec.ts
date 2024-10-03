@@ -211,4 +211,12 @@ describe('at', () => {
 
     expect(res).toBeUndefined();
   });
+
+  it('at with string 2', () => {
+    const srt = 'hello';
+
+    const res = at(-1, srt);
+
+    expect(res).toBe('o');
+  });
 });

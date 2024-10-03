@@ -12,7 +12,10 @@ function* syncFindIndex<A, B>(fn: (arg: A) => B, iter: Iterable<A>): IterableIte
 
     if (done) break;
 
-    if (fn(value)) yield currentIndex;
+    if (fn(value)) {
+      yield currentIndex;
+      break;
+    }
 
     currentIndex++;
   }
@@ -33,7 +36,10 @@ async function* asyncFindIndex<A, B>(
 
     if (done) break;
 
-    if (fn(value)) yield currentIndex;
+    if (fn(value)) {
+      yield currentIndex;
+      break;
+    }
 
     currentIndex++;
   }
