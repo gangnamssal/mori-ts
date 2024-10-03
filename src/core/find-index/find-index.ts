@@ -46,6 +46,53 @@ type FindIndexReturnType<A extends Iterable<unknown> | AsyncIterable<unknown>> =
   number
 >;
 
+/**
+ * @description
+ * - 주어진 조건을 만족하는 `첫 번째 요소의 인덱스`를 찾습니다.
+ * - 조건을 만족하는 요소가 발견되면 해당 요소의 인덱스를 반환하고, 조건을 만족하는 요소가 없으면 `-1`을 반환합니다.
+ * - 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
+ *
+ * @example
+ * - 배열에서 사용
+ * ```ts
+ * const arr = [1, 2, 3, 4, 5];
+ *
+ * const result = findIndex(x => x > 3, arr); // 출력: 3
+ * const noResult = findIndex(x => x > 6, arr); // 출력: -1
+ * ```
+ *
+ * @example
+ * - pipe와 함께 사용
+ * ```ts
+ * const arr = [1, 2, 3, 4, 5];
+ *
+ * const result = pipe(
+ *   arr,
+ *   findIndex(x => x > 3),
+ * ); // 출력: 3
+ * ```
+ *
+ * @example
+ * - 비동기 iterable에서 사용
+ * ```ts
+ * const asyncArr = [
+ *   Promise.resolve(1),
+ *   Promise.resolve(2),
+ *   Promise.resolve(3),
+ *   Promise.resolve(4),
+ *   Promise.resolve(5),
+ * ];
+ *
+ * const asyncResult = await pipe(
+ *   asyncArr,
+ *   toAsync,
+ *   findIndex(x => x > 3),
+ * ); // 출력: 3
+ * ```
+ *
+ * @url https://github.com/gangnamssal/mori-ts/wiki/findIndex
+ */
+
 function findIndex<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (arg: IterableInfer<A>) => B,
   iter: A,

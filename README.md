@@ -26,6 +26,7 @@
 - [every](#every)
 - [filter](#filter)
 - [find](#find)
+- [findIndex](#findindex)
 - [flat](#flat)
 - [flatMap](#flatmap)
 - [insert](#insert)
@@ -217,6 +218,16 @@ const res2 = await pipe(
 - 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/find
+
+### findIndex
+
+- 주어진 조건을 만족하는 `첫 번째 요소의 인덱스`를 찾습니다.
+
+- 조건을 만족하는 요소가 발견되면 해당 요소의 인덱스를 반환하고, 조건을 만족하는 요소가 없으면 `-1`을 반환합니다.
+
+- 동기 및 비동기 iterable 모두에서 사용될 수 있습니다.
+
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/findIndex
 
 ### flat
 
