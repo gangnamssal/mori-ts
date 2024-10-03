@@ -29,6 +29,9 @@ async function* asyncFind<A, R>(
   }
 }
 
+type FindReturnIterableAsyncIterableType<A extends Iterable<unknown> | AsyncIterable<unknown>> =
+  ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>;
+
 /**
  * @description
  * - 주어진 조건을 만족하는 첫 번째 요소를 찾습니다.
@@ -70,9 +73,6 @@ async function* asyncFind<A, R>(
  *
  * @url https://github.com/gangnamssal/mori-ts/wiki/find
  */
-
-type FindReturnIterableAsyncIterableType<A extends Iterable<unknown> | AsyncIterable<unknown>> =
-  ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>;
 
 function find<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
   fn: (args: IterableInfer<A>) => R,

@@ -2,42 +2,21 @@ import { ReturnIterableIteratorType } from './../../types';
 import { isAsyncIterable, isIterable } from './../../utils';
 
 function* syncReverse<A>(iter: Iterable<A>): IterableIterator<A> {
-  const iteratorInstance = iter[Symbol.iterator]();
-  let currentItem = iteratorInstance.next();
+  const values = Array.from(iter);
 
-  const values: IteratorResult<A>[] = [];
-
-  while (!currentItem.done) {
-    values.unshift(currentItem);
-    currentItem = iteratorInstance.next();
-  }
-
-  while (values.length > 0) {
-    const { value, done } = values.shift() as IteratorResult<A>;
-
-    if (done) return;
-
-    yield value;
+  for (let i = values.length - 1; i >= 0; i--) {
+    yield values[i]; // 역순으로 요소를 반환
   }
 }
 
 async function* asyncReverse<A>(iter: AsyncIterable<A>): AsyncIterableIterator<A> {
-  const iteratorInstance = iter[Symbol.asyncIterator]();
-  let currentItem = await iteratorInstance.next();
+  const values: A[] = [];
 
-  const values: IteratorResult<A>[] = [];
-
-  while (!currentItem.done) {
-    values.unshift(currentItem);
-    currentItem = await iteratorInstance.next();
+  for await (const value of iter) {
+    values.push(value); // 모든 요소를 배열로 저장
   }
-
-  while (values.length > 0) {
-    const { value, done } = values.shift() as IteratorResult<A>;
-
-    if (done) return;
-
-    yield value;
+  for (let i = values.length - 1; i >= 0; i--) {
+    yield values[i]; // 역순으로 요소를 반환
   }
 }
 

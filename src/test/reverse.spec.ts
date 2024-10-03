@@ -148,4 +148,11 @@ describe('reverse', () => {
 
     expect([...result]).toEqual([]);
   });
+
+  it('reverse with empty array', () => {
+    const iter: number[] = [];
+    const result = reverse(iter);
+
+    expect([...result]).toEqual([]);
+  });
 });
