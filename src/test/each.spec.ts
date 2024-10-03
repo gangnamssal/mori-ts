@@ -1,4 +1,4 @@
-import { pipe, toArray, toIterValue, each } from '../core';
+import { pipe, toArray, toValue, each } from '../core';
 
 const logMessage = (message: any) => {
   console.log(message);
@@ -35,13 +35,13 @@ describe('each', () => {
 
     const res = each(x => (sum += x), arr);
 
-    expect(toIterValue(res)).toBe(1);
+    expect(toValue(res)).toBe(1);
     expect(sum).toEqual(1);
 
-    expect(toIterValue(res)).toBe(2);
+    expect(toValue(res)).toBe(2);
     expect(sum).toEqual(3);
 
-    expect(toIterValue(res)).toBe(3);
+    expect(toValue(res)).toBe(3);
     expect(sum).toEqual(6);
   });
 

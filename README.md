@@ -43,7 +43,7 @@
 - [timeOut](#timeout)
 - [toArray](#toarray)
 - [toAsync](#toasync)
-- [toIterValue](#toitervalue)
+- [toValue](#tovalue)
 - [zip](#zip)
 
 [4.License](#license)
@@ -366,11 +366,11 @@ const res2 = await pipe(
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/toAsync
 
-### toIterValue
+### toValue
 
-- toIterValue 함수는 주어진 iterable 객체에서 `값`을 `추출`합니다.
+- toValue 함수는 주어진 iterable 객체에서 `값`을 `추출`합니다.
 
-- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/toIterValue
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/toValue
 
 ### zip
 
