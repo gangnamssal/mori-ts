@@ -1,28 +1,33 @@
-import { IterableInfer, ReturnIterableType } from '../../types';
+import { IterableInfer, ReturnIterableAsyncIterableType } from '../../types';
 import { isAsyncIterable, isIterable } from '../../utils';
+import toValue from '../to-value/to-value';
 
-function syncEvery<A, B>(fn: (args: A) => B, iter: Iterable<A>): boolean {
+function* syncEvery<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<boolean> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
     const { value, done } = iterator.next();
 
-    if (done) return true;
+    if (done) break;
 
-    if (!fn(value)) return false;
+    if (!fn(value)) yield false;
   }
+
+  yield true;
 }
 
-async function asyncEvery<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): Promise<boolean> {
+async function* asyncEvery<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<boolean> {
   const iterator = iter[Symbol.asyncIterator]();
 
   while (true) {
     const { value, done } = await iterator.next();
 
-    if (done) return true;
+    if (done) break;
 
-    if (!fn(value)) return false;
+    if (!fn(value)) yield false;
   }
+
+  yield true;
 }
 
 /**
@@ -64,24 +69,27 @@ async function asyncEvery<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): Pro
 function every<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter: A,
-): ReturnIterableType<A, boolean>;
+): ReturnIterableAsyncIterableType<A, boolean>;
 
 function every<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
-): (iter: A) => ReturnIterableType<A, boolean>;
+): (iter: A) => ReturnIterableAsyncIterableType<A, boolean>;
 
 function every<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter?: A,
-): boolean | Promise<boolean> | ((iter: A) => boolean | Promise<boolean>) {
+): ReturnIterableAsyncIterableType<A, boolean> | ((iter: A) => ReturnIterableAsyncIterableType<A, boolean>) {
   if (iter === undefined)
-    return (iter: A): boolean | Promise<boolean> => every(fn, iter) as boolean | Promise<boolean>;
+    return (iter: A): ReturnIterableAsyncIterableType<A, boolean> =>
+      every(fn, iter) as ReturnIterableAsyncIterableType<A, boolean>;
 
-  if (isIterable<IterableInfer<A>>(iter)) return syncEvery(fn, iter);
+  if (isIterable<IterableInfer<A>>(iter))
+    return toValue(syncEvery(fn, iter)) as ReturnIterableAsyncIterableType<A, boolean>;
 
-  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncEvery(fn, iter);
+  if (isAsyncIterable<IterableInfer<A>>(iter))
+    return toValue(asyncEvery(fn, iter)) as ReturnIterableAsyncIterableType<A, boolean>;
 
-  throw new Error('argument is not iterable');
+  throw new Error('argument is not iterable, every');
 }
 
 export default every;

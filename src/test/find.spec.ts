@@ -86,7 +86,7 @@ describe('find', () => {
     expect(res).resolves.toEqual(6);
   });
 
-  it('find with pipe 2', () => {
+  it('find with pipe 3', () => {
     const iter = Promise.resolve([1, 2, 3, 4, 5]);
 
     const res = pipe(

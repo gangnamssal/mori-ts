@@ -1,5 +1,5 @@
 import { isAsyncIterable, isIterable } from './../../utils';
-import { IterableInfer, ReturnIterableType } from './../../types';
+import { IterableInfer, ReturnIterableAsyncIterableType } from './../../types';
 import toValue from '../to-value/to-value';
 
 function* syncFindIndex<A, B>(fn: (arg: A) => B, iter: Iterable<A>): IterableIterator<number> {
@@ -41,10 +41,8 @@ async function* asyncFindIndex<A, B>(
   return -1;
 }
 
-type FindIndexReturnType<A extends Iterable<unknown> | AsyncIterable<unknown>> = ReturnIterableType<
-  A,
-  number
->;
+type FindIndexReturnType<A extends Iterable<unknown> | AsyncIterable<unknown>> =
+  ReturnIterableAsyncIterableType<A, number>;
 
 /**
  * @description

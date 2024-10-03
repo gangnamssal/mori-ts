@@ -1,27 +1,31 @@
 import { isAsyncIterable, isIterable } from './../../utils';
-import { IterableInfer, ReturnIterableType } from '../../types';
+import { IterableInfer, ReturnIterableAsyncIterableType } from '../../types';
+import toValue from '../to-value/to-value';
 
-function syncFind<A, R>(fn: (args: A) => R, iter: Iterable<A>): A | undefined {
+function* syncFind<A, R>(fn: (args: A) => R, iter: Iterable<A>): IterableIterator<A | undefined> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
     const { value, done } = iterator.next();
 
-    if (done) return;
+    if (done) break;
 
-    if (fn(value)) return value;
+    if (fn(value)) yield value;
   }
 }
 
-async function asyncFind<A, R>(fn: (args: A) => R, iter: AsyncIterable<A>): Promise<A | undefined> {
+async function* asyncFind<A, R>(
+  fn: (args: A) => R,
+  iter: AsyncIterable<A>,
+): AsyncIterableIterator<A | undefined> {
   const iterator = iter[Symbol.asyncIterator]();
 
   while (true) {
     const { value, done } = await iterator.next();
 
-    if (done) return;
+    if (done) break;
 
-    if (fn(value)) return value;
+    if (fn(value)) yield value;
   }
 }
 
@@ -67,32 +71,33 @@ async function asyncFind<A, R>(fn: (args: A) => R, iter: AsyncIterable<A>): Prom
  * @url https://github.com/gangnamssal/mori-ts/wiki/find
  */
 
-function find<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
-  fn: (args: IterableInfer<A>) => R,
-  iter: A,
-): ReturnIterableType<A, IterableInfer<A> | undefined>;
+type FindReturnIterableAsyncIterableType<A extends Iterable<unknown> | AsyncIterable<unknown>> =
+  ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>;
 
 function find<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
   fn: (args: IterableInfer<A>) => R,
-): (iter: A) => ReturnIterableType<A, IterableInfer<A> | undefined>;
+  iter: A,
+): FindReturnIterableAsyncIterableType<A>;
+
+function find<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
+  fn: (args: IterableInfer<A>) => R,
+): (iter: A) => FindReturnIterableAsyncIterableType<A>;
 
 function find<A extends Iterable<unknown> | AsyncIterable<unknown>, R>(
   fn: (args: IterableInfer<A>) => R,
   iter?: A,
-):
-  | ReturnIterableType<A, IterableInfer<A> | undefined>
-  | ((iter: A) => ReturnIterableType<A, IterableInfer<A> | undefined>) {
+): FindReturnIterableAsyncIterableType<A> | ((iter: A) => FindReturnIterableAsyncIterableType<A>) {
   if (iter === undefined)
-    return (iter: A): ReturnIterableType<A, IterableInfer<A> | undefined> =>
-      find(fn, iter) as ReturnIterableType<A, IterableInfer<A> | undefined>;
+    return (iter: A): FindReturnIterableAsyncIterableType<A> =>
+      find(fn, iter) as FindReturnIterableAsyncIterableType<A>;
 
   if (isIterable<IterableInfer<A>>(iter))
-    return syncFind(fn, iter) as ReturnIterableType<A, IterableInfer<A> | undefined>;
+    return toValue(syncFind(fn, iter)) as FindReturnIterableAsyncIterableType<A>;
 
   if (isAsyncIterable<IterableInfer<A>>(iter))
-    return asyncFind(fn, iter) as ReturnIterableType<A, IterableInfer<A> | undefined>;
+    return toValue(asyncFind(fn, iter)) as FindReturnIterableAsyncIterableType<A>;
 
-  throw new Error('argument is not iterable');
+  throw new Error('argument is not iterable, find');
 }
 
 export default find;

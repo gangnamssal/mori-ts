@@ -1,4 +1,4 @@
-import { IterableInfer, ReturnIterableType } from '../../types';
+import { IterableInfer, ReturnIterableAsyncIterableType } from '../../types';
 import { isAsyncIterable, isIterable } from '../../utils';
 import reduce from '../reduce/reduce';
 
@@ -49,22 +49,25 @@ async function asyncJoin<A>(sep: string, iter: AsyncIterable<A>): Promise<string
 function join<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   sep: string,
   iter: A,
-): ReturnIterableType<A, string>;
+): ReturnIterableAsyncIterableType<A, string>;
 
 function join<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   sep: string,
-): (iter: A) => ReturnIterableType<A, string>;
+): (iter: A) => ReturnIterableAsyncIterableType<A, string>;
 
 function join<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   sep = ',',
   iter?: A,
-): ReturnIterableType<A, string> | ((iter: A) => ReturnIterableType<A, string>) {
+): ReturnIterableAsyncIterableType<A, string> | ((iter: A) => ReturnIterableAsyncIterableType<A, string>) {
   if (iter === undefined) return (iter: A) => join(sep, iter);
 
-  if (isIterable<IterableInfer<A>>(iter)) return syncJoin(sep, iter) as ReturnIterableType<A, string>;
-  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncJoin(sep, iter) as ReturnIterableType<A, string>;
+  if (isIterable<IterableInfer<A>>(iter))
+    return syncJoin(sep, iter) as ReturnIterableAsyncIterableType<A, string>;
 
-  throw new Error('argument is not iterable');
+  if (isAsyncIterable<IterableInfer<A>>(iter))
+    return asyncJoin(sep, iter) as ReturnIterableAsyncIterableType<A, string>;
+
+  throw new Error('argument is not iterable, join');
 }
 
 export default join;

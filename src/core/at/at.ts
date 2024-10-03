@@ -1,42 +1,38 @@
 import { isAsyncIterable, isIterable } from './../../utils';
 import { IterableInfer, ReturnIterableAsyncIterableType } from '../../types';
+import toValue from '../to-value/to-value';
 
-function syncAt<A>(index: number, iter: Iterable<A>): A | undefined {
+function* syncAt<A>(index: number, iter: Iterable<A>): IterableIterator<A | undefined> {
   if (index === 0) {
     const iterator = iter[Symbol.iterator]();
     const result = iterator.next();
-    return result.done ? undefined : result.value;
+
+    yield result.done ? undefined : result.value;
   }
 
   let count = 0;
   let cache: A[] | null = index < 0 ? [] : null;
 
   for (const item of iter) {
-    if (index >= 0) {
-      if (count === index) return item;
-    } else {
-      if (cache) {
-        cache.push(item);
-      }
-    }
+    if (index >= 0 && count === index) yield item;
+
+    if (cache) cache.push(item);
+
     count++;
   }
 
   if (index < 0 && cache) {
     const adjustedIndex = count + index;
-    if (adjustedIndex >= 0 && adjustedIndex < count) {
-      return cache[adjustedIndex];
-    }
-  }
 
-  return undefined;
+    if (adjustedIndex >= 0 && adjustedIndex < count) yield cache[adjustedIndex];
+  }
 }
 
-async function asyncAt<A>(index: number, iter: AsyncIterable<A>): Promise<A | undefined> {
+async function* asyncAt<A>(index: number, iter: AsyncIterable<A>): AsyncIterableIterator<A | undefined> {
   if (index === 0) {
     const iterator = iter[Symbol.asyncIterator]();
     const result = await iterator.next();
-    return result.done ? undefined : result.value;
+    yield result.done ? undefined : result.value;
   }
 
   let count = 0;
@@ -44,21 +40,18 @@ async function asyncAt<A>(index: number, iter: AsyncIterable<A>): Promise<A | un
   let items: A[] = [];
 
   for await (const item of iter) {
-    if (!negativeIndex) {
-      if (count === index) return item;
-    } else {
-      items.push(item);
-    }
+    if (!negativeIndex && count === index) yield item;
+
+    items.push(item);
     count++;
   }
 
   if (negativeIndex) {
     index = items.length + index;
-    if (index < 0 || index >= items.length) return undefined;
-    return items[index];
-  }
+    if (index < 0 || index >= items.length) yield undefined;
 
-  return undefined;
+    yield items[index];
+  }
 }
 
 /**
@@ -109,13 +102,24 @@ function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
 ): (iter: A) => ReturnIterableAsyncIterableType<A> | undefined;
 
-function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(index: number, iter?: A) {
-  if (iter === undefined) return (iter: A): IterableInfer<A> => at(index, iter) as IterableInfer<A>;
+function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
+  index: number,
+  iter?: A,
+):
+  | ReturnIterableAsyncIterableType<A>
+  | undefined
+  | ((iter: A) => ReturnIterableAsyncIterableType<A> | undefined) {
+  if (iter === undefined)
+    return (iter: A): ReturnIterableAsyncIterableType<A> | undefined =>
+      at(index, iter) as ReturnIterableAsyncIterableType<A> | undefined;
 
-  if (isIterable<IterableInfer<A>>(iter)) return syncAt(index, iter);
-  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncAt(index, iter);
+  if (isIterable<IterableInfer<A>>(iter))
+    return toValue(syncAt(index, iter)) as ReturnIterableAsyncIterableType<A> | undefined;
 
-  return undefined;
+  if (isAsyncIterable<IterableInfer<A>>(iter))
+    return toValue(asyncAt(index, iter)) as ReturnIterableAsyncIterableType<A> | undefined;
+
+  throw new Error('arguments is not iterable, at');
 }
 
 export default at;

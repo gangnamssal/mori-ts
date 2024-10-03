@@ -1,5 +1,5 @@
 import { isAsyncIterable, isIterable, isPromise } from './../../utils';
-import { IterableInfer, ReturnIterableType } from '../../types';
+import { IterableInfer, ReturnIterableAsyncIterableType } from '../../types';
 
 function syncReduce<T extends Iterable<any>, Acc, R extends Acc>(
   fn: (acc: R, value: Awaited<IterableInfer<T>>) => R,
@@ -113,33 +113,36 @@ function reduce<A extends Iterable<unknown> | AsyncIterable<unknown>, Acc, R ext
   fn: (acc: R, value: IterableInfer<A>) => R,
   acc: Acc,
   iter: A,
-): ReturnIterableType<A, R>;
+): ReturnIterableAsyncIterableType<A, R>;
 
 function reduce<A extends Iterable<unknown> | AsyncIterable<unknown>, Acc extends IterableInfer<A>, R>(
   fn: (acc: Acc, value: IterableInfer<A>) => R,
   acc: A,
-): ReturnIterableType<A, R>;
+): ReturnIterableAsyncIterableType<A, R>;
 
 function reduce<
   A extends Iterable<unknown> | AsyncIterable<unknown>,
   Acc extends IterableInfer<A>,
   R extends Acc,
->(fn: (acc: Acc | R, value: IterableInfer<A>) => R): (iter: A) => ReturnIterableType<A, R>;
+>(fn: (acc: Acc | R, value: IterableInfer<A>) => R): (iter: A) => ReturnIterableAsyncIterableType<A, R>;
 
 function reduce<A extends Iterable<unknown> | AsyncIterable<unknown>, Acc, R extends Acc | IterableInfer<A>>(
   fn: (acc: Acc | R, value: IterableInfer<A>) => R,
   acc?: Acc | A,
   iter?: A,
-): ReturnIterableType<A, R> | ((iter: A) => ReturnIterableType<A, R>) {
+): ReturnIterableAsyncIterableType<A, R> | ((iter: A) => ReturnIterableAsyncIterableType<A, R>) {
   if (acc === undefined && iter === undefined)
-    return (iter: A): ReturnIterableType<A, R> =>
-      reduce(fn as any, iter as Iterable<unknown>) as ReturnIterableType<A, R>;
+    return (iter: A): ReturnIterableAsyncIterableType<A, R> =>
+      reduce(fn as any, iter as Iterable<unknown>) as ReturnIterableAsyncIterableType<A, R>;
 
   if (isIterable(acc) || isIterable(iter))
-    return syncReduce(fn as any, acc, iter as Iterable<unknown>) as ReturnIterableType<A, R>;
+    return syncReduce(fn as any, acc, iter as Iterable<unknown>) as ReturnIterableAsyncIterableType<A, R>;
 
   if (isAsyncIterable(acc) || isAsyncIterable(iter))
-    return asyncReduce(fn as any, acc, iter as AsyncIterable<unknown>) as ReturnIterableType<A, R>;
+    return asyncReduce(fn as any, acc, iter as AsyncIterable<unknown>) as ReturnIterableAsyncIterableType<
+      A,
+      R
+    >;
 
   throw new Error('Invalid arguments');
 }

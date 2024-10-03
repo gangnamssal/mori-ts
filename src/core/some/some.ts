@@ -1,28 +1,33 @@
 import { isAsyncIterable, isIterable } from './../../utils';
-import { IterableInfer, ReturnIterableType } from './../../types';
+import { IterableInfer, ReturnIterableAsyncIterableType } from './../../types';
+import toValue from '../to-value/to-value';
 
-function syncSome<A, B>(fn: (args: A) => B, iter: Iterable<A>): boolean {
+function* syncSome<A, B>(fn: (args: A) => B, iter: Iterable<A>): IterableIterator<boolean> {
   const iterator = iter[Symbol.iterator]();
 
   while (true) {
     const { value, done } = iterator.next();
 
-    if (done) return false;
+    if (done) break;
 
-    if (fn(value)) return true;
+    if (fn(value)) yield true;
   }
+
+  yield false;
 }
 
-async function asyncSome<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): Promise<boolean> {
+async function* asyncSome<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): AsyncIterableIterator<boolean> {
   const iterator = iter[Symbol.asyncIterator]();
 
   while (true) {
     const { value, done } = await iterator.next();
 
-    if (done) return false;
+    if (done) break;
 
-    if (fn(value)) return true;
+    if (fn(value)) yield true;
   }
+
+  yield false;
 }
 
 /**
@@ -58,22 +63,25 @@ async function asyncSome<A, B>(fn: (args: A) => B, iter: AsyncIterable<A>): Prom
 function some<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter: A,
-): ReturnIterableType<A, boolean>;
+): ReturnIterableAsyncIterableType<A, boolean>;
 
 function some<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
-): (iter: A) => ReturnIterableType<A, boolean>;
+): (iter: A) => ReturnIterableAsyncIterableType<A, boolean>;
 
 function some<A extends Iterable<unknown> | AsyncIterable<unknown>, B>(
   fn: (args: IterableInfer<A>) => B,
   iter?: A,
-): boolean | Promise<boolean> | ((iter: A) => boolean | Promise<boolean>) {
+): ReturnIterableAsyncIterableType<A, boolean> | ((iter: A) => ReturnIterableAsyncIterableType<A, boolean>) {
   if (iter === undefined)
-    return (iter: A): boolean | Promise<boolean> => some(fn, iter) as boolean | Promise<boolean>;
+    return (iter: A): ReturnIterableAsyncIterableType<A, boolean> =>
+      some(fn, iter) as ReturnIterableAsyncIterableType<A, boolean>;
 
-  if (isIterable<IterableInfer<A>>(iter)) return syncSome(fn, iter);
+  if (isIterable<IterableInfer<A>>(iter))
+    return toValue(syncSome(fn, iter)) as ReturnIterableAsyncIterableType<A, boolean>;
 
-  if (isAsyncIterable<IterableInfer<A>>(iter)) return asyncSome(fn, iter);
+  if (isAsyncIterable<IterableInfer<A>>(iter))
+    return toValue(asyncSome(fn, iter)) as ReturnIterableAsyncIterableType<A, boolean>;
 
   throw new Error('argument is not iterable');
 }
