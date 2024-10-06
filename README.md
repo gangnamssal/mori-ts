@@ -44,6 +44,7 @@
 - [timeOut](#timeout)
 - [toArray](#toarray)
 - [toAsync](#toasync)
+- [toIter](#toiter)
 - [toValue](#tovalue)
 - [zip](#zip)
 
@@ -376,6 +377,16 @@ const res2 = await pipe(
 - iterable을 `비동기` iterable로 `변환`합니다.
 
 - **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/toAsync
+
+### toIter
+
+- 동기 값일 경우, sync iterable로 변환합니다.
+
+- 비동기 값일 경우, async iterable로 변환합니다.
+
+- 변환된 iterable은 한 번만 값을 반환하며, 이후에는 종료됩니다.
+
+- **예시(Example)** : https://github.com/gangnamssal/mori-ts/wiki/toIter
 
 ### toValue
 

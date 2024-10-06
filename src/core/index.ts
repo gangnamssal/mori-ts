@@ -28,5 +28,6 @@ export { default as take } from './take/take';
 export { default as timeOut } from './time-out/time-out';
 export { default as toArray } from './to-array/to-array';
 export { default as toAsync } from './to-async/to-async';
+export { default as toIter } from './to-iter/to-iter';
 export { default as toValue } from './to-value/to-value';
 export { default as zip } from './zip/zip';
