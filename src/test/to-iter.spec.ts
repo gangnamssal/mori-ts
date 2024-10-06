@@ -1,4 +1,4 @@
-import { at, compact, find, map, pipe, range, some, toAsync, toIter, toValue } from '../core';
+import { at, compact, find, map, pipe, range, reduce, some, toAsync, toIter, toValue } from '../core';
 
 describe('toIter', () => {
   it('toIter with sync value', () => {
@@ -15,11 +15,29 @@ describe('toIter', () => {
     expect(result.next()).toEqual({ value: undefined, done: true });
   });
 
+  it('toIter with sync value 3', () => {
+    const value = [1, 2, 3];
+    const result = toIter(value);
+    expect(result.next()).toEqual({ value: 1, done: false });
+    expect(result.next()).toEqual({ value: 2, done: false });
+    expect(result.next()).toEqual({ value: 3, done: false });
+    expect(result.next()).toEqual({ value: undefined, done: true });
+  });
+
   it('toIter with async value', async () => {
     const value = Promise.resolve(1);
     const result = toIter(value);
 
     expect(result.next()).resolves.toEqual({ value: 1, done: false });
+  });
+
+  it('toIter with async value 2', async () => {
+    const value = toAsync([1, 2, 3]);
+    const result = toIter(value);
+
+    expect(result.next()).resolves.toEqual({ value: 1, done: false });
+    expect(result.next()).resolves.toEqual({ value: 2, done: false });
+    expect(result.next()).resolves.toEqual({ value: 3, done: false });
   });
 
   it('toIter with pipe', () => {
@@ -144,5 +162,17 @@ describe('toIter', () => {
     );
 
     expect(res).resolves.toBe(true);
+  });
+
+  it('toIter with pipe 6', () => {
+    const res = pipe(
+      range(1, 11),
+      reduce((acc, cur) => acc + cur),
+      toIter,
+      map(x => x + 100),
+      toValue,
+    );
+
+    expect(res).toBe(155);
   });
 });

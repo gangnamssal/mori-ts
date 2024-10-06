@@ -1,5 +1,5 @@
 import { ReturnConvertedIterableType } from '../../types';
-import { isPromiseLike } from './../../utils';
+import { isAsyncIterable, isIterable, isPromiseLike } from './../../utils';
 
 function syncToIter<A>(value: A): IterableIterator<A> {
   let isDone = false;
@@ -83,6 +83,10 @@ function asyncToIter<A extends Promise<unknown>>(value: A): AsyncIterableIterato
  */
 
 function toIter<A>(value: A): ReturnConvertedIterableType<A> {
+  if (isIterable(value)) return value[Symbol.iterator]() as ReturnConvertedIterableType<A>;
+
+  if (isAsyncIterable(value)) return value[Symbol.asyncIterator]() as ReturnConvertedIterableType<A>;
+
   if (isPromiseLike(value)) return asyncToIter(value) as ReturnConvertedIterableType<A>;
 
   return syncToIter(value) as ReturnConvertedIterableType<A>;

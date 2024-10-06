@@ -41,7 +41,13 @@ export type ReturnIterablePromiseType<T extends Iterable<unknown> | AsyncIterabl
       : never;
 
 export type ReturnConvertedIterableType<A> =
-  A extends Promise<unknown> ? AsyncIterableIterator<Awaited<A>> : IterableIterator<A>;
+  A extends Iterable<unknown>
+    ? IterableIterator<IterableInfer<A>>
+    : A extends AsyncIterable<unknown>
+      ? AsyncIterableIterator<Awaited<IterableInfer<A>>>
+      : A extends Promise<unknown>
+        ? AsyncIterableIterator<Awaited<A>>
+        : IterableIterator<A>;
 
 export type IsNever<T> = [T] extends [never] ? true : false;
 
