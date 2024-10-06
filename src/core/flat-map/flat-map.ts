@@ -58,7 +58,7 @@ function flatMap<
     return (iter: A): ReturnIterableIteratorType<A, IterableRecurInfer<B>> =>
       flatMap(fn, iter as any) as ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
 
-  return pipe(iter, map(fn), flat) as ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
+  return pipe(iter, map(fn), flat) as any as ReturnIterableIteratorType<A, IterableRecurInfer<B>>;
 }
 
 export default flatMap;

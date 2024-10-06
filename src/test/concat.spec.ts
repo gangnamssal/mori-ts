@@ -14,10 +14,9 @@ describe('concat', () => {
     const iter2 = [4, 5, 6];
 
     const res = concat(iter1, iter2);
-
     expect([...res]).toEqual([1, 2, 3, 4, 5, 6]);
-    const res2 = concat(iter1, iter2);
 
+    const res2 = concat(iter1, iter2);
     expect(res2.next().value).toBe(1);
     expect(res2.next().value).toBe(2);
     expect(res2.next().value).toBe(3);
@@ -33,11 +32,9 @@ describe('concat', () => {
     const iter3 = [7, 8, 9];
 
     const res = concat(iter1, iter2, iter3);
-
     expect([...res]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
     const res2 = concat(iter1, iter2, iter3);
-
     expect(res2.next().value).toBe(1);
     expect(res2.next().value).toBe(2);
     expect(res2.next().value).toBe(3);

@@ -1,5 +1,5 @@
 export type IsPromise<T, R> =
-  T extends Promise<unknown> ? Promise<R> : Promise<unknown> extends T ? Promise<R> | R : R;
+  T extends Promise<unknown> ? Promise<Awaited<R>> : Promise<unknown> extends T ? Promise<Awaited<R>> | R : R;
 
 export type IterableInfer<T extends Iterable<unknown> | AsyncIterable<unknown>> = T extends
   | Iterable<infer U>
@@ -40,8 +40,13 @@ export type ReturnIterablePromiseType<T extends Iterable<unknown> | AsyncIterabl
       ? AsyncIterableIterator<IterableInfer<T>>
       : never;
 
+export type ReturnConvertedIterableType<A> =
+  A extends Promise<unknown> ? AsyncIterableIterator<Awaited<A>> : IterableIterator<A>;
+
 export type IsNever<T> = [T] extends [never] ? true : false;
 
 export type ResolveType<A> = (value: IteratorResult<A> | PromiseLike<IteratorResult<A>>) => void;
 
 export type RejectType = (reason?: any) => void;
+
+export type PickPositiveType<T> = Exclude<T, 0 | null | undefined | false | ''>;

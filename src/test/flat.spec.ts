@@ -50,6 +50,7 @@ describe('flat', () => {
 
   it('flat with array promise', () => {
     const iter = flat([[Promise.resolve(1), Promise.resolve(2)], [Promise.resolve(3)]]);
+
     expect(iter.next().value).resolves.toBe(1);
     expect(iter.next().value).resolves.toBe(2);
     expect(iter.next().value).resolves.toBe(3);

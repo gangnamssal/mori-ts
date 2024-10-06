@@ -323,6 +323,14 @@ describe('pipe', () => {
       toArray,
     );
     expect(res2).toEqual([3]);
+
+    const res3 = pipe(
+      Promise.resolve([1, 2, 3]),
+      filter(a => a % 2 === 0),
+      map(a => a + 1),
+    );
+
+    res3.then(res => expect([...res]).toEqual([3]));
   });
 
   it('pipe with reduce and filter', () => {

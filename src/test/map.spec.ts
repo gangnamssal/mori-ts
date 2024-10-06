@@ -109,6 +109,17 @@ describe('map', () => {
     expect(res).toEqual([]);
   });
 
+  it('map with toAsync 4', async () => {
+    const res = pipe(
+      Promise.resolve([]),
+      toAsync,
+      map(value => value * 2),
+      toArray,
+    );
+
+    expect(res).resolves.toEqual([]);
+  });
+
   it('map with delay', () => {
     const res = pipe(
       [1, 2, 3],

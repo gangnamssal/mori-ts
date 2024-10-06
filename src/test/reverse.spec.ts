@@ -87,9 +87,9 @@ describe('reverse', () => {
     const iter = [1, 2, 3, 4];
 
     const result = pipe(iter, toAsync, reverse, toArray);
-    const result2 = await pipe(iter, toAsync, reverse, toArray);
-
     expect(result).resolves.toEqual([4, 3, 2, 1]);
+
+    const result2 = await pipe(iter, toAsync, reverse, toArray);
     expect(result2).toEqual([4, 3, 2, 1]);
   });
 

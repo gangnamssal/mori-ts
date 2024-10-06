@@ -33,25 +33,28 @@ describe('range', () => {
 
   it('range with pipe', () => {
     const res = pipe(range(5), toArray);
+    expect(res).toEqual([0, 1, 2, 3, 4]);
+
     const res2 = pipe(range(5, 10), toArray);
+    expect(res2).toEqual([5, 6, 7, 8, 9]);
+
     const res3 = pipe(range(5, 10, 2), toArray);
+    expect(res3).toEqual([5, 7, 9]);
+
     const res4 = pipe(
       range(5),
       map(x => x * 2),
       take(3),
       toArray,
     );
+    expect(res4).toEqual([0, 2, 4]);
+
     const res5 = pipe(
       range(0, 10),
       map(x => x * 2),
       filter(x => x % 2 === 0),
       reduce((acc, x) => acc + x),
     );
-
-    expect(res).toEqual([0, 1, 2, 3, 4]);
-    expect(res2).toEqual([5, 6, 7, 8, 9]);
-    expect(res3).toEqual([5, 7, 9]);
-    expect(res4).toEqual([0, 2, 4]);
     expect(res5).toEqual(90);
   });
 });

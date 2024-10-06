@@ -83,22 +83,21 @@ async function* asyncAt<A>(index: number, iter: AsyncIterable<A>): AsyncIterable
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
   iter: A,
-): ReturnIterableAsyncIterableType<A> | undefined;
+): ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>;
 
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
-): (iter: A) => ReturnIterableAsyncIterableType<A> | undefined;
+): (iter: A) => ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>;
 
 function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   index: number,
   iter?: A,
 ):
-  | ReturnIterableAsyncIterableType<A>
-  | undefined
-  | ((iter: A) => ReturnIterableAsyncIterableType<A> | undefined) {
+  | ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>
+  | ((iter: A) => ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>) {
   if (iter === undefined)
-    return (iter: A): ReturnIterableAsyncIterableType<A> | undefined =>
-      at(index, iter) as ReturnIterableAsyncIterableType<A> | undefined;
+    return (iter: A): ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined> =>
+      at(index, iter) as ReturnIterableAsyncIterableType<A, IterableInfer<A> | undefined>;
 
   const isIndexMinus = index < 0;
 
@@ -107,10 +106,16 @@ function at<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   const indexNumber = isIndexMinus ? -index - 1 : index;
 
   if (isIterable<IterableInfer<A>>(iterable))
-    return toValue(syncAt(indexNumber, iterable)) as ReturnIterableAsyncIterableType<A> | undefined;
+    return toValue(syncAt(indexNumber, iterable)) as ReturnIterableAsyncIterableType<
+      A,
+      IterableInfer<A> | undefined
+    >;
 
   if (isAsyncIterable<IterableInfer<A>>(iterable))
-    return toValue(asyncAt(indexNumber, iterable)) as ReturnIterableAsyncIterableType<A> | undefined;
+    return toValue(asyncAt(indexNumber, iterable)) as ReturnIterableAsyncIterableType<
+      A,
+      IterableInfer<A> | undefined
+    >;
 
   throw new Error('arguments is not iterable, at');
 }

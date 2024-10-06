@@ -128,7 +128,7 @@ describe('at', () => {
     expect(res3).toBe(1);
   });
 
-  it('at with pipe', async () => {
+  it('at with pipe', () => {
     const res = pipe(
       [1, 2, 3],
       map(x => x * 2),
@@ -138,7 +138,7 @@ describe('at', () => {
     expect(res).toBe(4);
   });
 
-  it('at with pipe 2', async () => {
+  it('at with pipe 2', () => {
     const res2 = pipe(
       [1, 2, 3],
       map(x => x * 2),
@@ -148,6 +148,7 @@ describe('at', () => {
 
     expect(res2).toBe(6);
   });
+
   it('at with pipe 3', async () => {
     const res3 = pipe(
       [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],

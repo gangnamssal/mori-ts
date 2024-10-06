@@ -29,7 +29,7 @@ describe('filter', () => {
     ];
 
     const result = filter(
-      async item => item.value === 1,
+      item => item.value === 1,
       (async function* () {
         for (const item of items) {
           yield item;

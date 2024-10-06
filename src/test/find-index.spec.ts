@@ -1,4 +1,4 @@
-import { findIndex, pipe, toAsync } from '../core';
+import { findIndex, map, pipe, range, toAsync } from '../core';
 
 describe('findIndex', () => {
   it('findIndex has value', () => {
@@ -76,6 +76,26 @@ describe('findIndex', () => {
       arr,
       toAsync,
       findIndex(x => x + 5 > 11),
+    );
+
+    expect(res).toBe(-1);
+  });
+
+  it('findIndex with pipe', () => {
+    const res = pipe(
+      range(1, 10),
+      map(x => x * 2),
+      findIndex(x => x === 16),
+    );
+
+    expect(res).toBe(7);
+  });
+
+  it('findIndex with pipe 2', () => {
+    const res = pipe(
+      range(1, 10),
+      map(x => x * 2),
+      findIndex(x => x === 40),
     );
 
     expect(res).toBe(-1);

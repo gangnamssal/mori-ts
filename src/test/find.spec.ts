@@ -9,7 +9,7 @@ describe('find', () => {
 
   it('should return the first element that satisfies the predicate in async iterables', async () => {
     const result = find(
-      (x: number) => x > 2,
+      x => x > 2,
       (async function* () {
         yield 1;
         yield 2;
@@ -44,13 +44,13 @@ describe('find', () => {
   });
 
   it('should return undefined for empty iterables', () => {
-    const result = find((x: number) => x > 2, []);
+    const result = find(x => x > 2, []);
 
     expect(result).toBeUndefined();
   });
 
   it('should return undefined for empty async iterables', async () => {
-    const result = find((x: number) => x > 2, (async function* () {})());
+    const result = find(x => x > 2, (async function* () {})());
 
     expect(result).resolves.toBeUndefined();
   });
@@ -60,8 +60,8 @@ describe('find', () => {
 
     const res = pipe(
       iter,
-      map((x: number) => x * 2),
-      find((x: number) => x > 5),
+      map(x => x * 2),
+      find(x => x > 5),
     );
 
     expect(res).toEqual(6);
@@ -79,8 +79,8 @@ describe('find', () => {
     const res = pipe(
       iter,
       toAsync,
-      map((x: number) => x * 2),
-      find((x: number) => x > 5),
+      map(x => x * 2),
+      find(x => x > 5),
     );
 
     expect(res).resolves.toEqual(6);
@@ -91,23 +91,35 @@ describe('find', () => {
 
     const res = pipe(
       iter,
-      map((x: number) => x * 2),
-      find((x: number) => x > 5),
+      map(x => x * 2),
+      find(x => x > 5),
     );
 
     expect(res).resolves.toEqual(6);
   });
 
+  it('find with pipe 4', () => {
+    const iter: never[] = [];
+
+    const res = pipe(
+      iter,
+      map(x => x * 2),
+      find(x => x > 5),
+    );
+
+    expect(res).toBeUndefined();
+  });
+
   it('find with string', () => {
     const iter = 'hello';
-    const res = find((x: string) => x === 'l', iter);
+    const res = find(x => x === 'l', iter);
 
     expect(res).toBe('l');
   });
 
   it('find with empty string', () => {
     const iter = '';
-    const res = find((x: string) => x === 'l', iter);
+    const res = find(x => x === 'l', iter);
 
     expect(res).toBeUndefined();
   });

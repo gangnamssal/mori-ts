@@ -5,11 +5,9 @@ describe('reduce', () => {
     const numbers = [1, 2, 3, 4, 5];
 
     const result = reduce((acc, value) => acc + value, 0, numbers);
-
     expect(result).toBe(15);
 
     const result2 = reduce((acc, value) => acc + value, numbers);
-
     expect(result2).toBe(15);
   });
 
@@ -17,14 +15,12 @@ describe('reduce', () => {
     const objects = [{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }];
 
     const result = reduce((acc, value) => acc + value.x, 0, objects);
-
     expect(result).toBe(15);
 
     const result2 = reduce((acc, value) => {
       if (acc instanceof Object) return acc.x + value.x;
       return acc + value.x;
     }, objects);
-
     expect(result2).toBe(15);
   });
 
@@ -38,14 +34,12 @@ describe('reduce', () => {
     ];
 
     const result = reduce((acc, value) => acc + value.x + value.y, 0, objects);
-
     expect(result).toBe(35);
 
     const result2 = reduce((acc, value) => {
       if (acc instanceof Object) return acc.x + value.x + acc.y + value.y;
       return acc + value.x + value.y;
     }, objects);
-
     expect(result2).toBe(35);
   });
 
