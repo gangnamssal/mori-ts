@@ -1,4 +1,4 @@
-import { ReturnIterableIteratorType } from '../../types';
+import { IterableInfer, PickPositiveType, ReturnIterableIteratorType } from '../../types';
 import filter from '../filter/filter';
 
 /**
@@ -41,8 +41,8 @@ import filter from '../filter/filter';
  */
 function compact<A extends Iterable<unknown> | AsyncIterable<unknown>>(
   iter: A,
-): ReturnIterableIteratorType<A> {
-  return filter(Boolean, iter);
+): ReturnIterableIteratorType<A, PickPositiveType<IterableInfer<A>>> {
+  return filter(Boolean, iter) as ReturnIterableIteratorType<A, PickPositiveType<IterableInfer<A>>>;
 }
 
 export default compact;
